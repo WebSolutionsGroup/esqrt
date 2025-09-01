@@ -187,8 +187,8 @@ define([
                     </h3>
                     <ul style="margin: 0; padding-left: 16px; line-height: 1.6;">
                         <li><a href="#" onclick="defaultQuerySet()" style="color: var(--codeoss-accent); text-decoration: none;">Load a sample query</a></li>
-                        <li>Write your SuiteQL query (try Ctrl+Space for auto-complete)</li>
-                        <li>Click "▶ Run Query" in the editor toolbar or press Ctrl+R</li>
+                        <li>Write your SuiteQL query (try <span id="autoCompleteShortcut">Ctrl+Space</span> for auto-complete)</li>
+                        <li>Click "▶ Run Query" in the editor toolbar or press <span id="executeShortcut">Ctrl+R</span></li>
                         <li>View results in table, CSV, or JSON format</li>
                     </ul>
                 </div>
@@ -199,7 +199,7 @@ define([
                         <span style="margin-right: 8px;">✨</span> Key Features
                     </h3>
                     <ul style="margin: 0; padding-left: 16px; line-height: 1.6;">
-                        <li>Intelligent auto-complete (Ctrl+Space)</li>
+                        <li>Intelligent auto-complete (<span id="autoCompleteShortcut2">Ctrl+Space</span>)</li>
                         <li>Syntax highlighting & query validation</li>
                         <li>Query history & saved queries</li>
                         <li>Multiple export formats (CSV, JSON, PDF)</li>
@@ -207,6 +207,65 @@ define([
                     </ul>
                 </div>
             </div>
+
+            <!-- Keyboard Shortcuts Panel -->
+            <div style="background-color: var(--codeoss-panel-bg); border: 1px solid var(--codeoss-border); border-radius: 4px; padding: 16px; margin-bottom: 24px;">
+                <h3 style="color: var(--codeoss-text-primary); margin: 0 0 12px 0; font-size: 14px; display: flex; align-items: center;">
+                    <span style="margin-right: 8px;">⌨️</span> Keyboard Shortcuts <span id="platformIndicator" style="font-size: 12px; color: var(--codeoss-text-secondary); margin-left: 8px;"></span>
+                </h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div>
+                        <strong style="color: var(--codeoss-text-primary); font-size: 12px;">Query Operations:</strong>
+                        <ul style="margin: 4px 0 0 0; padding-left: 16px; font-size: 13px; line-height: 1.4;">
+                            <li><span id="executeShortcut2">Ctrl+R</span> - Execute query</li>
+                            <li><span id="executeShortcut3">Ctrl+Enter</span> - Execute query (alt)</li>
+                            <li><strong>F5</strong> - Execute query (universal)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color: var(--codeoss-text-primary); font-size: 12px;">Editor Features:</strong>
+                        <ul style="margin: 4px 0 0 0; padding-left: 16px; font-size: 13px; line-height: 1.4;">
+                            <li><span id="autoCompleteShortcut3">Ctrl+Space</span> - Auto-complete</li>
+                            <li><span id="saveShortcut">Ctrl+S</span> - Save query</li>
+                            <li><strong>Escape</strong> - Close panels/modals</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Update keyboard shortcuts based on platform
+                (function() {
+                    var isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                    var cmdKey = isMac ? 'Cmd' : 'Ctrl';
+                    var platformName = isMac ? '(Mac)' : '(Windows/Linux)';
+
+                    // Update all shortcut displays
+                    var shortcuts = [
+                        'autoCompleteShortcut', 'autoCompleteShortcut2', 'autoCompleteShortcut3',
+                        'executeShortcut', 'executeShortcut2', 'executeShortcut3',
+                        'saveShortcut'
+                    ];
+
+                    shortcuts.forEach(function(id) {
+                        var element = document.getElementById(id);
+                        if (element) {
+                            var text = element.textContent;
+                            element.textContent = text.replace('Ctrl', cmdKey);
+                            if (isMac) {
+                                element.style.fontWeight = 'bold';
+                                element.style.color = 'var(--codeoss-accent)';
+                            }
+                        }
+                    });
+
+                    // Update platform indicator
+                    var platformIndicator = document.getElementById('platformIndicator');
+                    if (platformIndicator) {
+                        platformIndicator.textContent = platformName;
+                    }
+                })();
+            </script>
 
             <!-- Credits -->
             <div style="text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--codeoss-border); font-size: 11px; color: var(--codeoss-text-secondary);">
