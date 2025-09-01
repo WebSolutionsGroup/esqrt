@@ -140,7 +140,7 @@ define([], function() {
             }
             
             function loadSavedQueriesFromNetSuite() {
-                console.log('Loading saved queries from NetSuite...');
+                // console.log('Loading saved queries from NetSuite...');
 
                 // Create request payload for server-side function
                 const requestPayload = {

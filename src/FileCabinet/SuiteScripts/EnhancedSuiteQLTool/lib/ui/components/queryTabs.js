@@ -159,7 +159,6 @@ define([
 
                 // Load tab content based on tab type
                 const activeTab = queryTabs.find(tab => tab.id === tabId);
-                console.log('switchToTab called for tabId:', tabId, 'activeTab:', activeTab);
                 if (activeTab) {
                     if (activeTab.isTableDetails && activeTab.isHtmlContent) {
                         // Hide all query-related UI elements
@@ -214,7 +213,6 @@ define([
                         }
 
                         if (codeEditor && typeof codeEditor.setValue === 'function') {
-                            console.log('Setting editor content to:', activeTab.content);
                             codeEditor.setValue(activeTab.content);
 
                             // Ensure the editor is refreshed and focused
@@ -233,7 +231,6 @@ define([
                             // If CodeMirror isn't ready, try again after a short delay
                             setTimeout(function() {
                                 if (codeEditor && typeof codeEditor.setValue === 'function') {
-                                    console.log('Retrying: Setting editor content to:', activeTab.content);
                                     codeEditor.setValue(activeTab.content);
                                     if (typeof codeEditor.refresh === 'function') {
                                         codeEditor.refresh();
@@ -421,20 +418,7 @@ define([
                 function saveEdit() {
                     const newTitle = input.value.trim();
                     if (newTitle && newTitle !== currentTab.title) {
-                        console.log('Toolbar inline edit - before rename:', {
-                            tabId: currentTab.id,
-                            oldTitle: currentTab.title,
-                            newTitle: newTitle,
-                            savedQueryId: currentTab.savedQueryId
-                        });
-
                         renameTab(currentTab.id, newTitle);
-
-                        console.log('Toolbar inline edit - after rename:', {
-                            tabId: currentTab.id,
-                            title: currentTab.title,
-                            savedQueryId: currentTab.savedQueryId
-                        });
 
                         // Auto-save to saved queries (seamless save)
                         autoSaveTabQuery(currentTab.id);
@@ -505,20 +489,7 @@ define([
                 function saveEdit() {
                     const newTitle = input.value.trim();
                     if (newTitle && newTitle !== tab.title) {
-                        console.log('Tab inline edit - before rename:', {
-                            tabId: tabId,
-                            oldTitle: tab.title,
-                            newTitle: newTitle,
-                            savedQueryId: tab.savedQueryId
-                        });
-
                         renameTab(tabId, newTitle);
-
-                        console.log('Tab inline edit - after rename:', {
-                            tabId: tabId,
-                            title: tab.title,
-                            savedQueryId: tab.savedQueryId
-                        });
 
                         // Auto-save to saved queries (seamless save)
                         autoSaveTabQuery(tabId);
@@ -621,14 +592,9 @@ define([
 
                 // Switch to the active tab to load its content into the editor
                 if (activeTabId) {
-                    console.log('Switching to active tab:', activeTabId);
-                    const activeTab = queryTabs.find(tab => tab.id === activeTabId);
-                    console.log('Active tab content:', activeTab ? activeTab.content : 'Tab not found');
                     switchToTab(activeTabId, true); // Skip saving current tab during initialization
                 } else if (queryTabs.length > 0) {
                     // If no active tab is set, switch to the first tab
-                    console.log('Switching to first tab:', queryTabs[0].id);
-                    console.log('First tab content:', queryTabs[0].content);
                     switchToTab(queryTabs[0].id, true); // Skip saving current tab during initialization
                 }
 
@@ -696,7 +662,6 @@ define([
                     const saved = localStorage.getItem('suiteql-query-tabs');
                     if (saved) {
                         const tabsData = JSON.parse(saved);
-                        console.log('Loading tabs from localStorage:', tabsData);
                         queryTabs = tabsData.tabs || [];
                         activeTabId = tabsData.activeTabId || null;
                         tabCounter = tabsData.tabCounter || 1;
@@ -718,10 +683,6 @@ define([
                             queryTabs[0].isActive = true;
                             activeTabId = queryTabs[0].id;
                         }
-
-                        console.log('Loaded tabs:', queryTabs);
-                    } else {
-                        console.log('No saved tabs found in localStorage');
                     }
                 } catch(e) {
                     console.warn('Could not load tabs from localStorage:', e);
@@ -733,7 +694,6 @@ define([
             function clearTabsStorage() {
                 try {
                     localStorage.removeItem('suiteql-query-tabs');
-                    console.log('Cleared tabs storage');
                 } catch(e) {
                     console.warn('Could not clear tabs storage:', e);
                 }
@@ -746,7 +706,6 @@ define([
                 activeTabId = null;
                 tabCounter = 1;
                 addNewQueryTab('Untitled', '');
-                console.log('Reset query tabs to default state');
             };
 
             function saveTabAsQuery(tabId, title, description, tags, isPublic) {
@@ -766,7 +725,6 @@ define([
                 };
 
                 // TODO: Implement NetSuite record creation
-                console.log('Saving query to NetSuite record:', queryData);
                 alert('Query saved successfully! (NetSuite record integration pending)');
             }
 
@@ -862,7 +820,6 @@ define([
                     }).then(response => response.json())
                       .then(data => {
                           if (data.success) {
-                              console.log('Query saved to NetSuite:', data);
                               callback(true, data.recordId, null);
 
                               // Refresh saved queries list
@@ -903,18 +860,10 @@ define([
                     return;
                 }
 
-                console.log('Saving tab as query:', {
-                    tabId: currentTab.id,
-                    title: currentTab.title,
-                    titleLength: currentTab.title ? currentTab.title.length : 0,
-                    contentLength: currentContent.length,
-                    savedQueryId: currentTab.savedQueryId
-                });
+
 
                 // Ensure we have a valid title
                 const queryTitle = currentTab.title && currentTab.title.trim() !== '' ? currentTab.title.trim() : 'Untitled Query';
-
-                console.log('Using title for save:', queryTitle);
 
                 // Check if this tab was loaded from a saved query (has savedQueryId)
                 if (currentTab.savedQueryId) {
@@ -957,8 +906,6 @@ define([
                         favorite: false
                     };
 
-                    console.log('Query data for new query save:', queryData);
-
                     // Use the silent save function for new queries too, so we get the record ID back
                     saveQueryToNetSuiteSilent(queryData, null, function(success, recordId, error) {
                         if (success) {
@@ -972,12 +919,6 @@ define([
 
                             // Show status message in blue bar
                             showStatusMessage('Query "' + currentTab.title + '" saved successfully');
-
-                            console.log('New query saved successfully:', {
-                                tabId: currentTab.id,
-                                title: currentTab.title,
-                                savedQueryId: recordId
-                            });
                         } else {
                             console.error('Failed to save new query:', error);
                             showStatusMessage('Failed to save query "' + currentTab.title + '"');
@@ -1005,13 +946,7 @@ define([
                     favorite: false
                 };
 
-                // Debug: Log the tab's savedQueryId
-                console.log('Auto-saving tab:', {
-                    tabId: tabId,
-                    title: tab.title,
-                    savedQueryId: tab.savedQueryId,
-                    hasContent: !!content
-                });
+
 
                 // Use the tab's savedQueryId if it exists (for updates)
                 saveQueryToNetSuiteSilent(queryData, tab.savedQueryId, function(success, recordId, error) {
@@ -1027,13 +962,6 @@ define([
                         // Show status message
                         const action = tab.savedQueryId ? 'updated' : 'saved';
                         showStatusMessage('Query "' + tab.title + '" ' + action + ' successfully');
-
-                        console.log('Auto-save completed:', {
-                            tabId: tab.id,
-                            title: tab.title,
-                            savedQueryId: tab.savedQueryId,
-                            wasUpdate: !!tab.savedQueryId
-                        });
                     } else {
                         console.error('Failed to save query:', error);
                         showStatusMessage('Failed to save query "' + tab.title + '"');

@@ -182,7 +182,7 @@ define([
                     // New tabs should start blank, and saved tabs will load their content via switchToTab()
                     codeEditor.setValue('');
 
-                    console.log('CodeMirror initialized successfully');
+                    // console.log('CodeMirror initialized successfully');
 
                 } catch(error) {
                     console.error('Error initializing CodeMirror:', error);

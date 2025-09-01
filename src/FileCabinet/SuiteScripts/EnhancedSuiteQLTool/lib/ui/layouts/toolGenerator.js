@@ -144,9 +144,9 @@ define([
                     codeEditor;
 
                 // Debug logging
-                console.log('Enhanced SuiteQL Query Tool - Starting initialization...');
-                console.log('jQuery available:', typeof jQuery !== 'undefined');
-                console.log('CodeMirror available:', typeof CodeMirror !== 'undefined');
+                // console.log('Enhanced SuiteQL Query Tool - Starting initialization...');
+                // console.log('jQuery available:', typeof jQuery !== 'undefined');
+                // console.log('CodeMirror available:', typeof CodeMirror !== 'undefined');
 
                 window.jQuery = window.$ = jQuery;
 
@@ -158,7 +158,7 @@ define([
                 // Initialize responsive layout
                 try {
                     initializeResponsiveLayout();
-                    console.log('Responsive layout initialized');
+                    // console.log('Responsive layout initialized');
                 } catch(e) {
                     console.error('Error initializing responsive layout:', e);
                 }
@@ -166,14 +166,14 @@ define([
                 // Initialize resizable layout
                 try {
                     initializeResizers();
-                    console.log('Resizers initialized');
+                    // console.log('Resizers initialized');
                 } catch(e) {
                     console.error('Error initializing resizers:', e);
                 }
 
                 // Set initial theme
                 document.body.classList.add('light-theme');
-                console.log('Theme set to light');
+                // console.log('Theme set to light');
 
                 // Include all JavaScript functions from modular architecture
                 ${editorSetup.getAllEditorJS()}
@@ -238,10 +238,10 @@ define([
 
                 // Initialize the complete application after a short delay to ensure all scripts are loaded
                 setTimeout(function() {
-                    console.log('Starting application initialization...');
+                    // console.log('Starting application initialization...');
                     try {
                         initializeApplication();
-                        console.log('Application initialization completed');
+                        // console.log('Application initialization completed');
                     } catch(e) {
                         console.error('Error during application initialization:', e);
                     }
