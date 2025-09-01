@@ -24,34 +24,54 @@ define([
      */
     function getSidebarSectionToggleJS() {
         return `
-            // Track section states (expanded by default)
+            // Track section states (only one expanded at a time - accordion behavior)
             var sidebarSectionStates = {
-                queryHistory: true,
-                savedQueries: true
+                queryHistory: false,
+                savedQueries: true  // Default to saved queries expanded
             };
-            
+
             function toggleSidebarSection(sectionName) {
                 const content = document.getElementById(sectionName + 'Content');
                 const icon = document.getElementById(sectionName + 'Icon');
-                
-                if (!content || !icon) return;
-                
+                const section = content ? content.closest('.codeoss-sidebar-section') : null;
+
+                if (!content || !icon || !section) return;
+
                 const isExpanded = sidebarSectionStates[sectionName];
-                
+
                 if (isExpanded) {
-                    // Collapse section
+                    // Collapse the currently expanded section
                     content.classList.add('collapsed');
                     icon.classList.add('collapsed');
                     icon.textContent = '▶';
+                    section.classList.remove('expanded');
                     sidebarSectionStates[sectionName] = false;
                 } else {
-                    // Expand section
+                    // First, collapse all other sections (accordion behavior)
+                    Object.keys(sidebarSectionStates).forEach(otherSectionName => {
+                        if (otherSectionName !== sectionName && sidebarSectionStates[otherSectionName]) {
+                            const otherContent = document.getElementById(otherSectionName + 'Content');
+                            const otherIcon = document.getElementById(otherSectionName + 'Icon');
+                            const otherSection = otherContent ? otherContent.closest('.codeoss-sidebar-section') : null;
+
+                            if (otherContent && otherIcon && otherSection) {
+                                otherContent.classList.add('collapsed');
+                                otherIcon.classList.add('collapsed');
+                                otherIcon.textContent = '▶';
+                                otherSection.classList.remove('expanded');
+                                sidebarSectionStates[otherSectionName] = false;
+                            }
+                        }
+                    });
+
+                    // Then expand the clicked section
                     content.classList.remove('collapsed');
                     icon.classList.remove('collapsed');
                     icon.textContent = '▼';
+                    section.classList.add('expanded');
                     sidebarSectionStates[sectionName] = true;
                 }
-                
+
                 // Save state to localStorage
                 try {
                     localStorage.setItem('suiteql-sidebar-states', JSON.stringify(sidebarSectionStates));
@@ -85,19 +105,22 @@ define([
                 Object.keys(sidebarSectionStates).forEach(sectionName => {
                     const content = document.getElementById(sectionName + 'Content');
                     const icon = document.getElementById(sectionName + 'Icon');
-                    
-                    if (!content || !icon) return;
-                    
+                    const section = content ? content.closest('.codeoss-sidebar-section') : null;
+
+                    if (!content || !icon || !section) return;
+
                     const isExpanded = sidebarSectionStates[sectionName];
-                    
+
                     if (!isExpanded) {
                         content.classList.add('collapsed');
                         icon.classList.add('collapsed');
                         icon.textContent = '▶';
+                        section.classList.remove('expanded');
                     } else {
                         content.classList.remove('collapsed');
                         icon.classList.remove('collapsed');
                         icon.textContent = '▼';
+                        section.classList.add('expanded');
                     }
                 });
             }
