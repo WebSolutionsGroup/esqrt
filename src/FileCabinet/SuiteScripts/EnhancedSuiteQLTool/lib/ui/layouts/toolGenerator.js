@@ -96,8 +96,14 @@ define([
                 try { initializeSavedQueries(); } catch(e) { console.warn('initializeSavedQueries failed:', e); }
                 try { initializeControlsPanel(); } catch(e) { console.warn('initializeControlsPanel failed:', e); }
 
-                // Set default query
-                try { defaultQuerySet(); } catch(e) { console.warn('defaultQuerySet failed:', e); }
+                // Set default query only if no tabs were loaded
+                setTimeout(function() {
+                    try {
+                        if (typeof queryTabs !== 'undefined' && queryTabs.length === 0) {
+                            defaultQuerySet();
+                        }
+                    } catch(e) { console.warn('defaultQuerySet failed:', e); }
+                }, 300);
 
                 // Final layout adjustments
                 setTimeout(function() {
@@ -212,8 +218,14 @@ define([
                     try { initializeSavedQueries(); } catch(e) { console.warn('initializeSavedQueries failed:', e); }
                     try { initializeControlsPanel(); } catch(e) { console.warn('initializeControlsPanel failed:', e); }
 
-                    // Set default query
-                    try { defaultQuerySet(); } catch(e) { console.warn('defaultQuerySet failed:', e); }
+                    // Set default query only if no tabs were loaded
+                    setTimeout(function() {
+                        try {
+                            if (typeof queryTabs !== 'undefined' && queryTabs.length === 0) {
+                                defaultQuerySet();
+                            }
+                        } catch(e) { console.warn('defaultQuerySet failed:', e); }
+                    }, 300);
 
                     // Final layout adjustments
                     setTimeout(function() {

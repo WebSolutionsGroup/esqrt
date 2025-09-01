@@ -128,7 +128,13 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
             });
 
             // Ensure title is not empty and is a valid string
-            const safeName = (title && title.trim()) ? title.trim() : 'Query';
+            let safeName = (title && title.trim()) ? title.trim() : 'Query';
+
+            // Sanitize the name field for NetSuite - remove special characters and limit length
+            safeName = safeName.replace(/[^\w\s\-_]/g, '').substring(0, 50).trim();
+            if (!safeName || safeName === '') {
+                safeName = 'Query_' + Date.now(); // Use timestamp as fallback
+            }
 
             // Set the record's display name (this custom record has includename=T so it has a 'name' field)
             try {
@@ -136,11 +142,19 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                 log.debug('Set name field successfully', safeName);
             } catch(error) {
                 log.error('Failed to set name field', error.toString());
-                // If name field fails, try setting a simple default
+                // If name field fails, try setting a timestamp-based default
                 try {
-                    newRecord.setValue({ fieldId: 'name', value: 'Query' });
+                    const fallbackName = 'Query_' + Date.now();
+                    newRecord.setValue({ fieldId: 'name', value: fallbackName });
+                    log.debug('Set fallback name field', fallbackName);
                 } catch(error2) {
-                    log.error('Failed to set default name field', error2.toString());
+                    log.error('Failed to set fallback name field', error2.toString());
+                    // Last resort - try a simple string
+                    try {
+                        newRecord.setValue({ fieldId: 'name', value: 'Query' });
+                    } catch(error3) {
+                        log.error('Failed to set simple name field', error3.toString());
+                    }
                 }
             }
 

@@ -72,6 +72,12 @@ define([
             
             function addNewQueryTab(title, content) {
                 const tabId = 'tab_' + Date.now();
+
+                // If no tabs exist, reset counter to 1
+                if (queryTabs.length === 0) {
+                    tabCounter = 1;
+                }
+
                 const tabTitle = title || 'Untitled ' + tabCounter++;
                 const tabContent = content || '';
 
@@ -127,12 +133,13 @@ define([
                 
                 queryTabs = [];
                 activeTabId = null;
+                tabCounter = 1; // Reset counter when all tabs are closed
                 addNewQueryTab();
             }
             
-            function switchToTab(tabId) {
-                // Save current tab content and results before switching
-                if (activeTabId && codeEditor && typeof codeEditor.getValue === 'function') {
+            function switchToTab(tabId, skipSaveCurrentTab = false) {
+                // Save current tab content and results before switching (unless we're initializing)
+                if (!skipSaveCurrentTab && activeTabId && codeEditor && typeof codeEditor.getValue === 'function') {
                     const currentTab = queryTabs.find(tab => tab.id === activeTabId);
                     if (currentTab && !currentTab.isTableDetails) {
                         currentTab.content = codeEditor.getValue();
@@ -152,6 +159,7 @@ define([
 
                 // Load tab content based on tab type
                 const activeTab = queryTabs.find(tab => tab.id === tabId);
+                console.log('switchToTab called for tabId:', tabId, 'activeTab:', activeTab);
                 if (activeTab) {
                     if (activeTab.isTableDetails && activeTab.isHtmlContent) {
                         // Hide all query-related UI elements
@@ -206,13 +214,32 @@ define([
                         }
 
                         if (codeEditor && typeof codeEditor.setValue === 'function') {
+                            console.log('Setting editor content to:', activeTab.content);
                             codeEditor.setValue(activeTab.content);
+
+                            // Ensure the editor is refreshed and focused
+                            setTimeout(function() {
+                                if (codeEditor && typeof codeEditor.refresh === 'function') {
+                                    codeEditor.refresh();
+                                }
+                            }, 50);
                         } else {
                             // Fallback to textarea if CodeMirror isn't ready
                             const textarea = document.getElementById('` + constants.ELEMENT_IDS.QUERY_TEXTAREA + `');
                             if (textarea) {
                                 textarea.value = activeTab.content;
                             }
+
+                            // If CodeMirror isn't ready, try again after a short delay
+                            setTimeout(function() {
+                                if (codeEditor && typeof codeEditor.setValue === 'function') {
+                                    console.log('Retrying: Setting editor content to:', activeTab.content);
+                                    codeEditor.setValue(activeTab.content);
+                                    if (typeof codeEditor.refresh === 'function') {
+                                        codeEditor.refresh();
+                                    }
+                                }
+                            }, 100);
                         }
 
                         // Ensure active tab has results structure and restore results for this tab
@@ -584,7 +611,7 @@ define([
                 // Load tabs from storage
                 loadTabsFromStorage();
 
-                // If no tabs exist, create a default one with empty content
+                // If no tabs exist, create a blank tab
                 if (queryTabs.length === 0) {
                     addNewQueryTab('Untitled', '');
                 }
@@ -592,17 +619,39 @@ define([
                 // Render tabs
                 renderQueryTabs();
 
+                // Switch to the active tab to load its content into the editor
+                if (activeTabId) {
+                    console.log('Switching to active tab:', activeTabId);
+                    const activeTab = queryTabs.find(tab => tab.id === activeTabId);
+                    console.log('Active tab content:', activeTab ? activeTab.content : 'Tab not found');
+                    switchToTab(activeTabId, true); // Skip saving current tab during initialization
+                } else if (queryTabs.length > 0) {
+                    // If no active tab is set, switch to the first tab
+                    console.log('Switching to first tab:', queryTabs[0].id);
+                    console.log('First tab content:', queryTabs[0].content);
+                    switchToTab(queryTabs[0].id, true); // Skip saving current tab during initialization
+                }
+
                 // Update toolbar tab name
                 updateToolbarTabName();
 
-                // Set up editor change listener to mark tabs as dirty
-                if (codeEditor && typeof codeEditor.on === 'function') {
-                    codeEditor.on('change', function() {
-                        if (activeTabId) {
-                            markTabDirty(activeTabId, true);
-                        }
-                    });
-                }
+                // Set up editor change listener AFTER initial loading to prevent overwriting saved content
+                setTimeout(function() {
+                    if (codeEditor && typeof codeEditor.on === 'function') {
+                        let saveTimeout;
+                        codeEditor.on('change', function() {
+                            if (activeTabId) {
+                                markTabDirty(activeTabId, true);
+
+                                // Debounced save to localStorage (save after 1 second of no changes)
+                                clearTimeout(saveTimeout);
+                                saveTimeout = setTimeout(function() {
+                                    saveTabsToStorage();
+                                }, 1000);
+                            }
+                        });
+                    }
+                }, 100); // Small delay to ensure tab loading is complete
             }
         `;
     }
@@ -616,6 +665,14 @@ define([
         return `
             function saveTabsToStorage() {
                 try {
+                    // Save current editor content to active tab before saving to storage
+                    if (activeTabId && codeEditor && typeof codeEditor.getValue === 'function') {
+                        const currentTab = queryTabs.find(tab => tab.id === activeTabId);
+                        if (currentTab && !currentTab.isTableDetails) {
+                            currentTab.content = codeEditor.getValue();
+                        }
+                    }
+
                     const tabsData = {
                         tabs: queryTabs,
                         activeTabId: activeTabId,
@@ -626,6 +683,13 @@ define([
                     console.warn('Could not save tabs to localStorage:', e);
                 }
             }
+
+            // Removed refreshSavedQueryTabsContent() function
+            // Simplified logic:
+            // - New tabs start blank
+            // - Loading saved queries creates new tabs with content
+            // - Content changes update localStorage via editor listener
+            // - Never overwrite localStorage content from NetSuite
 
             function loadTabsFromStorage() {
                 try {
@@ -641,6 +705,13 @@ define([
                         queryTabs.forEach(tab => {
                             ensureTabHasResults(tab);
                         });
+
+                        // Set the active tab based on saved activeTabId
+                        if (activeTabId) {
+                            queryTabs.forEach(tab => {
+                                tab.isActive = (tab.id === activeTabId);
+                            });
+                        }
 
                         // Ensure at least one tab is marked as active
                         if (queryTabs.length > 0 && !queryTabs.some(tab => tab.isActive)) {

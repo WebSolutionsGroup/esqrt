@@ -37,10 +37,13 @@ define([
 
             <!-- CodeMirror CSS first -->
             <link rel="stylesheet" href="${constants.CONFIG.CDN.CODEMIRROR_CSS}">
+            <link rel="stylesheet" href="${constants.CONFIG.CDN.CODEMIRROR_HINT_CSS}">
 
             <!-- CodeMirror JavaScript -->
             <script src="${constants.CONFIG.CDN.CODEMIRROR_JS}" onload="console.log('CodeMirror JS loaded')" onerror="console.error('Failed to load CodeMirror JS')"></script>
             <script src="${constants.CONFIG.CDN.CODEMIRROR_SQL}" onload="console.log('CodeMirror SQL mode loaded')" onerror="console.error('Failed to load CodeMirror SQL mode')"></script>
+            <script src="${constants.CONFIG.CDN.CODEMIRROR_HINT_JS}" onload="console.log('CodeMirror hint addon loaded')" onerror="console.error('Failed to load CodeMirror hint addon')"></script>
+            <script src="${constants.CONFIG.CDN.CODEMIRROR_SQL_HINT}" onload="console.log('CodeMirror SQL hint loaded')" onerror="console.error('Failed to load CodeMirror SQL hint')"></script>
             <script src="${constants.CONFIG.CDN.CODEMIRROR_ADDON_MARK_SELECTION}" onload="console.log('CodeMirror mark-selection addon loaded')"></script>
 
             <!-- Bootstrap JS (after jQuery) -->

@@ -162,7 +162,15 @@ define([
                         }
                     },
                     hintOptions: {
-                        hint: CodeMirror.hint.sql,
+                        hint: function(cm) {
+                            // Use custom SQL hint if available, otherwise fall back to built-in
+                            if (CodeMirror.hint && CodeMirror.hint.sql) {
+                                return CodeMirror.hint.sql(cm);
+                            } else {
+                                // Fallback to our custom hint function
+                                return CodeMirror.helpers.hint.sql(cm);
+                            }
+                        },
                         completeSingle: false,
                         closeOnUnfocus: true,
                         alignWithWord: true,
@@ -170,8 +178,9 @@ define([
                     }
                     });
 
-                    // Set initial content
-                    codeEditor.setValue(` + JSON.stringify(constants.DEFAULT_QUERY) + `);
+                    // Set initial empty content - the tab system will override this with saved content if needed
+                    // New tabs should start blank, and saved tabs will load their content via switchToTab()
+                    codeEditor.setValue('');
 
                     console.log('CodeMirror initialized successfully');
 
@@ -195,22 +204,38 @@ define([
                         // Trigger auto-complete after typing certain characters or patterns
                         if (text === ' ' && /\\b(SELECT|FROM|WHERE|ORDER BY|GROUP BY|JOIN)$/i.test(beforeCursor.trim())) {
                             setTimeout(function() {
-                                cm.showHint({
-                                    hint: CodeMirror.hint.sql,
-                                    completeSingle: false,
-                                    closeOnUnfocus: true
-                                });
+                                if (cm.showHint) {
+                                    cm.showHint({
+                                        hint: function(cm) {
+                                            if (CodeMirror.hint && CodeMirror.hint.sql) {
+                                                return CodeMirror.hint.sql(cm);
+                                            } else {
+                                                return CodeMirror.helpers.hint.sql(cm);
+                                            }
+                                        },
+                                        completeSingle: false,
+                                        closeOnUnfocus: true
+                                    });
+                                }
                             }, 100);
                         } else if (text.match(/[a-zA-Z]/) && beforeCursor.length >= 2) {
                             // Auto-trigger after typing 2+ characters
                             var lastWord = beforeCursor.match(/\\b\\w{2,}$/);
                             if (lastWord) {
                                 setTimeout(function() {
-                                    cm.showHint({
-                                        hint: CodeMirror.hint.sql,
-                                        completeSingle: false,
-                                        closeOnUnfocus: true
-                                    });
+                                    if (cm.showHint) {
+                                        cm.showHint({
+                                            hint: function(cm) {
+                                                if (CodeMirror.hint && CodeMirror.hint.sql) {
+                                                    return CodeMirror.hint.sql(cm);
+                                                } else {
+                                                    return CodeMirror.helpers.hint.sql(cm);
+                                                }
+                                            },
+                                            completeSingle: false,
+                                            closeOnUnfocus: true
+                                        });
+                                    }
                                 }, 300);
                             }
                         }
