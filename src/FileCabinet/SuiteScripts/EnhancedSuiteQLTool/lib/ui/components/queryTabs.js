@@ -55,7 +55,18 @@ define([
                     title: title || 'Untitled',
                     content: content || '',
                     isDirty: false,
-                    isActive: false
+                    isActive: false,
+                    // Results storage for this tab
+                    results: {
+                        hasResults: false,
+                        resultsHTML: '',
+                        welcomeVisible: true,
+                        statusText: 'Ready',
+                        queryResultsHeader: 'Query Results',
+                        responsePayload: null,
+                        copyButtonVisible: false,
+                        csvButtonsVisible: false
+                    }
                 };
             }
             
@@ -120,11 +131,15 @@ define([
             }
             
             function switchToTab(tabId) {
-                // Save current tab content before switching
+                // Save current tab content and results before switching
                 if (activeTabId && codeEditor && typeof codeEditor.getValue === 'function') {
                     const currentTab = queryTabs.find(tab => tab.id === activeTabId);
                     if (currentTab && !currentTab.isTableDetails) {
                         currentTab.content = codeEditor.getValue();
+
+                        // Ensure current tab has results structure and save current results state
+                        ensureTabHasResults(currentTab);
+                        saveCurrentTabResults(currentTab);
                     }
                 }
 
@@ -199,6 +214,10 @@ define([
                                 textarea.value = activeTab.content;
                             }
                         }
+
+                        // Ensure active tab has results structure and restore results for this tab
+                        ensureTabHasResults(activeTab);
+                        restoreTabResults(activeTab);
                     }
                 }
 
@@ -224,6 +243,103 @@ define([
                 if (tab) {
                     tab.isDirty = isDirty;
                     renderQueryTabs();
+                }
+            }
+
+            // Results management functions for tabs
+            function ensureTabHasResults(tab) {
+                if (!tab) return;
+                if (!tab.results) {
+                    tab.results = {
+                        hasResults: false,
+                        resultsHTML: '',
+                        welcomeVisible: true,
+                        statusText: 'Ready',
+                        queryResultsHeader: 'Query Results',
+                        responsePayload: null,
+                        copyButtonVisible: false,
+                        csvButtonsVisible: false
+                    };
+                }
+            }
+
+            function saveCurrentTabResults(tab) {
+                if (!tab) {
+                    console.warn('saveCurrentTabResults: No tab provided');
+                    return;
+                }
+
+                // Ensure tab has results structure
+                ensureTabHasResults(tab);
+
+                try {
+                    // Save current results state
+                    const resultsDiv = document.getElementById('` + constants.ELEMENT_IDS.RESULTS_DIV + `');
+                    const welcomeMessage = document.getElementById('` + constants.ELEMENT_IDS.WELCOME_MESSAGE + `');
+                    const statusText = document.getElementById('` + constants.ELEMENT_IDS.STATUS_TEXT + `');
+                    const queryResultsHeader = document.getElementById('` + constants.ELEMENT_IDS.QUERY_RESULTS_HEADER + `');
+                    const copyButton = document.getElementById('` + constants.ELEMENT_IDS.COPY_CLIPBOARD_BTN + `');
+                    const downloadCSVBtn = document.getElementById('downloadCSVBtn');
+                    const copyCSVBtn = document.getElementById('copyCSVBtn');
+
+                    if (resultsDiv && welcomeMessage && statusText && queryResultsHeader) {
+                        tab.results.hasResults = resultsDiv.style.display !== 'none';
+                        tab.results.resultsHTML = resultsDiv.innerHTML;
+                        tab.results.welcomeVisible = welcomeMessage.style.display !== 'none';
+                        tab.results.statusText = statusText.textContent;
+                        tab.results.queryResultsHeader = queryResultsHeader.textContent;
+                        tab.results.responsePayload = window.queryResponsePayload || null;
+                        tab.results.copyButtonVisible = copyButton ? copyButton.style.display !== 'none' : false;
+                        tab.results.csvButtonsVisible = downloadCSVBtn ? downloadCSVBtn.style.display !== 'none' : false;
+                    }
+                } catch (error) {
+                    console.error('Error saving tab results:', error);
+                }
+            }
+
+            function restoreTabResults(tab) {
+                if (!tab) {
+                    console.warn('restoreTabResults: No tab provided');
+                    return;
+                }
+
+                // Ensure tab has results structure
+                ensureTabHasResults(tab);
+
+                try {
+                    // Restore results state for this tab
+                    const resultsDiv = document.getElementById('` + constants.ELEMENT_IDS.RESULTS_DIV + `');
+                    const welcomeMessage = document.getElementById('` + constants.ELEMENT_IDS.WELCOME_MESSAGE + `');
+                    const statusText = document.getElementById('` + constants.ELEMENT_IDS.STATUS_TEXT + `');
+                    const queryResultsHeader = document.getElementById('` + constants.ELEMENT_IDS.QUERY_RESULTS_HEADER + `');
+                    const copyButton = document.getElementById('` + constants.ELEMENT_IDS.COPY_CLIPBOARD_BTN + `');
+                    const downloadCSVBtn = document.getElementById('downloadCSVBtn');
+                    const copyCSVBtn = document.getElementById('copyCSVBtn');
+
+                    if (resultsDiv && welcomeMessage && statusText && queryResultsHeader) {
+                        // Restore results content
+                        resultsDiv.innerHTML = tab.results.resultsHTML || '';
+                        resultsDiv.style.display = tab.results.hasResults ? 'block' : 'none';
+                        welcomeMessage.style.display = tab.results.welcomeVisible ? 'block' : 'none';
+                        statusText.textContent = tab.results.statusText || 'Ready';
+                        queryResultsHeader.textContent = tab.results.queryResultsHeader || 'Query Results';
+
+                        // Restore global query response payload
+                        window.queryResponsePayload = tab.results.responsePayload;
+
+                        // Restore button states
+                        if (copyButton) {
+                            copyButton.style.display = tab.results.copyButtonVisible ? 'inline-block' : 'none';
+                        }
+                        if (downloadCSVBtn) {
+                            downloadCSVBtn.style.display = tab.results.csvButtonsVisible ? 'none' : 'none'; // CSV buttons are typically hidden for table format
+                        }
+                        if (copyCSVBtn) {
+                            copyCSVBtn.style.display = tab.results.csvButtonsVisible ? 'none' : 'none';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error restoring tab results:', error);
                 }
             }
             
@@ -521,6 +637,11 @@ define([
                         activeTabId = tabsData.activeTabId || null;
                         tabCounter = tabsData.tabCounter || 1;
 
+                        // Ensure all loaded tabs have results structure
+                        queryTabs.forEach(tab => {
+                            ensureTabHasResults(tab);
+                        });
+
                         // Ensure at least one tab is marked as active
                         if (queryTabs.length > 0 && !queryTabs.some(tab => tab.isActive)) {
                             queryTabs[0].isActive = true;
@@ -651,6 +772,8 @@ define([
                         favorite: queryData.favorite || false
                     };
 
+
+
                     // Only include category if we have a valid value
                     if (queryData.category && queryData.category.trim() !== '') {
                         requestPayload.category = queryData.category;
@@ -693,26 +816,47 @@ define([
                     return;
                 }
 
+                // Get current content from the editor
+                let currentContent = '';
+                if (codeEditor && typeof codeEditor.getValue === 'function') {
+                    currentContent = codeEditor.getValue();
+                } else {
+                    // Fallback to textarea if CodeMirror isn't available
+                    const textarea = document.getElementById('` + constants.ELEMENT_IDS.QUERY_TEXTAREA + `');
+                    currentContent = textarea ? textarea.value : currentTab.content;
+                }
+
+                // Validate that we have content to save
+                if (!currentContent || currentContent.trim() === '') {
+                    showStatusMessage('Please enter a query before saving.');
+                    return;
+                }
+
+                console.log('Saving tab as query:', {
+                    tabId: currentTab.id,
+                    title: currentTab.title,
+                    titleLength: currentTab.title ? currentTab.title.length : 0,
+                    contentLength: currentContent.length,
+                    savedQueryId: currentTab.savedQueryId
+                });
+
+                // Ensure we have a valid title
+                const queryTitle = currentTab.title && currentTab.title.trim() !== '' ? currentTab.title.trim() : 'Untitled Query';
+
+                console.log('Using title for save:', queryTitle);
+
                 // Check if this tab was loaded from a saved query (has savedQueryId)
                 if (currentTab.savedQueryId) {
-                    // Get current content from the editor
-                    let currentContent = '';
-                    if (codeEditor && typeof codeEditor.getValue === 'function') {
-                        currentContent = codeEditor.getValue();
-                    } else {
-                        // Fallback to textarea if CodeMirror isn't available
-                        const textarea = document.getElementById('` + constants.ELEMENT_IDS.QUERY_TEXTAREA + `');
-                        currentContent = textarea ? textarea.value : currentTab.content;
-                    }
-
                     // This is an existing saved query - update it silently
                     const queryData = {
-                        title: currentTab.title,
+                        title: queryTitle,
                         content: currentContent,
                         description: '', // We don't have description stored in tab, use empty
                         tags: '', // We don't have tags stored in tab, use empty
                         favorite: false
                     };
+
+
 
                     // Use the silent save function for seamless updates
                     saveQueryToNetSuiteSilent(queryData, currentTab.savedQueryId, function(success, recordId, error) {
@@ -733,23 +877,16 @@ define([
                     });
                 } else {
                     // This is a new query - save seamlessly using the current tab title
-                    // Get current content from the editor
-                    let currentContent = '';
-                    if (codeEditor && typeof codeEditor.getValue === 'function') {
-                        currentContent = codeEditor.getValue();
-                    } else {
-                        // Fallback to textarea if CodeMirror isn't available
-                        const textarea = document.getElementById('` + constants.ELEMENT_IDS.QUERY_TEXTAREA + `');
-                        currentContent = textarea ? textarea.value : currentTab.content;
-                    }
 
                     const queryData = {
-                        title: currentTab.title,
+                        title: queryTitle,
                         content: currentContent,
                         description: '',
                         tags: '',
                         favorite: false
                     };
+
+                    console.log('Query data for new query save:', queryData);
 
                     // Use the silent save function for new queries too, so we get the record ID back
                     saveQueryToNetSuiteSilent(queryData, null, function(success, recordId, error) {
@@ -850,6 +987,16 @@ define([
 
 
 
+            // Function to save results to current active tab after query execution
+            function saveResultsToCurrentTab() {
+                const currentTab = queryTabs.find(tab => tab.id === activeTabId);
+                if (currentTab) {
+                    ensureTabHasResults(currentTab);
+                    saveCurrentTabResults(currentTab);
+                    saveTabsToStorage();
+                }
+            }
+
             // Expose functions globally
             window.addNewQueryTab = addNewQueryTab;
             window.switchToTab = switchToTab;
@@ -857,6 +1004,7 @@ define([
             window.loadQueryIntoTab = loadQueryIntoTab;
             window.startInlineTabEdit = startInlineTabEdit;
             window.saveCurrentTabAsQuery = saveCurrentTabAsQuery;
+            window.saveResultsToCurrentTab = saveResultsToCurrentTab;
         `;
     }
 

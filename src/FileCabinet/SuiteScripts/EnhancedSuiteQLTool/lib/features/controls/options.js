@@ -258,6 +258,11 @@ define([
                 formatRadios.forEach(radio => {
                     radio.checked = radio.value === 'table';
                 });
+
+                // Clear results for current active tab
+                if (typeof saveResultsToCurrentTab === 'function') {
+                    saveResultsToCurrentTab();
+                }
             }
         `;
     }
