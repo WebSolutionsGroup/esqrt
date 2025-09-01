@@ -27,10 +27,9 @@ define([
             <!-- Query Tabs Bar -->
             <div class="codeoss-tabs-container">
                 <div class="codeoss-tabs-bar" id="queryTabsBar">
-                    <!-- Tabs will be dynamically added here -->
+                    <!-- Tabs and add button will be dynamically added here -->
                 </div>
                 <div class="codeoss-tabs-actions">
-                    <button type="button" class="codeoss-tab-action-btn" onclick="addNewQueryTab()" title="New Query Tab">+</button>
                     <button type="button" class="codeoss-tab-action-btn" onclick="closeAllQueryTabs()" title="Close All Tabs">✕</button>
                 </div>
             </div>
@@ -415,24 +414,34 @@ define([
             function renderQueryTabs() {
                 const tabsBar = document.getElementById('queryTabsBar');
                 if (!tabsBar) return;
-                
+
                 tabsBar.innerHTML = '';
-                
+
+                // Render all tabs
                 queryTabs.forEach(tab => {
                     const tabElement = document.createElement('div');
                     tabElement.className = 'codeoss-tab' + (tab.isActive ? ' active' : '');
                     tabElement.setAttribute('data-tab-id', tab.id);
-                    
+
                     const tabTitle = tab.title + (tab.isDirty ? ' •' : '');
-                    
+
                     tabElement.innerHTML = \`
                         <span class="codeoss-tab-title" onclick="switchToTab('\${tab.id}')" ondblclick="startInlineTabEditOnTab('\${tab.id}', event)" title="Double-click to edit: \${tab.title}">\${tabTitle}</span>
                         <button class="codeoss-tab-close" onclick="closeQueryTab('\${tab.id}')" title="Close tab">×</button>
                     \`;
-                    
+
                     tabsBar.appendChild(tabElement);
                 });
-                
+
+                // Add the "+" button right after the tabs
+                const addTabButton = document.createElement('button');
+                addTabButton.type = 'button';
+                addTabButton.className = 'codeoss-add-tab-btn';
+                addTabButton.onclick = function() { addNewQueryTab(); };
+                addTabButton.title = 'New Query Tab';
+                addTabButton.innerHTML = '+';
+                tabsBar.appendChild(addTabButton);
+
                 // Update tab bar visibility
                 const tabsContainer = document.querySelector('.codeoss-tabs-container');
                 if (tabsContainer) {

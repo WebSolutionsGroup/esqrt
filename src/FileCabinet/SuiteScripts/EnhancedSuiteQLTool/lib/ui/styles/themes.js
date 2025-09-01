@@ -382,10 +382,12 @@ define([
 
                 .codeoss-tabs-bar {
                     display: flex;
-                    flex: 1;
+                    align-items: center;
                     overflow-x: auto;
                     scrollbar-width: none;
                     -ms-overflow-style: none;
+                    flex-shrink: 1;
+                    min-width: 0;
                 }
 
                 .codeoss-tabs-bar::-webkit-scrollbar {
@@ -442,11 +444,44 @@ define([
                     opacity: 1;
                 }
 
+                /* Add New Tab Button - positioned right after tabs */
+                .codeoss-add-tab-btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: var(--codeoss-sidebar-bg);
+                    border: none;
+                    border-right: 1px solid var(--codeoss-border);
+                    color: var(--codeoss-text-secondary);
+                    cursor: pointer;
+                    padding: 8px 12px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    min-height: 35px;
+                    min-width: 35px;
+                    box-sizing: border-box;
+                    transition: all 0.2s ease;
+                    flex-shrink: 0;
+                    line-height: 1;
+                }
+
+                .codeoss-add-tab-btn:hover {
+                    background-color: var(--codeoss-hover);
+                    color: var(--codeoss-accent);
+                }
+
+                .codeoss-add-tab-btn:active {
+                    background-color: var(--codeoss-accent);
+                    color: white;
+                }
+
                 .codeoss-tabs-actions {
                     display: flex;
                     align-items: center;
                     padding: 0 8px;
                     gap: 4px;
+                    flex-shrink: 0;
+                    margin-left: auto;
                 }
 
                 .codeoss-tab-action-btn {
