@@ -68,13 +68,33 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
    cd esqrt
    ```
 
-2. **Configure authentication**:
+2. **Set up project configuration files**:
+
+   The repository excludes environment-specific configuration files. You'll need to create these files with your own NetSuite account details:
+
+   **Create `project.json` in the root directory:**
+   ```json
+   {
+       "defaultAuthId": "your-account-id"
+   }
+   ```
+
+   **Create `src/project.json` in the src directory:**
+   ```json
+   {
+       "defaultAuthId": "your-account-id"
+   }
+   ```
+
+   > **Note**: These files are excluded from version control because they contain environment-specific authentication references. Replace `"your-account-id"` with your actual NetSuite account authentication ID.
+
+3. **Configure authentication**:
    ```bash
    # Set up your NetSuite authentication
    suitecloud account:setup
    ```
 
-3. **Deploy to NetSuite**:
+4. **Deploy to NetSuite**:
    ```bash
    # Validate the project
    suitecloud project:validate
