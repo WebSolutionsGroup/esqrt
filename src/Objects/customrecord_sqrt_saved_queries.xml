@@ -1,0 +1,102 @@
+<customrecordtype scriptid="customrecord_sqrt_saved_queries">
+    <recordname>SuiteQL Saved Query</recordname>
+    <description>Stores saved SuiteQL queries for the Enhanced SuiteQL Query Tool</description>
+    <allowattachments>F</allowattachments>
+    <allowinlineediting>F</allowinlineediting>
+    <allowquicksearch>T</allowquicksearch>
+    <allowuiaccess>T</allowuiaccess>
+    <enablenumbering>T</enablenumbering>
+    <enablesystemnotes>T</enablesystemnotes>
+    <includename>T</includename>
+    <showid>F</showid>
+    <customrecordcustomfields>
+        <customrecordcustomfield scriptid="custrecord_sqrt_query_title">
+            <label>Query Title</label>
+            <fieldtype>TEXT</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>The display name/title of the saved query</help>
+            <maxlength>100</maxlength>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_query_content">
+            <label>Query Content</label>
+            <fieldtype>TEXTAREA</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>The actual SuiteQL query content</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>F</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_query_description">
+            <label>Description</label>
+            <fieldtype>TEXTAREA</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>Optional description of what the query does</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>F</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_query_tags">
+            <label>Tags</label>
+            <fieldtype>TEXT</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>Comma-separated tags for categorization and search</help>
+            <maxlength>200</maxlength>
+            <searchlevel>2</searchlevel>
+            <showinlist>F</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_query_category">
+            <label>Category</label>
+            <fieldtype>SELECT</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>Query category for organization</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+            <selectrecordtype>-120</selectrecordtype>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_query_created_by">
+            <label>Created By</label>
+            <fieldtype>SELECT</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>The user who created this saved query</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+            <selectrecordtype>-4</selectrecordtype>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_query_last_modified">
+            <label>Last Modified</label>
+            <fieldtype>DATETIMETZ</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>When the query was last modified</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_query_execution_count">
+            <label>Execution Count</label>
+            <fieldtype>INTEGER</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>How many times this query has been executed</help>
+            <defaultvalue>0</defaultvalue>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_query_favorite">
+            <label>Favorite</label>
+            <fieldtype>CHECKBOX</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>Whether this query is marked as a favorite by the user</help>
+            <defaultchecked>F</defaultchecked>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+
+    </customrecordcustomfields>
+</customrecordtype>

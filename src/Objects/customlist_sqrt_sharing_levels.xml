@@ -1,0 +1,26 @@
+<customlist scriptid="customlist_sqrt_sharing_levels">
+    <name>SuiteQL Sharing Levels</name>
+    <description>Sharing levels for SuiteQL saved queries and history</description>
+    <customvalues>
+        <customvalue scriptid="val_sqrt_sharing_private">
+            <value>Private</value>
+            <abbreviation>Private</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_sharing_role">
+            <value>Role-based</value>
+            <abbreviation>Role</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_sharing_individual">
+            <value>Individual</value>
+            <abbreviation>Individual</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_sharing_public">
+            <value>Public</value>
+            <abbreviation>Public</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+    </customvalues>
+</customlist>

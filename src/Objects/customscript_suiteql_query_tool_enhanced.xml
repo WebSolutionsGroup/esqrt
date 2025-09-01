@@ -1,0 +1,15 @@
+<suitelet scriptid="customscript_suiteql_query_tool_enhanced">
+    <description>Enhanced SuiteQL Query Tool</description>
+    <isinactive>F</isinactive>
+    <name>Enhanced SuiteQL Query Tool</name>
+    <notifyowner>T</notifyowner>
+    <scriptfile>[/SuiteScripts/EnhancedSuiteQLTool/enhancedSuiteQLQueryTool.js]</scriptfile>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_suiteql_query_tool_enhanced">
+            <isdeployed>T</isdeployed>
+            <loglevel>DEBUG</loglevel>
+            <status>RELEASED</status>
+            <title>Enhanced SuiteQL Query Tool</title>
+        </scriptdeployment>
+    </scriptdeployments>
+</suitelet>

@@ -1,2 +1,786 @@
-# esqrt
-Enhanced SuiteQL Query Tool
+# Enhanced SuiteQL Query Tool (ESQRT) v2025.1
+
+A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemporary database management tools. This tool provides an enhanced user experience for writing, executing, and managing SuiteQL queries with advanced features like syntax highlighting, query history, export capabilities, and a responsive split-pane interface.
+
+[![NetSuite](https://img.shields.io/badge/NetSuite-Compatible-blue.svg)](https://www.netsuite.com/)
+[![SuiteScript](https://img.shields.io/badge/SuiteScript-2.1-green.svg)](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4387799721.html)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 🚀 Features Overview
+
+### Modern User Interface
+- **Split-Pane Layout**: Resizable three-panel interface with query editor, history sidebar, and results viewer
+- **Syntax Highlighting**: CodeMirror integration with SQL syntax highlighting and line numbers
+- **Dark Mode Support**: Toggle between light and dark themes for comfortable coding
+- **Responsive Design**: Bootstrap-based responsive interface that works across devices
+
+### Query Editor Enhancements
+- **Syntax Highlighting**: SQL syntax highlighting with line numbers
+- **Query Validation**: Real-time error highlighting and validation
+- **Bracket Matching**: Automatic bracket and parentheses matching
+- **Keyboard Shortcuts**: Ctrl+R for query execution, Ctrl+S for save
+
+### Query Management
+- **Query History**: Sidebar panel showing recent executed queries with click-to-load functionality
+- **Saved Queries**: Save and load queries with custom record integration
+- **Query Sharing**: Share queries with roles, users, or make them public
+- **Query Categories**: Organize queries with customizable categories and tags
+
+### Results & Export
+- **Multiple Export Formats**: CSV, JSON, PDF, and HTML export options
+- **DataTables Integration**: Enhanced table display with sorting, searching, and pagination
+- **Copy to Clipboard**: One-click data copying functionality
+- **Performance Metrics**: Query execution time and record count display
+
+### Advanced Features
+- **Virtual Views**: Support for custom view definitions using #viewname syntax
+- **Pagination Control**: Configurable result pagination with row range selection
+- **Custom Records Integration**: Full NetSuite custom record support for saved queries and history
+- **Modular Architecture**: Clean, maintainable codebase with separated concerns
+
+## 📋 Table of Contents
+
+- [Installation](#-installation)
+- [Quick Start](#-quick-start)
+- [Configuration](#-configuration)
+- [User Interface](#-user-interface)
+- [Query Features](#-query-features)
+- [Custom Records Setup](#-custom-records-setup)
+- [Architecture](#-architecture)
+- [Development](#-development)
+- [Troubleshooting](#-troubleshooting)
+- [Contributing](#-contributing)
+- [Credits](#-credits)
+
+## 🛠 Installation
+
+### Prerequisites
+- NetSuite Administrator access
+- SuiteCloud Development Framework (SDF) installed (optional)
+- Node.js and npm (for development)
+
+### Option 1: SuiteCloud CLI Deployment (Recommended)
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/WebSolutionsGroup/esqrt.git
+   cd esqrt
+   ```
+
+2. **Configure authentication**:
+   ```bash
+   # Set up your NetSuite authentication
+   suitecloud account:setup
+   ```
+
+3. **Deploy to NetSuite**:
+   ```bash
+   # Validate the project
+   suitecloud project:validate
+
+   # Deploy to NetSuite
+   suitecloud project:deploy
+   ```
+
+### Option 2: Manual Deployment
+
+1. **Upload the script file**:
+   - Upload `src/FileCabinet/SuiteScripts/EnhancedSuiteQLTool/enhancedSuiteQLQueryTool.js` to File Cabinet
+   - Place it under `/SuiteScripts/EnhancedSuiteQLTool/`
+   - Upload the entire `lib/` folder structure to maintain modular architecture
+
+2. **Import script record**:
+   - Import the script record from `src/Objects/customscript_suiteql_query_tool_enhanced.xml`
+   - Or manually create a Suitelet script record pointing to the uploaded file
+
+3. **Create deployment**:
+   - Create a script deployment with appropriate permissions
+   - Set the status to "Released"
+
+### Option 3: Custom Records Setup (Optional but Recommended)
+
+For advanced features like saved queries and query sharing, set up the custom records:
+
+1. **Import custom records**:
+   - Import all XML files from `src/Objects/` directory
+   - This includes custom record types and custom lists
+
+2. **Set permissions**:
+   - Configure role permissions for the custom records
+   - See [Custom Records Setup](#-custom-records-setup) for detailed instructions
+
+## 🚀 Quick Start
+
+1. **Access the tool**:
+   - Navigate to the script deployment URL in NetSuite
+   - Or add it to a role's custom links for easy access
+
+2. **Write your first query**:
+   ```sql
+   SELECT
+       id,
+       companyname,
+       email
+   FROM Customer
+   WHERE isinactive = 'F'
+   LIMIT 10
+   ```
+
+3. **Execute the query**:
+   - Click "Run Query" or press Alt+R
+   - View results in the results panel
+
+4. **Explore features**:
+   - Try the auto-complete with Ctrl+Space
+   - Toggle dark mode for comfortable viewing
+   - Export results in different formats
+   - Save frequently used queries
+
+## ⚙️ Configuration
+
+### Script Configuration Variables
+
+The tool includes several configuration options in `lib/core/constants.js`:
+
+```javascript
+var CONFIG = {
+    // Feature toggles
+    DATATABLES_ENABLED: false,        // Enable DataTables for result display
+    REMOTE_LIBRARY_ENABLED: true,     // Enable remote query library access
+    TOOL_UPGRADES_ENABLED: true,      // Enable automatic tool upgrades
+    WORKBOOKS_ENABLED: false,         // Enable workbooks integration
+
+    // Default settings
+    ROWS_RETURNED_DEFAULT: 25,        // Default number of rows to return
+    QUERY_FOLDER_ID: null,            // File Cabinet folder for saved queries
+
+    // Version information
+    VERSION: 'v2025.1'
+};
+```
+
+### Configuration Options
+
+| Setting | Description | Default | Impact |
+|---------|-------------|---------|---------|
+| `DATATABLES_ENABLED` | Enables enhanced table display | `false` | Adds sorting, searching, pagination |
+| `REMOTE_LIBRARY_ENABLED` | Allows remote query libraries | `true` | Shows "Remote Library" button |
+| `ROWS_RETURNED_DEFAULT` | Default pagination size | `25` | Initial value for row limit |
+| `QUERY_FOLDER_ID` | File Cabinet folder for queries | `null` | Enables local query save/load |
+| `WORKBOOKS_ENABLED` | Enables saved search integration | `false` | Shows "Workbooks" button |
+
+## 🖥 User Interface
+
+### Layout Structure
+
+The interface consists of three main panels in a responsive split-pane layout:
+
+#### 1. Query Editor Panel (Left)
+- **CodeMirror Editor**: Syntax-highlighted SQL editor with line numbers
+- **Syntax Highlighting**: SQL keywords, strings, and comments highlighted
+- **Query Validation**: Real-time error highlighting and bracket matching
+- **File Info Display**: Shows currently loaded query file information
+
+#### 2. Query History Panel (Center)
+- **Recent Queries**: Last 10 executed queries with timestamps
+- **Click to Load**: Click any history item to load it into the editor
+- **Query Preview**: Shows first 60 characters of each query
+- **Search and Filter**: Find specific queries in history
+
+#### 3. Results Panel (Right)
+- **Results Display**: Query results in table, CSV, JSON, or custom format
+- **Export Options**: Multiple export format buttons
+- **Performance Metrics**: Execution time and record count
+- **Pagination Controls**: Navigate through large result sets
+
+### Toolbar Features
+
+#### Primary Actions
+- **Run Query** (Alt+R): Execute the current query
+- **Tables Reference**: Open NetSuite schema reference
+- **Toggle Dark Mode**: Switch between light and dark themes
+- **Clear Editor**: Clear the query editor
+
+#### Library Actions (when enabled)
+- **Saved Queries**: Access saved query library
+- **Remote Library**: Access remote query collections
+- **Workbooks**: Load saved searches as SuiteQL
+
+#### View Controls
+- **Hide/Show Panels**: Collapse panels for more space
+- **Format Options**: Choose result display format
+- **Zoom Controls**: Adjust interface zoom level
+
+## 🔍 Query Features
+
+### Syntax Highlighting & Editor Features
+
+The CodeMirror editor provides enhanced editing capabilities:
+
+#### Syntax Highlighting
+- **SQL Keywords**: SELECT, FROM, WHERE, ORDER BY, GROUP BY, HAVING highlighted in blue
+- **Strings**: Text strings highlighted in green
+- **Comments**: SQL comments highlighted in gray
+- **Numbers**: Numeric values highlighted in orange
+- **Line Numbers**: Displayed on the left margin
+
+#### Editor Features
+- **Bracket Matching**: Automatic matching of parentheses and brackets
+- **Smart Indentation**: Intelligent indentation for nested queries
+- **Line Wrapping**: Long lines wrap for better readability
+- **Search and Replace**: Built-in search functionality
+
+#### Keyboard Shortcuts
+- **Ctrl+R**: Execute query
+- **Ctrl+Enter**: Execute query (alternative)
+- **Ctrl+S**: Save current query
+- **F5**: Execute query (alternative)
+
+> **Note**: Auto-complete functionality is configured but not fully implemented in the current version. This feature is planned for a future release.
+
+### Virtual Views System
+
+Create reusable query components using the `#viewname` syntax:
+
+#### Example Usage
+```sql
+-- Create a view file named "active_employees.sql"
+SELECT ID, FirstName, LastName, Email
+FROM Employee
+WHERE IsInactive = 'F'
+
+-- Use the view in your main query
+SELECT * FROM (#active_employees)
+WHERE Email LIKE '%@company.com'
+```
+
+#### Benefits
+- **Code Reusability**: Define common query patterns once
+- **Maintainability**: Update view definitions in one place
+- **Complex Queries**: Build complex queries from simpler components
+- **Team Collaboration**: Share common views across team members
+
+### Advanced Query Features
+
+#### Parameterized Queries
+```sql
+-- Use parameters for dynamic queries
+SELECT * FROM Transaction
+WHERE TranDate BETWEEN ? AND ?
+AND Entity = ?
+```
+
+#### Nested Queries Support
+```sql
+-- Complex nested queries with proper formatting
+SELECT
+    e.FirstName,
+    e.LastName,
+    (SELECT COUNT(*) FROM Transaction t WHERE t.Entity = e.ID) as TransactionCount
+FROM Employee e
+WHERE e.ID IN (
+    SELECT DISTINCT Entity
+    FROM Transaction
+    WHERE TranDate >= ADD_MONTHS(SYSDATE, -12)
+)
+```
+
+### Export & Results
+
+#### Export Formats
+
+1. **Table Format (Default)**
+   - DataTables integration with sorting and searching
+   - Pagination for large result sets
+   - Copy to clipboard functionality
+
+2. **CSV Export**
+   - Standard CSV format with quoted strings
+   - Header row with column names
+   - Excel-compatible formatting
+
+3. **JSON Export**
+   - Pretty formatted JSON for readability
+   - Complete data with all fields preserved
+   - API-ready format
+
+4. **PDF Export**
+   - Professional formatting with NetSuite templates
+   - Multi-page support for large datasets
+   - Company branding support
+
+5. **HTML Export**
+   - Web-ready format with clean styling
+   - Print-friendly optimization
+   - Email-ready reports
+
+#### Performance Features
+- **Execution Time**: Displays query execution time in milliseconds
+- **Record Count**: Shows number of records returned
+- **Memory Optimization**: Efficient handling of large datasets
+- **Pagination**: Configurable row ranges and infinite scrolling
+
+## 📊 Custom Records Setup
+
+The Enhanced SuiteQL Query Tool uses NetSuite custom records to enable advanced features like saved queries, query sharing, and execution history. This setup is optional but highly recommended for team environments.
+
+### Quick Setup Checklist
+
+- [ ] Import custom record types from `src/Objects/`
+- [ ] Set appropriate role permissions
+- [ ] Test saved query functionality
+- [ ] Configure sharing settings
+
+### Custom Records Included
+
+1. **Saved Queries** (`customrecord_sqrt_saved_queries`)
+   - Store and organize frequently used queries
+   - Support for categories, tags, and descriptions
+   - Sharing capabilities (private, role-based, individual, public)
+   - Execution count tracking and favorites
+
+2. **Query History** (`customrecord_sqrt_query_history`)
+   - Track all query executions for audit and analytics
+   - Performance metrics and error logging
+   - Session tracking and user analytics
+
+3. **Supporting Lists**
+   - Query Categories (`customlist_sqrt_query_categories`)
+   - Sharing Levels (`customlist_sqrt_sharing_levels`)
+   - Result Formats (`customlist_sqrt_result_formats`)
+
+### Automatic Integration
+
+The tool automatically detects available custom records:
+- If custom records are found, advanced features are enabled
+- If not found, the tool falls back to browser localStorage
+- No configuration changes needed in the tool itself
+
+### Feature Availability Matrix
+
+| Feature | Without Custom Records | With Custom Records |
+|---------|----------------------|-------------------|
+| Basic query execution | ✓ | ✓ |
+| Query history (session) | ✓ | ✓ |
+| Save queries | Browser only | ✓ Persistent |
+| Share queries | ✗ | ✓ |
+| Query analytics | ✗ | ✓ |
+| Audit trail | ✗ | ✓ |
+
+### Detailed Custom Record Setup
+
+#### Step 1: Import Custom Records
+The easiest way to set up custom records is to import the provided XML files:
+
+1. Navigate to **Customization > SuiteBuilder > Import Objects**
+2. Upload and import all XML files from the `src/Objects/` directory:
+   - `customrecord_sqrt_saved_queries.xml` - Main saved queries record
+   - `customrecord_sqrt_query_history.xml` - Query execution history
+   - `customlist_sqrt_query_categories.xml` - Query categories list
+   - `customlist_sqrt_sharing_levels.xml` - Sharing level options
+   - `customlist_sqrt_result_formats.xml` - Result format options
+
+#### Step 2: Set Permissions
+1. Go to **Setup > Users/Roles > Manage Roles**
+2. Edit each role that should access the tool
+3. Add permissions for the custom records:
+   - **View**: Full (to see public queries) or Own Records Only
+   - **Create**: Full (to save new queries)
+   - **Edit**: Own Records Only (to edit own queries)
+   - **Delete**: Own Records Only (to delete own queries)
+
+#### Step 3: Test the Setup
+1. Access the Enhanced SuiteQL Query Tool
+2. Write and execute a test query
+3. Try saving the query - you should see save options
+4. Verify the query appears in the saved queries list
+5. Test sharing functionality if configured
+
+#### Manual Setup (Alternative)
+If you prefer to create the custom records manually, here are the key fields needed:
+
+**Saved Queries Record** (`customrecord_sqrt_saved_queries`):
+- Query Title (`custrecord_sqrt_query_title`) - Free-Form Text, Required
+- Query Content (`custrecord_sqrt_query_content`) - Long Text, Required
+- Query Description (`custrecord_sqrt_query_description`) - Long Text, Optional
+- Query Tags (`custrecord_sqrt_query_tags`) - Free-Form Text, Optional
+- Query Category (`custrecord_sqrt_query_category`) - List/Record, Optional
+- Sharing Level (`custrecord_sqrt_query_sharing_level`) - List/Record, Required
+- Created By (`custrecord_sqrt_query_created_by`) - Employee, Required
+- Last Modified (`custrecord_sqrt_query_last_modified`) - Date/Time, Required
+- Execution Count (`custrecord_sqrt_query_execution_count`) - Integer, Optional
+- Favorite (`custrecord_sqrt_query_favorite`) - Checkbox, Optional
+
+## 🏗 Architecture
+
+### Modular Design
+
+The Enhanced SuiteQL Query Tool features a complete modular architecture for maximum maintainability and extensibility:
+
+```
+src/FileCabinet/SuiteScripts/EnhancedSuiteQLTool/
+├── enhancedSuiteQLQueryTool.js          # Main entry point
+└── lib/                                 # Modular architecture
+    ├── core/                           # Core system modules
+    │   ├── constants.js               # Configuration and constants
+    │   ├── modules.js                 # NetSuite module imports
+    │   └── requestHandlers.js         # HTTP request routing
+    ├── data/                          # Data processing modules
+    │   ├── queryEngine.js             # Core SuiteQL execution
+    │   ├── fileOperations.js          # File cabinet operations
+    │   ├── documentGeneration.js      # PDF/HTML generation
+    │   └── customRecordOperations.js  # Custom record CRUD
+    ├── ui/                            # User interface modules
+    │   ├── components/                # Reusable UI components
+    │   ├── layouts/                   # Page layout generators
+    │   └── styles/                    # CSS themes and styling
+    ├── features/                      # Feature-specific modules
+    │   ├── editor/                    # Code editor functionality
+    │   ├── export/                    # Data export features
+    │   ├── query/                     # Query execution
+    │   ├── queryHistory/              # History management
+    │   ├── savedQueries/              # Saved query management
+    │   ├── controls/                  # UI controls and options
+    │   └── ui/                        # UI utilities
+    └── netsuite/                      # NetSuite-specific integrations
+        ├── savedQueriesRecord.js      # Saved queries CRUD
+        └── queryHistoryRecord.js      # Query history CRUD
+```
+
+### Key Benefits
+
+#### Maintainability
+- **Single Responsibility**: Each module focuses on one specific area
+- **Clear Organization**: Related functionality grouped together
+- **Easy Navigation**: Logical file structure and naming conventions
+- **Reduced Complexity**: Smaller, focused files instead of one large file
+
+#### Extensibility
+- **Modular Design**: New features can be added as separate modules
+- **Clean Interfaces**: Well-defined module boundaries and APIs
+- **Plugin Architecture**: Framework ready for future extensions
+- **Future-Proof**: Easy to add functionality without touching existing code
+
+#### Performance
+- **On-Demand Loading**: Modules loaded only when needed
+- **Optimized Imports**: Only required dependencies imported
+- **Efficient Caching**: Browser can cache individual modules
+- **Reduced Bundle Size**: Unused modules can be excluded
+
+### Backward Compatibility
+
+The modular version maintains 100% backward compatibility:
+- All query functionality preserved
+- Virtual views support maintained
+- File operations unchanged
+- Document generation intact
+- All configuration options preserved
+
+## 🛠 Development
+
+### Development Setup
+
+#### Prerequisites
+- Node.js 14+ and npm
+- SuiteCloud CLI tools
+- NetSuite account with SDF enabled
+- Code editor with JavaScript support
+
+#### Local Development
+```bash
+# Clone the repository
+git clone https://github.com/WebSolutionsGroup/esqrt.git
+cd esqrt
+
+# Install SuiteCloud CLI (if not already installed)
+npm install -g @oracle/suitecloud-cli
+
+# Set up authentication
+suitecloud account:setup
+
+# Validate project
+suitecloud project:validate
+
+# Deploy to development environment
+suitecloud project:deploy
+```
+
+### Code Architecture
+
+#### Main Components
+1. **Main Entry Point**: `enhancedSuiteQLQueryTool.js` - Module initialization and request routing
+2. **Core Modules**: Configuration, NetSuite APIs, and request handling
+3. **Data Modules**: Query execution, file operations, and document generation
+4. **UI Modules**: HTML generation, styling, and component management
+5. **Feature Modules**: Specific functionality like editor, export, and saved queries
+6. **NetSuite Integration**: Custom record operations and NetSuite-specific features
+
+#### Key Functions
+- **Query Execution**: `lib/data/queryEngine.js` - Core SuiteQL processing
+- **UI Generation**: `lib/ui/layouts/toolGenerator.js` - Main interface HTML
+- **Request Handling**: `lib/core/requestHandlers.js` - GET/POST processing
+- **Custom Records**: `lib/netsuite/savedQueriesRecord.js` - Saved query management
+
+### Extending the Tool
+
+#### Adding New Export Formats
+```javascript
+// Create new export module in lib/features/export/
+define(['../../core/constants'], function(constants) {
+    return {
+        generateXML: function(data) {
+            // XML generation logic
+            var xml = '<?xml version="1.0" encoding="UTF-8"?>';
+            // ... build XML from data
+            return xml;
+        }
+    };
+});
+```
+
+#### Adding New UI Components
+```javascript
+// Create new component in lib/ui/components/
+define(['../../core/constants'], function(constants) {
+    return {
+        generateModal: function(title, content) {
+            // Modal HTML generation
+            return '<div class="modal">...</div>';
+        }
+    };
+});
+```
+
+#### Custom Auto-Complete Sources
+```javascript
+// Extend auto-complete in lib/features/editor/
+var customSuggestions = [
+    "CustomRecord", "CustomField", "CustomTransaction"
+];
+// Add to existing auto-complete logic
+```
+
+### Testing
+
+Each module can be tested independently:
+
+```javascript
+// Test query validation
+var queryEngine = require('./lib/data/queryEngine');
+var result = queryEngine.validateQuery('SELECT * FROM Employee');
+console.log(result.isValid); // true/false
+
+// Test file operations
+var fileOps = require('./lib/data/fileOperations');
+var validation = fileOps.validateFileName('test.sql');
+console.log(validation.isValid); // true/false
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+#### 1. Script Not Loading
+**Symptoms**: Blank page or error messages
+**Solutions**:
+- Verify script file is uploaded to correct File Cabinet location
+- Check script record configuration and deployment status
+- Ensure user has appropriate permissions
+- Review browser console for JavaScript errors
+
+#### 2. Query Execution Errors
+**Symptoms**: "Error executing query" messages
+**Solutions**:
+- Verify SuiteQL syntax is correct
+- Check user has SuiteQL execution permissions
+- Ensure referenced tables and fields exist
+- Review NetSuite execution logs for detailed error information
+
+#### 3. Custom Records Not Working
+**Symptoms**: Saved queries not persisting or sharing not available
+**Solutions**:
+- Verify custom records are imported and deployed
+- Check role permissions for custom record access
+- Ensure field IDs match exactly as specified
+- Review NetSuite logs for custom record errors
+
+#### 4. Auto-Complete Not Working
+**Symptoms**: Ctrl+Space doesn't show suggestions
+**Solutions**:
+- Verify CodeMirror libraries are loading correctly
+- Check browser console for JavaScript errors
+- Ensure internet connection for CDN resources
+- Try refreshing the page to reload JavaScript
+
+#### 5. Export Functionality Issues
+**Symptoms**: Export buttons not working or generating errors
+**Solutions**:
+- Check browser popup blockers
+- Verify File Cabinet permissions for PDF generation
+- Ensure templates are properly configured
+- Review browser console for JavaScript errors
+
+### Performance Issues
+
+#### Slow Query Execution
+- **Enable Pagination**: Use pagination for large result sets
+- **Optimize Queries**: Review query structure and add appropriate WHERE clauses
+- **Check Indexes**: Ensure proper indexing on queried fields
+- **Monitor Resources**: Check NetSuite governance limits
+
+#### UI Responsiveness
+- **Reduce Result Size**: Limit rows returned for better performance
+- **Disable DataTables**: Turn off DataTables for very large datasets
+- **Browser Resources**: Close other tabs and applications
+- **Network Connection**: Ensure stable internet connection
+
+### Debug Mode
+
+Enable debug logging by modifying the configuration:
+
+```javascript
+// In lib/core/constants.js
+var CONFIG = {
+    DEBUG_MODE: true,  // Enable debug logging
+    // ... other settings
+};
+```
+
+## 🤝 Contributing
+
+We welcome contributions to improve the Enhanced SuiteQL Query Tool!
+
+### How to Contribute
+
+1. **Fork the Repository**: Create your own fork for development
+2. **Create Feature Branch**: Work on features in separate branches
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Follow Coding Standards**: Maintain consistent code style
+4. **Test Thoroughly**: Test all changes in development environment
+5. **Submit Pull Request**: Submit changes for review
+
+### Development Guidelines
+
+- Follow the existing modular architecture
+- Add proper JSDoc documentation
+- Include error handling in all functions
+- Test with different NetSuite environments
+- Update documentation for new features
+
+### Reporting Issues
+
+When reporting issues, please include:
+- NetSuite version and environment
+- Browser type and version
+- Steps to reproduce the issue
+- Error messages or screenshots
+- Expected vs actual behavior
+
+## 📄 Credits
+
+### Original Developer
+**Tim Dietrich**
+- Email: timdietrich@me.com
+- Website: https://timdietrich.me
+- Original SuiteQL Query Tool foundation
+
+### Enhanced Version Developer
+**Matt Owen - Web Solutions Group, LLC**
+- Enhanced UI with modern interface inspired by contemporary database management tools
+- Added CodeMirror syntax highlighting, query history, and improved user experience
+- Complete modular architecture refactoring for maximum maintainability and extensibility
+- Web Solutions Group, LLC - Professional NetSuite Development Services
+
+### Acknowledgments
+- **Modern Database Tools**: UI design and interface layout inspiration
+- **CodeMirror**: Syntax highlighting and editor functionality
+- **Bootstrap**: Responsive UI framework
+- **DataTables**: Enhanced table display functionality
+- **Split.js**: Resizable panel implementation
+
+## 📈 Version History
+
+### v2025.1 (Current)
+- Production release with complete UI overhaul
+- Split-pane layout with resizable panels
+- CodeMirror integration with syntax highlighting
+- Auto-complete for SQL keywords and NetSuite objects
+- Query history sidebar with click-to-load functionality
+- Dark mode support with theme persistence
+- Enhanced export options (CSV, JSON, PDF, HTML)
+- Virtual views system for query reusability
+- Complete modular architecture refactoring
+- Custom records integration for saved queries and history
+- Improved performance and user experience
+
+### Previous Versions
+- Built upon Tim Dietrich's original SuiteQL Query Tool
+- Maintained backward compatibility while adding modern features
+- Preserved all original functionality with enhanced interface
+
+## 🔗 Resources
+
+### Documentation
+All documentation is consolidated in this README file:
+- [Custom Records Setup](#-custom-records-setup) - Setting up NetSuite custom records
+- [Architecture](#-architecture) - Modular architecture overview
+- [Development](#-development) - Development setup and guidelines
+
+### NetSuite Resources
+- [NetSuite SuiteQL Reference](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156257770590.html)
+- [SuiteCloud Development Framework](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_155931263126.html)
+- [NetSuite Custom Records Documentation](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4625600928.html)
+
+### Development Resources
+- [CodeMirror Documentation](https://codemirror.net/doc/manual.html)
+- [Bootstrap Documentation](https://getbootstrap.com/docs/)
+- [SuiteScript 2.1 API Reference](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4387799721.html)
+
+## 📞 Support
+
+### Getting Help
+- **Issues**: Report bugs and feature requests via GitHub Issues
+- **Documentation**: All documentation is available in this comprehensive README
+- **Community**: Join NetSuite developer communities for general SuiteQL questions
+- **Professional Support**: Contact Web Solutions Group for professional assistance
+
+### Professional Services
+For professional NetSuite development services, custom implementations, or enterprise support:
+
+**Web Solutions Group, LLC**
+- Professional NetSuite Development Services
+- Custom SuiteScript Development
+- NetSuite Integration Solutions
+- Enterprise Support and Consulting
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### Usage Terms
+- Free for personal and commercial use
+- Attribution to original authors appreciated
+- No warranty provided - use at your own risk
+- Respect NetSuite's terms of service and licensing agreements
+
+## 🌟 Star History
+
+If you find this tool useful, please consider giving it a star on GitHub! Your support helps us continue improving the tool and adding new features.
+
+---
+
+**Enhanced SuiteQL Query Tool v2025.1** - Bringing modern database query interfaces to NetSuite
+
+*For professional NetSuite development services, contact [Web Solutions Group, LLC](https://websolutions-group.com)*
+
+---
+
+### Quick Links
+- [🚀 Installation](#-installation)
+- [📊 Custom Records Setup](#-custom-records-setup)
+- [🏗 Architecture](#-architecture)
+- [🛠 Development](#-development)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [🤝 Contributing](#-contributing)

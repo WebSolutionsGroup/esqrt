@@ -1,0 +1,109 @@
+<customrecordtype scriptid="customrecord_sqrt_query_history">
+    <recordname>SuiteQL Query History</recordname>
+    <description>Stores execution history of SuiteQL queries for analytics and reuse</description>
+    <allowattachments>F</allowattachments>
+    <allowinlineediting>F</allowinlineediting>
+    <allowquicksearch>T</allowquicksearch>
+    <allowuiaccess>T</allowuiaccess>
+    <enablenumbering>T</enablenumbering>
+    <includename>F</includename>
+    <showid>F</showid>
+    <customrecordcustomfields>
+        <customrecordcustomfield scriptid="custrecord_sqrt_history_query_content">
+            <label>Query Content</label>
+            <fieldtype>TEXTAREA</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>The actual SuiteQL query that was executed</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>F</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_history_executed_by">
+            <label>Executed By</label>
+            <fieldtype>SELECT</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>The user who executed this query</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+            <selectrecordtype>-4</selectrecordtype>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_history_executed_date">
+            <label>Executed Date</label>
+            <fieldtype>DATETIMETZ</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>When the query was executed</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_history_execution_time">
+            <label>Execution Time (ms)</label>
+            <fieldtype>FLOAT</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>How long the query took to execute in milliseconds</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_history_record_count">
+            <label>Record Count</label>
+            <fieldtype>INTEGER</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>Number of records returned by the query</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_history_success">
+            <label>Success</label>
+            <fieldtype>CHECKBOX</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>Whether the query executed successfully</help>
+            <defaultchecked>T</defaultchecked>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_history_error_message">
+            <label>Error Message</label>
+            <fieldtype>TEXTAREA</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>Error message if the query failed</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>F</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_history_result_format">
+            <label>Result Format</label>
+            <fieldtype>SELECT</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>Format used to display results (table, csv, json)</help>
+            <searchlevel>2</searchlevel>
+            <showinlist>T</showinlist>
+            <storevalue>T</storevalue>
+            <selectrecordtype>-120</selectrecordtype>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_history_query_hash">
+            <label>Query Hash</label>
+            <fieldtype>TEXT</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>Hash of the query content for deduplication and analytics</help>
+            <maxlength>50</maxlength>
+            <searchlevel>2</searchlevel>
+            <showinlist>F</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+        <customrecordcustomfield scriptid="custrecord_sqrt_history_session_id">
+            <label>Session ID</label>
+            <fieldtype>TEXT</fieldtype>
+            <displaytype>NORMAL</displaytype>
+            <help>Browser session identifier for grouping related queries</help>
+            <maxlength>100</maxlength>
+            <searchlevel>2</searchlevel>
+            <showinlist>F</showinlist>
+            <storevalue>T</storevalue>
+        </customrecordcustomfield>
+
+    </customrecordcustomfields>
+</customrecordtype>

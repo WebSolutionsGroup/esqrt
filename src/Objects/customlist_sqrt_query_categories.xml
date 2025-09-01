@@ -1,0 +1,46 @@
+<customlist scriptid="customlist_sqrt_query_categories">
+    <name>SuiteQL Query Categories</name>
+    <description>Categories for organizing SuiteQL saved queries</description>
+    <customvalues>
+        <customvalue scriptid="val_sqrt_category_reports">
+            <value>Reports</value>
+            <abbreviation>Reports</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_category_analysis">
+            <value>Data Analysis</value>
+            <abbreviation>Analysis</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_category_maintenance">
+            <value>Maintenance</value>
+            <abbreviation>Maintenance</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_category_troubleshooting">
+            <value>Troubleshooting</value>
+            <abbreviation>Troubleshooting</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_category_integration">
+            <value>Integration</value>
+            <abbreviation>Integration</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_category_custom">
+            <value>Custom</value>
+            <abbreviation>Custom</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_category_testing">
+            <value>Testing</value>
+            <abbreviation>Testing</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_category_audit">
+            <value>Audit</value>
+            <abbreviation>Audit</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+    </customvalues>
+</customlist>

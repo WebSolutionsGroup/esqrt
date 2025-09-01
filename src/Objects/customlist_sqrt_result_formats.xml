@@ -1,0 +1,21 @@
+<customlist scriptid="customlist_sqrt_result_formats">
+    <name>SuiteQL Result Formats</name>
+    <description>Result display formats for SuiteQL query history</description>
+    <customvalues>
+        <customvalue scriptid="val_sqrt_format_table">
+            <value>Table</value>
+            <abbreviation>Table</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_format_csv">
+            <value>CSV</value>
+            <abbreviation>CSV</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+        <customvalue scriptid="val_sqrt_format_json">
+            <value>JSON</value>
+            <abbreviation>JSON</abbreviation>
+            <isinactive>F</isinactive>
+        </customvalue>
+    </customvalues>
+</customlist>
