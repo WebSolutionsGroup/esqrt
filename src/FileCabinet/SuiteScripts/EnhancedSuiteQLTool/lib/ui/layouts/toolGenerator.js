@@ -425,13 +425,14 @@ define([
                     padding: 8px 12px;
                     background-color: var(--codeoss-sidebar-bg);
                     transition: all 0.3s ease;
-                    overflow: hidden;
+                    overflow-y: auto; /* Allow scrolling when expanded */
                 }
 
                 .codeoss-sidebar-section-content.collapsed {
                     max-height: 0;
                     padding-top: 0;
                     padding-bottom: 0;
+                    overflow: hidden; /* Hide content when collapsed */
                 }
 
                 /* Sidebar section buttons */

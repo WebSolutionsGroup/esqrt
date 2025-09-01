@@ -258,6 +258,61 @@ define([
                 .codeoss-btn-secondary:hover {
                     background-color: var(--codeoss-border);
                 }
+
+                /* Sortable table header styles */
+                .sortable-header {
+                    position: relative;
+                    transition: background-color 0.2s ease;
+                }
+
+                .sortable-header:hover {
+                    background-color: var(--codeoss-hover) !important;
+                }
+
+                .sort-indicator {
+                    font-size: 12px;
+                    margin-left: 4px;
+                    opacity: 0.5;
+                    transition: opacity 0.2s ease;
+                    display: inline-block;
+                    min-width: 12px;
+                    text-align: center;
+                }
+
+                .sortable-header:hover .sort-indicator {
+                    opacity: 0.8;
+                }
+
+                /* Table styles for better sorting experience */
+                .codeoss-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-family: var(--codeoss-font-family);
+                    font-size: 12px;
+                }
+
+                .codeoss-table th {
+                    background-color: var(--codeoss-bg-secondary);
+                    border: 1px solid var(--codeoss-border);
+                    padding: 8px 12px;
+                    text-align: left;
+                    font-weight: 600;
+                    color: var(--codeoss-text-primary);
+                }
+
+                .codeoss-table td {
+                    border: 1px solid var(--codeoss-border);
+                    padding: 6px 12px;
+                    color: var(--codeoss-text-primary);
+                }
+
+                .codeoss-table tbody tr:nth-child(even) {
+                    background-color: var(--codeoss-bg-secondary);
+                }
+
+                .codeoss-table tbody tr:hover {
+                    background-color: var(--codeoss-hover);
+                }
             </style>
         `;
     }
@@ -513,6 +568,15 @@ define([
                 /* Sidebar Section Styles */
                 .codeoss-sidebar-section {
                     border-bottom: 1px solid var(--codeoss-border);
+                    display: flex;
+                    flex-direction: column;
+                    flex: 0 0 auto; /* Don't grow by default */
+                    min-height: 0;
+                }
+
+                /* Expanded section takes all available space */
+                .codeoss-sidebar-section.expanded {
+                    flex: 1;
                 }
 
                 .codeoss-sidebar-section-header {
@@ -528,9 +592,10 @@ define([
                 }
 
                 .codeoss-sidebar-section-content {
-                    max-height: 300px;
+                    flex: 1;
                     overflow-y: auto;
                     padding: 8px;
+                    min-height: 0;
                 }
 
                 .codeoss-sidebar-section-content::-webkit-scrollbar {
@@ -551,38 +616,12 @@ define([
                 }
 
                 #savedQueriesContainer {
-                    max-height: 250px;
+                    flex: 1;
                     overflow-y: auto;
+                    min-height: 0;
                 }
 
-                /* Sidebar Section Styles */
-                .codeoss-sidebar-section-content {
-                    max-height: 300px;
-                    overflow-y: auto;
-                    padding: 8px;
-                }
 
-                .codeoss-sidebar-section-content::-webkit-scrollbar {
-                    width: 6px;
-                }
-
-                .codeoss-sidebar-section-content::-webkit-scrollbar-track {
-                    background: var(--codeoss-panel-bg);
-                }
-
-                .codeoss-sidebar-section-content::-webkit-scrollbar-thumb {
-                    background: var(--codeoss-border);
-                    border-radius: 3px;
-                }
-
-                .codeoss-sidebar-section-content::-webkit-scrollbar-thumb:hover {
-                    background: var(--codeoss-text-secondary);
-                }
-
-                #savedQueriesContainer {
-                    max-height: 250px;
-                    overflow-y: auto;
-                }
 
                 /* Saved Queries Styles */
                 .codeoss-saved-query-item {
