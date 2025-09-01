@@ -130,11 +130,17 @@ For advanced features like saved queries and query sharing, set up the custom re
    - Click "Run Query" or press Alt+R
    - View results in the results panel
 
-4. **Explore features**:
-   - Try the auto-complete with Ctrl+Space
+4. **Explore the welcome screen**:
+   - The tool displays a helpful welcome panel on first load
+   - Click "Load a sample query" to get started with an example
+   - Review the "Getting Started" and "Key Features" sections
+   - Notice the attribution to Tim Dietrich's original work in the footer
+
+5. **Explore features**:
+   - Use keyboard shortcuts (Ctrl+R to run queries)
    - Toggle dark mode for comfortable viewing
    - Export results in different formats
-   - Save frequently used queries
+   - Save frequently used queries (if custom records are set up)
 
 ## ⚙️ Configuration
 
@@ -188,6 +194,10 @@ The interface consists of three main panels in a responsive split-pane layout:
 - **Search and Filter**: Find specific queries in history
 
 #### 3. Results Panel (Right)
+- **Welcome Screen**: Professional welcome panel displayed on first load with:
+  - Getting Started guide with sample query link
+  - Key Features overview
+  - Attribution to Tim Dietrich's original work
 - **Results Display**: Query results in table, CSV, JSON, or custom format
 - **Export Options**: Multiple export format buttons
 - **Performance Metrics**: Execution time and record count
@@ -231,10 +241,28 @@ The CodeMirror editor provides enhanced editing capabilities:
 - **Search and Replace**: Built-in search functionality
 
 #### Keyboard Shortcuts
-- **Ctrl+R**: Execute query
-- **Ctrl+Enter**: Execute query (alternative)
-- **Ctrl+S**: Save current query
-- **F5**: Execute query (alternative)
+
+The tool includes comprehensive keyboard shortcuts for efficient query development:
+
+**Query Execution:**
+- **Ctrl+R** - Execute the current query
+- **Ctrl+Enter** - Execute query (alternative)
+- **F5** - Execute query (alternative)
+
+**File Operations:**
+- **Ctrl+S** - Save current query (opens save dialog if local library enabled)
+- **Ctrl+O** - Open/load query (opens load dialog if local library enabled)
+
+**Interface Navigation:**
+- **Escape** - Close open modals or panels
+- **Click title** - Load sample query (click "ENHANCED SUITEQL QUERY TOOL" in header)
+
+**Editor Features:**
+- **Ctrl+Space** - Auto-complete (configured for future implementation)
+- **Tab** - Smart indentation
+- **Ctrl+A** - Select all text
+- **Ctrl+Z** - Undo
+- **Ctrl+Y** - Redo
 
 > **Note**: Auto-complete functionality is configured but not fully implemented in the current version. This feature is planned for a future release.
 
@@ -680,18 +708,46 @@ When reporting issues, please include:
 
 ## 📄 Credits
 
-### Original Developer
-**Tim Dietrich**
+### Original Developer - Tim Dietrich
+
+**Tim Dietrich** created the foundational SuiteQL Query Tool that serves as the backbone of this enhanced version. His original work provided:
+
+- **Core SuiteQL Execution Engine**: The fundamental query processing and execution logic
+- **Virtual Views System**: Innovative #viewname syntax for reusable query components
+- **File Cabinet Integration**: Local library functionality for saving and loading queries
+- **Document Generation**: PDF and HTML export capabilities
+- **Workbooks Integration**: Saved search to SuiteQL conversion functionality
+- **Robust Error Handling**: Comprehensive error management and user feedback
+- **NetSuite Best Practices**: Professional SuiteScript implementation patterns
+
+**Tim Dietrich's Contact Information:**
 - Email: timdietrich@me.com
 - Website: https://timdietrich.me
-- Original SuiteQL Query Tool foundation
+- Original Tool: https://timdietrich.me/netsuite-suitescripts/suiteql-query-tool/
+
+**Original Version History:**
+- **v2021.2 Beta 1** (July 14, 2021) - First public beta release
+- **v2021.2 Beta 2** (July 25, 2021) - Second public beta with improvements
+- **v2021.2 Production** (October 27, 2021) - Production release with virtual views, selected text queries, and Tables Reference enhancements
 
 ### Enhanced Version Developer
-**Matt Owen - Web Solutions Group, LLC**
-- Enhanced UI with modern interface inspired by contemporary database management tools
-- Added CodeMirror syntax highlighting, query history, and improved user experience
-- Complete modular architecture refactoring for maximum maintainability and extensibility
-- Web Solutions Group, LLC - Professional NetSuite Development Services
+
+**Matt Owen - Web Solutions Group, LLC** built upon Tim's solid foundation to create the modern enhanced version:
+
+- **Modern UI/UX**: Complete interface redesign inspired by contemporary database management tools
+- **CodeMirror Integration**: Syntax highlighting, line numbers, and enhanced editing features
+- **Split-Pane Layout**: Resizable three-panel interface with query editor, history, and results
+- **Dark Mode Support**: Professional light/dark theme system with persistence
+- **Query History Management**: Sidebar panel with click-to-load functionality and session tracking
+- **Enhanced Export Options**: Improved CSV, JSON, PDF, and HTML export capabilities
+- **Custom Records Integration**: NetSuite custom record support for saved queries and execution history
+- **Modular Architecture**: Complete refactoring into maintainable, extensible modular codebase
+- **Performance Optimizations**: Improved query execution, result handling, and UI responsiveness
+
+**Web Solutions Group, LLC Contact:**
+- Professional NetSuite Development Services
+- Custom SuiteScript Development and NetSuite Integration Solutions
+- Website: https://websolutions-group.com
 
 ### Acknowledgments
 - **Modern Database Tools**: UI design and interface layout inspiration
