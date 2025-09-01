@@ -7,7 +7,7 @@
     <allowuiaccess>T</allowuiaccess>
     <enablenumbering>T</enablenumbering>
     <enablesystemnotes>T</enablesystemnotes>
-    <includename>T</includename>
+    <includename>F</includename>
     <showid>F</showid>
     <customrecordcustomfields>
         <customrecordcustomfield scriptid="custrecord_sqrt_query_title">

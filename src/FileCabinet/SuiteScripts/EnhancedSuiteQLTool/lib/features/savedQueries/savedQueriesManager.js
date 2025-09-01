@@ -140,7 +140,7 @@ define([], function() {
             }
             
             function loadSavedQueriesFromNetSuite() {
-                console.log('Loading saved queries from NetSuite...');
+                // console.log('Loading saved queries from NetSuite...');
 
                 // Create request payload for server-side function
                 const requestPayload = {
@@ -159,6 +159,9 @@ define([], function() {
                       if (data.success) {
                           savedQueries = data.queries || [];
                           renderSavedQueries();
+
+                          // No need to refresh tab content - tabs maintain their localStorage content
+                          // Saved queries only populate new tabs when explicitly loaded
                       } else {
                           throw new Error(data.error || 'Unknown error loading queries');
                       }

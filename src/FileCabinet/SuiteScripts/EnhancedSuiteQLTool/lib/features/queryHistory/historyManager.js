@@ -180,7 +180,7 @@ define([
             }
 
             function loadQueryHistoryFromNetSuite() {
-                console.log('Loading query history from NetSuite...');
+                // console.log('Loading query history from NetSuite...');
 
                 // Create request payload for server-side function
                 const requestPayload = {

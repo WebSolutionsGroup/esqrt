@@ -27,10 +27,9 @@ define([
             <!-- Query Tabs Bar -->
             <div class="codeoss-tabs-container">
                 <div class="codeoss-tabs-bar" id="queryTabsBar">
-                    <!-- Tabs will be dynamically added here -->
+                    <!-- Tabs and add button will be dynamically added here -->
                 </div>
                 <div class="codeoss-tabs-actions">
-                    <button type="button" class="codeoss-tab-action-btn" onclick="addNewQueryTab()" title="New Query Tab">+</button>
                     <button type="button" class="codeoss-tab-action-btn" onclick="closeAllQueryTabs()" title="Close All Tabs">✕</button>
                 </div>
             </div>
@@ -56,12 +55,29 @@ define([
                     title: title || 'Untitled',
                     content: content || '',
                     isDirty: false,
-                    isActive: false
+                    isActive: false,
+                    // Results storage for this tab
+                    results: {
+                        hasResults: false,
+                        resultsHTML: '',
+                        welcomeVisible: true,
+                        statusText: 'Ready',
+                        queryResultsHeader: 'Query Results',
+                        responsePayload: null,
+                        copyButtonVisible: false,
+                        csvButtonsVisible: false
+                    }
                 };
             }
             
             function addNewQueryTab(title, content) {
                 const tabId = 'tab_' + Date.now();
+
+                // If no tabs exist, reset counter to 1
+                if (queryTabs.length === 0) {
+                    tabCounter = 1;
+                }
+
                 const tabTitle = title || 'Untitled ' + tabCounter++;
                 const tabContent = content || '';
 
@@ -117,15 +133,20 @@ define([
                 
                 queryTabs = [];
                 activeTabId = null;
+                tabCounter = 1; // Reset counter when all tabs are closed
                 addNewQueryTab();
             }
             
-            function switchToTab(tabId) {
-                // Save current tab content before switching
-                if (activeTabId && codeEditor && typeof codeEditor.getValue === 'function') {
+            function switchToTab(tabId, skipSaveCurrentTab = false) {
+                // Save current tab content and results before switching (unless we're initializing)
+                if (!skipSaveCurrentTab && activeTabId && codeEditor && typeof codeEditor.getValue === 'function') {
                     const currentTab = queryTabs.find(tab => tab.id === activeTabId);
                     if (currentTab && !currentTab.isTableDetails) {
                         currentTab.content = codeEditor.getValue();
+
+                        // Ensure current tab has results structure and save current results state
+                        ensureTabHasResults(currentTab);
+                        saveCurrentTabResults(currentTab);
                     }
                 }
 
@@ -193,13 +214,34 @@ define([
 
                         if (codeEditor && typeof codeEditor.setValue === 'function') {
                             codeEditor.setValue(activeTab.content);
+
+                            // Ensure the editor is refreshed and focused
+                            setTimeout(function() {
+                                if (codeEditor && typeof codeEditor.refresh === 'function') {
+                                    codeEditor.refresh();
+                                }
+                            }, 50);
                         } else {
                             // Fallback to textarea if CodeMirror isn't ready
                             const textarea = document.getElementById('` + constants.ELEMENT_IDS.QUERY_TEXTAREA + `');
                             if (textarea) {
                                 textarea.value = activeTab.content;
                             }
+
+                            // If CodeMirror isn't ready, try again after a short delay
+                            setTimeout(function() {
+                                if (codeEditor && typeof codeEditor.setValue === 'function') {
+                                    codeEditor.setValue(activeTab.content);
+                                    if (typeof codeEditor.refresh === 'function') {
+                                        codeEditor.refresh();
+                                    }
+                                }
+                            }, 100);
                         }
+
+                        // Ensure active tab has results structure and restore results for this tab
+                        ensureTabHasResults(activeTab);
+                        restoreTabResults(activeTab);
                     }
                 }
 
@@ -225,6 +267,103 @@ define([
                 if (tab) {
                     tab.isDirty = isDirty;
                     renderQueryTabs();
+                }
+            }
+
+            // Results management functions for tabs
+            function ensureTabHasResults(tab) {
+                if (!tab) return;
+                if (!tab.results) {
+                    tab.results = {
+                        hasResults: false,
+                        resultsHTML: '',
+                        welcomeVisible: true,
+                        statusText: 'Ready',
+                        queryResultsHeader: 'Query Results',
+                        responsePayload: null,
+                        copyButtonVisible: false,
+                        csvButtonsVisible: false
+                    };
+                }
+            }
+
+            function saveCurrentTabResults(tab) {
+                if (!tab) {
+                    console.warn('saveCurrentTabResults: No tab provided');
+                    return;
+                }
+
+                // Ensure tab has results structure
+                ensureTabHasResults(tab);
+
+                try {
+                    // Save current results state
+                    const resultsDiv = document.getElementById('` + constants.ELEMENT_IDS.RESULTS_DIV + `');
+                    const welcomeMessage = document.getElementById('` + constants.ELEMENT_IDS.WELCOME_MESSAGE + `');
+                    const statusText = document.getElementById('` + constants.ELEMENT_IDS.STATUS_TEXT + `');
+                    const queryResultsHeader = document.getElementById('` + constants.ELEMENT_IDS.QUERY_RESULTS_HEADER + `');
+                    const copyButton = document.getElementById('` + constants.ELEMENT_IDS.COPY_CLIPBOARD_BTN + `');
+                    const downloadCSVBtn = document.getElementById('downloadCSVBtn');
+                    const copyCSVBtn = document.getElementById('copyCSVBtn');
+
+                    if (resultsDiv && welcomeMessage && statusText && queryResultsHeader) {
+                        tab.results.hasResults = resultsDiv.style.display !== 'none';
+                        tab.results.resultsHTML = resultsDiv.innerHTML;
+                        tab.results.welcomeVisible = welcomeMessage.style.display !== 'none';
+                        tab.results.statusText = statusText.textContent;
+                        tab.results.queryResultsHeader = queryResultsHeader.textContent;
+                        tab.results.responsePayload = window.queryResponsePayload || null;
+                        tab.results.copyButtonVisible = copyButton ? copyButton.style.display !== 'none' : false;
+                        tab.results.csvButtonsVisible = downloadCSVBtn ? downloadCSVBtn.style.display !== 'none' : false;
+                    }
+                } catch (error) {
+                    console.error('Error saving tab results:', error);
+                }
+            }
+
+            function restoreTabResults(tab) {
+                if (!tab) {
+                    console.warn('restoreTabResults: No tab provided');
+                    return;
+                }
+
+                // Ensure tab has results structure
+                ensureTabHasResults(tab);
+
+                try {
+                    // Restore results state for this tab
+                    const resultsDiv = document.getElementById('` + constants.ELEMENT_IDS.RESULTS_DIV + `');
+                    const welcomeMessage = document.getElementById('` + constants.ELEMENT_IDS.WELCOME_MESSAGE + `');
+                    const statusText = document.getElementById('` + constants.ELEMENT_IDS.STATUS_TEXT + `');
+                    const queryResultsHeader = document.getElementById('` + constants.ELEMENT_IDS.QUERY_RESULTS_HEADER + `');
+                    const copyButton = document.getElementById('` + constants.ELEMENT_IDS.COPY_CLIPBOARD_BTN + `');
+                    const downloadCSVBtn = document.getElementById('downloadCSVBtn');
+                    const copyCSVBtn = document.getElementById('copyCSVBtn');
+
+                    if (resultsDiv && welcomeMessage && statusText && queryResultsHeader) {
+                        // Restore results content
+                        resultsDiv.innerHTML = tab.results.resultsHTML || '';
+                        resultsDiv.style.display = tab.results.hasResults ? 'block' : 'none';
+                        welcomeMessage.style.display = tab.results.welcomeVisible ? 'block' : 'none';
+                        statusText.textContent = tab.results.statusText || 'Ready';
+                        queryResultsHeader.textContent = tab.results.queryResultsHeader || 'Query Results';
+
+                        // Restore global query response payload
+                        window.queryResponsePayload = tab.results.responsePayload;
+
+                        // Restore button states
+                        if (copyButton) {
+                            copyButton.style.display = tab.results.copyButtonVisible ? 'inline-block' : 'none';
+                        }
+                        if (downloadCSVBtn) {
+                            downloadCSVBtn.style.display = tab.results.csvButtonsVisible ? 'none' : 'none'; // CSV buttons are typically hidden for table format
+                        }
+                        if (copyCSVBtn) {
+                            copyCSVBtn.style.display = tab.results.csvButtonsVisible ? 'none' : 'none';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error restoring tab results:', error);
                 }
             }
             
@@ -279,20 +418,7 @@ define([
                 function saveEdit() {
                     const newTitle = input.value.trim();
                     if (newTitle && newTitle !== currentTab.title) {
-                        console.log('Toolbar inline edit - before rename:', {
-                            tabId: currentTab.id,
-                            oldTitle: currentTab.title,
-                            newTitle: newTitle,
-                            savedQueryId: currentTab.savedQueryId
-                        });
-
                         renameTab(currentTab.id, newTitle);
-
-                        console.log('Toolbar inline edit - after rename:', {
-                            tabId: currentTab.id,
-                            title: currentTab.title,
-                            savedQueryId: currentTab.savedQueryId
-                        });
 
                         // Auto-save to saved queries (seamless save)
                         autoSaveTabQuery(currentTab.id);
@@ -363,20 +489,7 @@ define([
                 function saveEdit() {
                     const newTitle = input.value.trim();
                     if (newTitle && newTitle !== tab.title) {
-                        console.log('Tab inline edit - before rename:', {
-                            tabId: tabId,
-                            oldTitle: tab.title,
-                            newTitle: newTitle,
-                            savedQueryId: tab.savedQueryId
-                        });
-
                         renameTab(tabId, newTitle);
-
-                        console.log('Tab inline edit - after rename:', {
-                            tabId: tabId,
-                            title: tab.title,
-                            savedQueryId: tab.savedQueryId
-                        });
 
                         // Auto-save to saved queries (seamless save)
                         autoSaveTabQuery(tabId);
@@ -415,24 +528,34 @@ define([
             function renderQueryTabs() {
                 const tabsBar = document.getElementById('queryTabsBar');
                 if (!tabsBar) return;
-                
+
                 tabsBar.innerHTML = '';
-                
+
+                // Render all tabs
                 queryTabs.forEach(tab => {
                     const tabElement = document.createElement('div');
                     tabElement.className = 'codeoss-tab' + (tab.isActive ? ' active' : '');
                     tabElement.setAttribute('data-tab-id', tab.id);
-                    
+
                     const tabTitle = tab.title + (tab.isDirty ? ' •' : '');
-                    
+
                     tabElement.innerHTML = \`
                         <span class="codeoss-tab-title" onclick="switchToTab('\${tab.id}')" ondblclick="startInlineTabEditOnTab('\${tab.id}', event)" title="Double-click to edit: \${tab.title}">\${tabTitle}</span>
                         <button class="codeoss-tab-close" onclick="closeQueryTab('\${tab.id}')" title="Close tab">×</button>
                     \`;
-                    
+
                     tabsBar.appendChild(tabElement);
                 });
-                
+
+                // Add the "+" button right after the tabs
+                const addTabButton = document.createElement('button');
+                addTabButton.type = 'button';
+                addTabButton.className = 'codeoss-add-tab-btn';
+                addTabButton.onclick = function() { addNewQueryTab(); };
+                addTabButton.title = 'New Query Tab';
+                addTabButton.innerHTML = '+';
+                tabsBar.appendChild(addTabButton);
+
                 // Update tab bar visibility
                 const tabsContainer = document.querySelector('.codeoss-tabs-container');
                 if (tabsContainer) {
@@ -459,7 +582,7 @@ define([
                 // Load tabs from storage
                 loadTabsFromStorage();
 
-                // If no tabs exist, create a default one with empty content
+                // If no tabs exist, create a blank tab
                 if (queryTabs.length === 0) {
                     addNewQueryTab('Untitled', '');
                 }
@@ -467,17 +590,34 @@ define([
                 // Render tabs
                 renderQueryTabs();
 
+                // Switch to the active tab to load its content into the editor
+                if (activeTabId) {
+                    switchToTab(activeTabId, true); // Skip saving current tab during initialization
+                } else if (queryTabs.length > 0) {
+                    // If no active tab is set, switch to the first tab
+                    switchToTab(queryTabs[0].id, true); // Skip saving current tab during initialization
+                }
+
                 // Update toolbar tab name
                 updateToolbarTabName();
 
-                // Set up editor change listener to mark tabs as dirty
-                if (codeEditor && typeof codeEditor.on === 'function') {
-                    codeEditor.on('change', function() {
-                        if (activeTabId) {
-                            markTabDirty(activeTabId, true);
-                        }
-                    });
-                }
+                // Set up editor change listener AFTER initial loading to prevent overwriting saved content
+                setTimeout(function() {
+                    if (codeEditor && typeof codeEditor.on === 'function') {
+                        let saveTimeout;
+                        codeEditor.on('change', function() {
+                            if (activeTabId) {
+                                markTabDirty(activeTabId, true);
+
+                                // Debounced save to localStorage (save after 1 second of no changes)
+                                clearTimeout(saveTimeout);
+                                saveTimeout = setTimeout(function() {
+                                    saveTabsToStorage();
+                                }, 1000);
+                            }
+                        });
+                    }
+                }, 100); // Small delay to ensure tab loading is complete
             }
         `;
     }
@@ -491,6 +631,14 @@ define([
         return `
             function saveTabsToStorage() {
                 try {
+                    // Save current editor content to active tab before saving to storage
+                    if (activeTabId && codeEditor && typeof codeEditor.getValue === 'function') {
+                        const currentTab = queryTabs.find(tab => tab.id === activeTabId);
+                        if (currentTab && !currentTab.isTableDetails) {
+                            currentTab.content = codeEditor.getValue();
+                        }
+                    }
+
                     const tabsData = {
                         tabs: queryTabs,
                         activeTabId: activeTabId,
@@ -502,25 +650,39 @@ define([
                 }
             }
 
+            // Removed refreshSavedQueryTabsContent() function
+            // Simplified logic:
+            // - New tabs start blank
+            // - Loading saved queries creates new tabs with content
+            // - Content changes update localStorage via editor listener
+            // - Never overwrite localStorage content from NetSuite
+
             function loadTabsFromStorage() {
                 try {
                     const saved = localStorage.getItem('suiteql-query-tabs');
                     if (saved) {
                         const tabsData = JSON.parse(saved);
-                        console.log('Loading tabs from localStorage:', tabsData);
                         queryTabs = tabsData.tabs || [];
                         activeTabId = tabsData.activeTabId || null;
                         tabCounter = tabsData.tabCounter || 1;
+
+                        // Ensure all loaded tabs have results structure
+                        queryTabs.forEach(tab => {
+                            ensureTabHasResults(tab);
+                        });
+
+                        // Set the active tab based on saved activeTabId
+                        if (activeTabId) {
+                            queryTabs.forEach(tab => {
+                                tab.isActive = (tab.id === activeTabId);
+                            });
+                        }
 
                         // Ensure at least one tab is marked as active
                         if (queryTabs.length > 0 && !queryTabs.some(tab => tab.isActive)) {
                             queryTabs[0].isActive = true;
                             activeTabId = queryTabs[0].id;
                         }
-
-                        console.log('Loaded tabs:', queryTabs);
-                    } else {
-                        console.log('No saved tabs found in localStorage');
                     }
                 } catch(e) {
                     console.warn('Could not load tabs from localStorage:', e);
@@ -532,7 +694,6 @@ define([
             function clearTabsStorage() {
                 try {
                     localStorage.removeItem('suiteql-query-tabs');
-                    console.log('Cleared tabs storage');
                 } catch(e) {
                     console.warn('Could not clear tabs storage:', e);
                 }
@@ -545,7 +706,6 @@ define([
                 activeTabId = null;
                 tabCounter = 1;
                 addNewQueryTab('Untitled', '');
-                console.log('Reset query tabs to default state');
             };
 
             function saveTabAsQuery(tabId, title, description, tags, isPublic) {
@@ -565,7 +725,6 @@ define([
                 };
 
                 // TODO: Implement NetSuite record creation
-                console.log('Saving query to NetSuite record:', queryData);
                 alert('Query saved successfully! (NetSuite record integration pending)');
             }
 
@@ -642,6 +801,8 @@ define([
                         favorite: queryData.favorite || false
                     };
 
+
+
                     // Only include category if we have a valid value
                     if (queryData.category && queryData.category.trim() !== '') {
                         requestPayload.category = queryData.category;
@@ -659,7 +820,6 @@ define([
                     }).then(response => response.json())
                       .then(data => {
                           if (data.success) {
-                              console.log('Query saved to NetSuite:', data);
                               callback(true, data.recordId, null);
 
                               // Refresh saved queries list
@@ -684,26 +844,39 @@ define([
                     return;
                 }
 
+                // Get current content from the editor
+                let currentContent = '';
+                if (codeEditor && typeof codeEditor.getValue === 'function') {
+                    currentContent = codeEditor.getValue();
+                } else {
+                    // Fallback to textarea if CodeMirror isn't available
+                    const textarea = document.getElementById('` + constants.ELEMENT_IDS.QUERY_TEXTAREA + `');
+                    currentContent = textarea ? textarea.value : currentTab.content;
+                }
+
+                // Validate that we have content to save
+                if (!currentContent || currentContent.trim() === '') {
+                    showStatusMessage('Please enter a query before saving.');
+                    return;
+                }
+
+
+
+                // Ensure we have a valid title
+                const queryTitle = currentTab.title && currentTab.title.trim() !== '' ? currentTab.title.trim() : 'Untitled Query';
+
                 // Check if this tab was loaded from a saved query (has savedQueryId)
                 if (currentTab.savedQueryId) {
-                    // Get current content from the editor
-                    let currentContent = '';
-                    if (codeEditor && typeof codeEditor.getValue === 'function') {
-                        currentContent = codeEditor.getValue();
-                    } else {
-                        // Fallback to textarea if CodeMirror isn't available
-                        const textarea = document.getElementById('` + constants.ELEMENT_IDS.QUERY_TEXTAREA + `');
-                        currentContent = textarea ? textarea.value : currentTab.content;
-                    }
-
                     // This is an existing saved query - update it silently
                     const queryData = {
-                        title: currentTab.title,
+                        title: queryTitle,
                         content: currentContent,
                         description: '', // We don't have description stored in tab, use empty
                         tags: '', // We don't have tags stored in tab, use empty
                         favorite: false
                     };
+
+
 
                     // Use the silent save function for seamless updates
                     saveQueryToNetSuiteSilent(queryData, currentTab.savedQueryId, function(success, recordId, error) {
@@ -724,18 +897,9 @@ define([
                     });
                 } else {
                     // This is a new query - save seamlessly using the current tab title
-                    // Get current content from the editor
-                    let currentContent = '';
-                    if (codeEditor && typeof codeEditor.getValue === 'function') {
-                        currentContent = codeEditor.getValue();
-                    } else {
-                        // Fallback to textarea if CodeMirror isn't available
-                        const textarea = document.getElementById('` + constants.ELEMENT_IDS.QUERY_TEXTAREA + `');
-                        currentContent = textarea ? textarea.value : currentTab.content;
-                    }
 
                     const queryData = {
-                        title: currentTab.title,
+                        title: queryTitle,
                         content: currentContent,
                         description: '',
                         tags: '',
@@ -755,12 +919,6 @@ define([
 
                             // Show status message in blue bar
                             showStatusMessage('Query "' + currentTab.title + '" saved successfully');
-
-                            console.log('New query saved successfully:', {
-                                tabId: currentTab.id,
-                                title: currentTab.title,
-                                savedQueryId: recordId
-                            });
                         } else {
                             console.error('Failed to save new query:', error);
                             showStatusMessage('Failed to save query "' + currentTab.title + '"');
@@ -788,13 +946,7 @@ define([
                     favorite: false
                 };
 
-                // Debug: Log the tab's savedQueryId
-                console.log('Auto-saving tab:', {
-                    tabId: tabId,
-                    title: tab.title,
-                    savedQueryId: tab.savedQueryId,
-                    hasContent: !!content
-                });
+
 
                 // Use the tab's savedQueryId if it exists (for updates)
                 saveQueryToNetSuiteSilent(queryData, tab.savedQueryId, function(success, recordId, error) {
@@ -810,13 +962,6 @@ define([
                         // Show status message
                         const action = tab.savedQueryId ? 'updated' : 'saved';
                         showStatusMessage('Query "' + tab.title + '" ' + action + ' successfully');
-
-                        console.log('Auto-save completed:', {
-                            tabId: tab.id,
-                            title: tab.title,
-                            savedQueryId: tab.savedQueryId,
-                            wasUpdate: !!tab.savedQueryId
-                        });
                     } else {
                         console.error('Failed to save query:', error);
                         showStatusMessage('Failed to save query "' + tab.title + '"');
@@ -841,6 +986,16 @@ define([
 
 
 
+            // Function to save results to current active tab after query execution
+            function saveResultsToCurrentTab() {
+                const currentTab = queryTabs.find(tab => tab.id === activeTabId);
+                if (currentTab) {
+                    ensureTabHasResults(currentTab);
+                    saveCurrentTabResults(currentTab);
+                    saveTabsToStorage();
+                }
+            }
+
             // Expose functions globally
             window.addNewQueryTab = addNewQueryTab;
             window.switchToTab = switchToTab;
@@ -848,6 +1003,7 @@ define([
             window.loadQueryIntoTab = loadQueryIntoTab;
             window.startInlineTabEdit = startInlineTabEdit;
             window.saveCurrentTabAsQuery = saveCurrentTabAsQuery;
+            window.saveResultsToCurrentTab = saveResultsToCurrentTab;
         `;
     }
 

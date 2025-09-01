@@ -149,6 +149,11 @@ define([
                 
                 // Show copy button
                 document.getElementById('${constants.ELEMENT_IDS.COPY_CLIPBOARD_BTN}').style.display = 'inline-block';
+
+                // Save results to current active tab
+                if (typeof saveResultsToCurrentTab === 'function') {
+                    saveResultsToCurrentTab();
+                }
             }
         `;
     }
@@ -195,8 +200,15 @@ define([
                 \`;
                 
                 document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').innerHTML = errorHTML;
+                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'block';
+                document.getElementById('${constants.ELEMENT_IDS.WELCOME_MESSAGE}').style.display = 'none';
                 document.getElementById('${constants.ELEMENT_IDS.STATUS_TEXT}').textContent = 'Query failed';
                 document.getElementById('${constants.ELEMENT_IDS.COPY_CLIPBOARD_BTN}').style.display = 'none';
+
+                // Save error state to current active tab
+                if (typeof saveResultsToCurrentTab === 'function') {
+                    saveResultsToCurrentTab();
+                }
             }
         `;
     }
