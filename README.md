@@ -15,10 +15,11 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
 - **Responsive Design**: Bootstrap-based responsive interface that works across devices
 
 ### Query Editor Enhancements
+- **Auto-Complete**: Intelligent context-aware suggestions for SQL keywords and NetSuite objects
 - **Syntax Highlighting**: SQL syntax highlighting with line numbers
 - **Query Validation**: Real-time error highlighting and validation
 - **Bracket Matching**: Automatic bracket and parentheses matching
-- **Keyboard Shortcuts**: Ctrl+R for query execution, Ctrl+S for save
+- **Keyboard Shortcuts**: Ctrl+Space for auto-complete, Ctrl+R for query execution
 
 ### Query Management
 - **Query History**: Sidebar panel showing recent executed queries with click-to-load functionality
@@ -127,7 +128,7 @@ For advanced features like saved queries and query sharing, set up the custom re
    ```
 
 3. **Execute the query**:
-   - Click "Run Query" or press Alt+R
+   - Click "Run Query" or press Ctrl+R (Windows/Linux) or Cmd+R (Mac)
    - View results in the results panel
 
 4. **Explore the welcome screen**:
@@ -137,7 +138,7 @@ For advanced features like saved queries and query sharing, set up the custom re
    - Notice the attribution to Tim Dietrich's original work in the footer
 
 5. **Explore features**:
-   - Use keyboard shortcuts (Ctrl+R to run queries)
+   - Use keyboard shortcuts (Ctrl+R/Cmd+R to run queries, Ctrl+Space/Cmd+Space for auto-complete)
    - Toggle dark mode for comfortable viewing
    - Export results in different formats
    - Save frequently used queries (if custom records are set up)
@@ -183,6 +184,7 @@ The interface consists of three main panels in a responsive split-pane layout:
 
 #### 1. Query Editor Panel (Left)
 - **CodeMirror Editor**: Syntax-highlighted SQL editor with line numbers
+- **Auto-Complete**: Intelligent suggestions triggered by Ctrl+Space or automatically
 - **Syntax Highlighting**: SQL keywords, strings, and comments highlighted
 - **Query Validation**: Real-time error highlighting and bracket matching
 - **File Info Display**: Shows currently loaded query file information
@@ -223,9 +225,18 @@ The interface consists of three main panels in a responsive split-pane layout:
 
 ## 🔍 Query Features
 
-### Syntax Highlighting & Editor Features
+### Auto-Complete & Editor Features
 
-The CodeMirror editor provides enhanced editing capabilities:
+The CodeMirror editor provides intelligent auto-complete and enhanced editing capabilities:
+
+#### Auto-Complete System
+- **Context-Aware Suggestions**: Intelligent suggestions based on SQL context
+- **SQL Keywords**: SELECT, FROM, WHERE, JOIN, ORDER BY, GROUP BY, and more
+- **NetSuite Tables**: Employee, Customer, Vendor, Transaction, Item, and 30+ more
+- **NetSuite Fields**: ID, Name, Email, TranDate, Amount, and 40+ common fields
+- **SQL Functions**: COUNT, SUM, AVG, BUILTIN.DF, TO_CHAR, and more
+- **Automatic Triggering**: Auto-complete appears after keywords or when typing
+- **Manual Triggering**: Press Ctrl+Space anytime for suggestions
 
 #### Syntax Highlighting
 - **SQL Keywords**: SELECT, FROM, WHERE, ORDER BY, GROUP BY, HAVING highlighted in blue
@@ -242,29 +253,72 @@ The CodeMirror editor provides enhanced editing capabilities:
 
 #### Keyboard Shortcuts
 
-The tool includes comprehensive keyboard shortcuts for efficient query development:
+The tool includes comprehensive cross-platform keyboard shortcuts for efficient query development:
 
 **Query Execution:**
-- **Ctrl+R** - Execute the current query
-- **Ctrl+Enter** - Execute query (alternative)
-- **F5** - Execute query (alternative)
+- **Ctrl+R** (Windows/Linux) or **Cmd+R** (Mac) - Execute the current query
+- **Ctrl+Enter** (Windows/Linux) or **Cmd+Enter** (Mac) - Execute query (alternative)
+- **F5** - Execute query (works on all platforms)
 
 **File Operations:**
-- **Ctrl+S** - Save current query (opens save dialog if local library enabled)
-- **Ctrl+O** - Open/load query (opens load dialog if local library enabled)
+- **Ctrl+S** (Windows/Linux) or **Cmd+S** (Mac) - Save current query
+- **Ctrl+O** (Windows/Linux) or **Cmd+O** (Mac) - Open/load query
+
+**Auto-Complete:**
+- **Ctrl+Space** (Windows/Linux) or **Cmd+Space** (Mac) - Trigger auto-complete suggestions
 
 **Interface Navigation:**
 - **Escape** - Close open modals or panels
 - **Click title** - Load sample query (click "ENHANCED SUITEQL QUERY TOOL" in header)
 
-**Editor Features:**
-- **Ctrl+Space** - Auto-complete (configured for future implementation)
+**Standard Editor Features:**
 - **Tab** - Smart indentation
-- **Ctrl+A** - Select all text
-- **Ctrl+Z** - Undo
-- **Ctrl+Y** - Redo
+- **Ctrl+A** (Windows/Linux) or **Cmd+A** (Mac) - Select all text
+- **Ctrl+Z** (Windows/Linux) or **Cmd+Z** (Mac) - Undo
+- **Ctrl+Y** (Windows/Linux) or **Cmd+Y** (Mac) - Redo
 
-> **Note**: Auto-complete functionality is configured but not fully implemented in the current version. This feature is planned for a future release.
+#### Auto-Complete Usage Examples
+
+**Manual Triggering:**
+- **Windows/Linux**: Press **Ctrl+Space** anywhere in the editor
+- **Mac**: Press **Cmd+Space** anywhere in the editor
+
+**Context-Aware Suggestions:**
+- Type `SELECT ` and auto-complete will suggest field names
+- Type `FROM ` and auto-complete will suggest table names
+- Type `WHERE ` and auto-complete will suggest fields and operators
+- Type `ORDER BY ` and auto-complete will suggest fields and ASC/DESC
+
+**Automatic Triggering:**
+- Auto-complete appears automatically after SQL keywords
+- Suggestions appear when typing 2+ characters of a word
+- Press **Escape** to close suggestions, **Enter** to accept
+
+### Mac Compatibility
+
+The Enhanced SuiteQL Query Tool is fully compatible with Mac systems:
+
+#### **Mac-Specific Features:**
+- **Native Mac Shortcuts**: All keyboard shortcuts use Cmd instead of Ctrl on Mac
+- **Automatic Detection**: The tool automatically detects Mac systems and adjusts shortcuts
+- **Safari Compatibility**: Fully tested and compatible with Safari browser
+- **CodeMirror Integration**: Auto-complete and syntax highlighting work seamlessly on Mac
+
+#### **Mac Keyboard Shortcuts:**
+- **Cmd+Space**: Trigger auto-complete (instead of Ctrl+Space)
+- **Cmd+R**: Execute query (instead of Ctrl+R)
+- **Cmd+Enter**: Execute query alternative (instead of Ctrl+Enter)
+- **Cmd+S**: Save query (instead of Ctrl+S)
+- **Cmd+O**: Open query (instead of Ctrl+O)
+- **F5**: Execute query (works the same on Mac)
+
+#### **Browser Recommendations for Mac:**
+- **Safari**: Fully supported and recommended
+- **Chrome**: Excellent compatibility
+- **Firefox**: Good compatibility
+- **Edge**: Good compatibility
+
+> **Note**: The tool automatically detects your operating system and uses the appropriate keyboard shortcuts. Mac users will see Cmd-based shortcuts, while Windows/Linux users will see Ctrl-based shortcuts.
 
 ### Virtual Views System
 
@@ -747,7 +801,7 @@ When reporting issues, please include:
 **Web Solutions Group, LLC Contact:**
 - Professional NetSuite Development Services
 - Custom SuiteScript Development and NetSuite Integration Solutions
-- Website: https://websolutions-group.com
+- Website: https://websolutionsgroup.com
 
 ### Acknowledgments
 - **Modern Database Tools**: UI design and interface layout inspiration
@@ -829,7 +883,7 @@ If you find this tool useful, please consider giving it a star on GitHub! Your s
 
 **Enhanced SuiteQL Query Tool v2025.1** - Bringing modern database query interfaces to NetSuite
 
-*For professional NetSuite development services, contact [Web Solutions Group, LLC](https://websolutions-group.com)*
+*For professional NetSuite development services, contact [Web Solutions Group, LLC](https://websolutionsgroup.com)*
 
 ---
 

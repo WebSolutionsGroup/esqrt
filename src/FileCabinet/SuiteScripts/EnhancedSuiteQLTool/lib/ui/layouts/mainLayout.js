@@ -187,7 +187,7 @@ define([
                     </h3>
                     <ul style="margin: 0; padding-left: 16px; line-height: 1.6;">
                         <li><a href="#" onclick="defaultQuerySet()" style="color: var(--codeoss-accent); text-decoration: none;">Load a sample query</a></li>
-                        <li>Write your SuiteQL query in the editor above</li>
+                        <li>Write your SuiteQL query (try Ctrl+Space for auto-complete)</li>
                         <li>Click "▶ Run Query" in the editor toolbar or press Ctrl+R</li>
                         <li>View results in table, CSV, or JSON format</li>
                     </ul>
@@ -199,7 +199,8 @@ define([
                         <span style="margin-right: 8px;">✨</span> Key Features
                     </h3>
                     <ul style="margin: 0; padding-left: 16px; line-height: 1.6;">
-                        <li>Syntax highlighting & auto-complete</li>
+                        <li>Intelligent auto-complete (Ctrl+Space)</li>
+                        <li>Syntax highlighting & query validation</li>
                         <li>Query history & saved queries</li>
                         <li>Multiple export formats (CSV, JSON, PDF)</li>
                         <li>Dark/light theme support</li>

@@ -279,33 +279,37 @@ define([
     function getKeyboardHandlersJS() {
         return `
             function initializeKeyboardHandlers() {
-                // Global keyboard shortcuts
+                // Global keyboard shortcuts (cross-platform support)
                 document.addEventListener('keydown', function(e) {
-                    // Ctrl+R or F5 - Run query
-                    if ((e.ctrlKey && e.key === 'r') || e.key === 'F5') {
+                    // Detect if we're on Mac (use Cmd instead of Ctrl)
+                    var isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                    var cmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
+
+                    // Cmd/Ctrl+R or F5 - Run query
+                    if ((cmdOrCtrl && e.key === 'r') || e.key === 'F5') {
                         e.preventDefault();
                         querySubmit();
                         return false;
                     }
-                    
-                    // Ctrl+Enter - Run query
-                    if (e.ctrlKey && e.key === 'Enter') {
+
+                    // Cmd/Ctrl+Enter - Run query
+                    if (cmdOrCtrl && e.key === 'Enter') {
                         e.preventDefault();
                         querySubmit();
                         return false;
                     }
-                    
-                    // Ctrl+S - Save query (if local library enabled)
-                    if (e.ctrlKey && e.key === 's') {
+
+                    // Cmd/Ctrl+S - Save query (if local library enabled)
+                    if (cmdOrCtrl && e.key === 's') {
                         e.preventDefault();
                         if (${constants.CONFIG.QUERY_FOLDER_ID !== null}) {
                             $('#${constants.MODAL_IDS.SAVE}').modal('show');
                         }
                         return false;
                     }
-                    
-                    // Ctrl+O - Open query (if local library enabled)
-                    if (e.ctrlKey && e.key === 'o') {
+
+                    // Cmd/Ctrl+O - Open query (if local library enabled)
+                    if (cmdOrCtrl && e.key === 'o') {
                         e.preventDefault();
                         if (${constants.CONFIG.QUERY_FOLDER_ID !== null}) {
                             $('#${constants.MODAL_IDS.LOCAL_LOAD}').modal('show');

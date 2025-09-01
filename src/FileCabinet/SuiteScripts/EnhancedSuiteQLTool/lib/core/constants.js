@@ -72,12 +72,15 @@ define([], function() {
         
         // SQL Keywords for auto-completion
         SQL_KEYWORDS: [
-            'SELECT', 'FROM', 'WHERE', 'ORDER BY', 'GROUP BY', 'HAVING', 'JOIN', 
+            'SELECT', 'FROM', 'WHERE', 'ORDER BY', 'GROUP BY', 'HAVING', 'JOIN',
             'INNER JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'FULL JOIN', 'UNION', 'UNION ALL',
             'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'ALTER', 'DROP', 'INDEX',
             'AND', 'OR', 'NOT', 'IN', 'EXISTS', 'BETWEEN', 'LIKE', 'IS NULL', 'IS NOT NULL',
             'COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'DISTINCT', 'TOP', 'LIMIT',
-            'ASC', 'DESC', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END'
+            'ASC', 'DESC', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END',
+            'AS', 'ON', 'USING', 'WITH', 'RECURSIVE', 'OFFSET', 'FETCH',
+            'BUILTIN.DF', 'TO_CHAR', 'TO_DATE', 'SUBSTR', 'LENGTH', 'UPPER', 'LOWER',
+            'COALESCE', 'NULLIF', 'CAST', 'CONVERT'
         ],
         
         // Common NetSuite tables for auto-completion
@@ -85,7 +88,13 @@ define([], function() {
             'Employee', 'Customer', 'Vendor', 'Item', 'Transaction', 'Account',
             'Department', 'Location', 'Class', 'Subsidiary', 'Currency',
             'TransactionLine', 'ItemFulfillment', 'SalesOrder', 'PurchaseOrder',
-            'Invoice', 'Bill', 'CashSale', 'Check', 'Deposit', 'JournalEntry'
+            'Invoice', 'Bill', 'CashSale', 'Check', 'Deposit', 'JournalEntry',
+            'Contact', 'Lead', 'Prospect', 'Partner', 'Project', 'Task',
+            'TimeEntry', 'ExpenseReport', 'PayrollItem', 'TaxCode', 'TaxGroup',
+            'PriceLevel', 'DiscountItem', 'PaymentItem', 'OtherChargeItem',
+            'ServiceItem', 'InventoryItem', 'NonInventoryItem', 'KitItem',
+            'AssemblyItem', 'GiftCertificateItem', 'DownloadItem', 'MarkupItem',
+            'SubtotalItem', 'EndGroup', 'BeginGroup', 'DescriptionItem'
         ],
         
         // Common NetSuite fields for auto-completion
@@ -93,7 +102,15 @@ define([], function() {
             'ID', 'InternalId', 'ExternalId', 'Name', 'Email', 'Phone',
             'FirstName', 'LastName', 'CompanyName', 'Date', 'Amount',
             'Quantity', 'Rate', 'Total', 'Status', 'Type', 'Number',
-            'Memo', 'Description', 'Created', 'LastModified'
+            'Memo', 'Description', 'Created', 'LastModified', 'CreatedBy',
+            'LastModifiedBy', 'IsInactive', 'Entity', 'Item', 'Account',
+            'Department', 'Location', 'Class', 'Subsidiary', 'Currency',
+            'TranDate', 'TranId', 'PostingPeriod', 'DueDate', 'Terms',
+            'ShipDate', 'ShipMethod', 'ShipTo', 'BillTo', 'SalesRep',
+            'Partner', 'LeadSource', 'PromoCode', 'CouponCode', 'DiscountItem',
+            'TaxItem', 'TaxCode', 'TaxRate', 'GrossAmount', 'NetAmount',
+            'TaxAmount', 'ForeignAmount', 'ExchangeRate', 'Approved',
+            'ApprovalStatus', 'NextApprover', 'Source', 'Reversing'
         ]
     };
     

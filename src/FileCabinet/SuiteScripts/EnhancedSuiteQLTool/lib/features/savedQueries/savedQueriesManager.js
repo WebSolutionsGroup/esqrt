@@ -297,9 +297,13 @@ define([], function() {
                 // Load saved queries on startup
                 loadSavedQueries();
                 
-                // Add keyboard shortcut for saving (Ctrl+S)
+                // Add keyboard shortcut for saving (Cmd/Ctrl+S cross-platform)
                 document.addEventListener('keydown', function(e) {
-                    if (e.ctrlKey && e.key === 's') {
+                    // Detect if we're on Mac (use Cmd instead of Ctrl)
+                    var isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                    var cmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
+
+                    if (cmdOrCtrl && e.key === 's') {
                         e.preventDefault();
                         saveCurrentQuery();
                     }

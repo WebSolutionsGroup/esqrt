@@ -21,7 +21,7 @@ A utility for running SuiteQL queries in a NetSuite instance.
 
 Enhancements (2025 Update):
 - Redesigned UI inspired by modern database management tools.
-- Added CodeMirror for syntax-highlighted query editor with enhanced editing features.
+- Added CodeMirror for syntax-highlighted query editor with intelligent auto-complete for SQL keywords and NetSuite objects.
 - Improved result display with resizable panels, query history sidebar, and export options (CSV, JSON, PDF).
 - Added query validation and error highlighting.
 - Enhanced pagination with infinite scrolling option.
