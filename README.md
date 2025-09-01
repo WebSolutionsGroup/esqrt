@@ -24,8 +24,6 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
 ### Query Management
 - **Query History**: Sidebar panel showing recent executed queries with click-to-load functionality
 - **Saved Queries**: Save and load queries with custom record integration
-- **Query Sharing**: Share queries with roles, users, or make them public
-- **Query Categories**: Organize queries with customizable categories and tags
 
 ### Results & Export
 - **Multiple Export Formats**: CSV, JSON, PDF, and HTML export options
@@ -49,6 +47,7 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
 - [Custom Records Setup](#-custom-records-setup)
 - [Architecture](#-architecture)
 - [Development](#-development)
+- [Roadmap](#️-roadmap)
 - [Troubleshooting](#-troubleshooting)
 - [Contributing](#-contributing)
 - [Credits](#-credits)
@@ -57,8 +56,7 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
 
 ### Prerequisites
 - NetSuite Administrator access
-- SuiteCloud Development Framework (SDF) installed (optional)
-- Node.js and npm (for development)
+- SuiteCloud Development Framework (SDF) installed (optional for CLI deployment)
 
 ### Option 1: SuiteCloud CLI Deployment (Recommended)
 
@@ -120,7 +118,7 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
 
 ### Option 3: Custom Records Setup (Optional but Recommended)
 
-For advanced features like saved queries and query sharing, set up the custom records:
+For advanced features like saved queries, set up the custom records:
 
 1. **Import custom records**:
    - Import all XML files from `src/Objects/` directory
@@ -360,7 +358,7 @@ WHERE Email LIKE '%@company.com'
 - **Code Reusability**: Define common query patterns once
 - **Maintainability**: Update view definitions in one place
 - **Complex Queries**: Build complex queries from simpler components
-- **Team Collaboration**: Share common views across team members
+- **Team Collaboration**: Share common views across team members through file sharing
 
 ### Advanced Query Features
 
@@ -424,21 +422,20 @@ WHERE e.ID IN (
 
 ## 📊 Custom Records Setup
 
-The Enhanced SuiteQL Query Tool uses NetSuite custom records to enable advanced features like saved queries, query sharing, and execution history. This setup is optional but highly recommended for team environments.
+The Enhanced SuiteQL Query Tool uses NetSuite custom records to enable advanced features like saved queries and execution history. This setup is optional but highly recommended for team environments.
 
 ### Quick Setup Checklist
 
 - [ ] Import custom record types from `src/Objects/`
 - [ ] Set appropriate role permissions
 - [ ] Test saved query functionality
-- [ ] Configure sharing settings
+
 
 ### Custom Records Included
 
 1. **Saved Queries** (`customrecord_sqrt_saved_queries`)
    - Store and organize frequently used queries
-   - Support for categories, tags, and descriptions
-   - Sharing capabilities (private, role-based, individual, public)
+   - Support for tags and descriptions
    - Execution count tracking and favorites
 
 2. **Query History** (`customrecord_sqrt_query_history`)
@@ -447,8 +444,6 @@ The Enhanced SuiteQL Query Tool uses NetSuite custom records to enable advanced 
    - Session tracking and user analytics
 
 3. **Supporting Lists**
-   - Query Categories (`customlist_sqrt_query_categories`)
-   - Sharing Levels (`customlist_sqrt_sharing_levels`)
    - Result Formats (`customlist_sqrt_result_formats`)
 
 ### Automatic Integration
@@ -465,7 +460,6 @@ The tool automatically detects available custom records:
 | Basic query execution | ✓ | ✓ |
 | Query history (session) | ✓ | ✓ |
 | Save queries | Browser only | ✓ Persistent |
-| Share queries | ✗ | ✓ |
 | Query analytics | ✗ | ✓ |
 | Audit trail | ✗ | ✓ |
 
@@ -478,8 +472,6 @@ The easiest way to set up custom records is to import the provided XML files:
 2. Upload and import all XML files from the `src/Objects/` directory:
    - `customrecord_sqrt_saved_queries.xml` - Main saved queries record
    - `customrecord_sqrt_query_history.xml` - Query execution history
-   - `customlist_sqrt_query_categories.xml` - Query categories list
-   - `customlist_sqrt_sharing_levels.xml` - Sharing level options
    - `customlist_sqrt_result_formats.xml` - Result format options
 
 #### Step 2: Set Permissions
@@ -496,7 +488,7 @@ The easiest way to set up custom records is to import the provided XML files:
 2. Write and execute a test query
 3. Try saving the query - you should see save options
 4. Verify the query appears in the saved queries list
-5. Test sharing functionality if configured
+
 
 #### Manual Setup (Alternative)
 If you prefer to create the custom records manually, here are the key fields needed:
@@ -506,8 +498,6 @@ If you prefer to create the custom records manually, here are the key fields nee
 - Query Content (`custrecord_sqrt_query_content`) - Long Text, Required
 - Query Description (`custrecord_sqrt_query_description`) - Long Text, Optional
 - Query Tags (`custrecord_sqrt_query_tags`) - Free-Form Text, Optional
-- Query Category (`custrecord_sqrt_query_category`) - List/Record, Optional
-- Sharing Level (`custrecord_sqrt_query_sharing_level`) - List/Record, Required
 - Created By (`custrecord_sqrt_query_created_by`) - Employee, Required
 - Last Modified (`custrecord_sqrt_query_last_modified`) - Date/Time, Required
 - Execution Count (`custrecord_sqrt_query_execution_count`) - Integer, Optional
@@ -583,8 +573,7 @@ The modular version maintains 100% backward compatibility:
 ### Development Setup
 
 #### Prerequisites
-- Node.js 14+ and npm
-- SuiteCloud CLI tools
+- SuiteCloud CLI tools (requires Node.js runtime)
 - NetSuite account with SDF enabled
 - Code editor with JavaScript support
 
@@ -595,6 +584,7 @@ git clone https://github.com/WebSolutionsGroup/esqrt.git
 cd esqrt
 
 # Install SuiteCloud CLI (if not already installed)
+# Note: This requires Node.js but only for the CLI tools, not the application itself
 npm install -g @oracle/suitecloud-cli
 
 # Set up authentication
@@ -664,21 +654,48 @@ var customSuggestions = [
 
 ### Testing
 
-Each module can be tested independently:
+Follow standard NetSuite deployment testing practices:
 
-```javascript
-// Test query validation
-var queryEngine = require('./lib/data/queryEngine');
-var result = queryEngine.validateQuery('SELECT * FROM Employee');
-console.log(result.isValid); // true/false
+1. **Deploy to Sandbox**: Always test in a NetSuite sandbox environment first
+2. **Validate Deployment**: Use `suitecloud project:validate` before deploying
+3. **Test Core Functionality**: Verify query execution, saving, and export features
+4. **Browser Testing**: Test in your organization's supported browsers
+5. **User Acceptance Testing**: Have end users test the interface and workflows
+6. **Production Deployment**: Deploy to production only after thorough sandbox testing
 
-// Test file operations
-var fileOps = require('./lib/data/fileOperations');
-var validation = fileOps.validateFileName('test.sql');
-console.log(validation.isValid); // true/false
-```
+## �️ Roadmap
 
-## 🐛 Troubleshooting
+The Enhanced SuiteQL Query Tool continues to evolve with exciting new features planned for future releases. Here's what's on the horizon:
+
+### 📊 Enhanced Data Export
+- **Enhanced CSV Exporting Options**: Advanced CSV export with customizable delimiters, quote escaping, and encoding options for better data integration workflows
+
+### 🔧 Advanced Query Capabilities
+- **Functions & Stored Procedures**: JavaScript functions that allow you to execute code blocks and call them as SuiteQL functions, enabling complex data transformations and business logic
+- **Basic DML Support**: Ability to perform basic INSERT, UPDATE, DELETE operations using SQL-like expressions for data manipulation workflows
+
+### 🗂️ Data Discovery & Management
+- **Table & Field Browser**: Interactive browser for exploring tables and fields available inside NetSuite, with search, filtering, and documentation features
+- **File Cabinet Browser**: Integrated file management with basic file editing capabilities for managing scripts, templates, and data files
+
+### 💻 Advanced Development Environment
+- **Terminal Emulator Support**: Full terminal emulator integration using [Xterm.js](https://xtermjs.org/) for advanced command-line operations and scripting
+- **Python Interpreter Support**: Embedded Python interpreter using [Pyodide](https://pyodide.org/) via Xterm for data analysis and automation scripts
+- **Python Notebooks**: Jupyter-like notebook interface built on top of Pyodide via Xterm for interactive data analysis and documentation
+
+### ☁️ Cloud Integration
+- **Cloud Service Provider Support**: Integration with major cloud platforms including:
+  - **Google Cloud Platform**: BigQuery, Cloud Storage, and other GCP services
+  - **Microsoft Azure**: Azure SQL, Blob Storage, and Azure services
+  - **Amazon Web Services**: RDS, S3, Redshift, and other AWS services
+  - **Snowflake**: Direct Snowflake data warehouse connectivity
+
+### 🎯 Coming Soon
+These features are actively being planned and developed. Stay tuned for updates and feel free to contribute ideas or feedback through GitHub Issues.
+
+**Want to contribute?** We welcome community input on these roadmap items. If you have specific use cases or requirements for any of these features, please open a GitHub issue to discuss implementation details.
+
+## �🐛 Troubleshooting
 
 ### Common Issues
 
@@ -699,7 +716,7 @@ console.log(validation.isValid); // true/false
 - Review NetSuite execution logs for detailed error information
 
 #### 3. Custom Records Not Working
-**Symptoms**: Saved queries not persisting or sharing not available
+**Symptoms**: Saved queries not persisting
 **Solutions**:
 - Verify custom records are imported and deployed
 - Check role permissions for custom record access
