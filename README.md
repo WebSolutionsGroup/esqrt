@@ -1,10 +1,30 @@
-# Enhanced SuiteQL Query Tool (ESQRT) v2025.1.0.0
+# Enhanced SuiteQL Query Tool (ESQRT) v1.1.0
 
 A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemporary database management tools. This tool provides an enhanced user experience for writing, executing, and managing SuiteQL queries with advanced features like syntax highlighting, query history, export capabilities, and a responsive split-pane interface.
 
 [![NetSuite](https://img.shields.io/badge/NetSuite-Compatible-blue.svg)](https://www.netsuite.com/)
 [![SuiteScript](https://img.shields.io/badge/SuiteScript-2.1-green.svg)](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4387799721.html)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 🆕 What's New in v1.1.0
+
+### 🔧 Advanced CSV Export System
+- **Professional CSV Configuration**: Complete modal interface with customizable delimiters, encoding, and line endings
+- **Export Presets**: Standard, Excel Compatible, Tab Delimited, Semicolon, and Pipe formats
+- **International Support**: UTF-8, UTF-16, Windows-1252, and specialized encoding options
+- **Persistent Settings**: CSV configurations saved to localStorage for consistent exports
+
+### 📝 Enhanced Query Editor
+- **Intelligent Auto-Complete**: Context-aware suggestions for SQL keywords, NetSuite tables, and fields
+- **Cross-Platform Shortcuts**: Native Mac (Cmd) and Windows/Linux (Ctrl) keyboard shortcuts
+- **Advanced Tab Management**: Individual tab state persistence with smart numbering and result isolation
+
+### 🎨 User Interface Improvements
+- **Sortable Result Tables**: Click any column header to sort data ascending or descending
+- **Accordion Sidebar**: Improved space utilization with collapsible sections
+- **Enhanced Visual Feedback**: Professional modal styling and improved button states
+
+[📋 View Complete Release Notes](RELEASE_NOTES_v1.1.0.md)
 
 ## 🚀 Features Overview
 
@@ -26,12 +46,15 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
 - **Saved Queries**: Save and load queries with custom record integration
 
 ### Results & Export
+- **Advanced CSV Export**: Comprehensive CSV export with customizable delimiters, encoding, line endings, and presets
 - **Multiple Export Formats**: CSV, JSON, PDF, and HTML export options
+- **Sortable Result Tables**: Click column headers to sort data ascending/descending
 - **DataTables Integration**: Enhanced table display with sorting, searching, and pagination
 - **Copy to Clipboard**: One-click data copying functionality
 - **Performance Metrics**: Query execution time and record count display
 
 ### Advanced Features
+- **Multi-Tab Interface**: Advanced tab management with individual state persistence and smart numbering
 - **Virtual Views**: Support for custom view definitions using #viewname syntax
 - **Pagination Control**: Configurable result pagination with row range selection
 - **Custom Records Integration**: Full NetSuite custom record support for saved queries and history
@@ -180,7 +203,7 @@ var CONFIG = {
     QUERY_FOLDER_ID: null,            // File Cabinet folder for saved queries
 
     // Version information
-    VERSION: 'v2025.1'
+    VERSION: 'v1.1.0'
 };
 ```
 
@@ -214,10 +237,31 @@ The interface consists of three main areas in a responsive split-pane layout:
 
 #### 2. Query Editor Panel (Center Top)
 - **CodeMirror Editor**: Syntax-highlighted SQL editor with line numbers
-- **Auto-Complete**: Intelligent suggestions triggered by Ctrl+Space or automatically
+- **Intelligent Auto-Complete**: Context-aware suggestions for SQL keywords, NetSuite tables, and fields
+- **Cross-Platform Shortcuts**: Mac (Cmd) and Windows/Linux (Ctrl) keyboard shortcuts
 - **Syntax Highlighting**: SQL keywords, strings, and comments highlighted
 - **Query Validation**: Real-time error highlighting and bracket matching
-- **Tab Support**: Multiple query tabs with individual state management
+- **Advanced Tab Management**: Multiple query tabs with individual state persistence and smart numbering
+
+#### Advanced Tab Management Features
+
+The Enhanced SuiteQL Query Tool provides sophisticated tab management capabilities:
+
+**Tab Creation & Management:**
+- **Add Tab Button**: Easy creation of new query tabs with "+" button positioned after existing tabs
+- **Smart Tab Numbering**: Tab counter resets to 1 when all tabs are closed, rather than continuing from stored values
+- **Individual Tab States**: Each tab maintains its own query content, results, and UI state independently
+
+**Tab Content Persistence:**
+- **Automatic Content Saving**: Tab content automatically saved to localStorage on every change
+- **Result State Preservation**: Query results, copy button visibility, and welcome message state preserved per tab
+- **Session Recovery**: Tab states restored when returning to the application
+- **Blank New Tabs**: New tabs start with empty content for immediate query writing
+
+**Tab Switching & Isolation:**
+- **Seamless Tab Switching**: Switch between tabs without losing content or results
+- **Isolated Results**: Each tab displays its own query results independently
+- **State Restoration**: Previous query results and UI state restored when switching back to a tab
 
 #### 3. Results Panel (Center Bottom)
 - **Welcome Screen**: Professional welcome panel displayed on first load with:
@@ -398,14 +442,17 @@ WHERE e.ID IN (
 #### Export Formats
 
 1. **Table Format (Default)**
+   - Sortable columns with click-to-sort functionality
    - DataTables integration with sorting and searching
    - Pagination for large result sets
    - Copy to clipboard functionality
 
-2. **CSV Export**
-   - Standard CSV format with quoted strings
-   - Header row with column names
-   - Excel-compatible formatting
+2. **Advanced CSV Export**
+   - Comprehensive CSV configuration modal with customizable options
+   - Multiple export presets: Standard, Excel Compatible, Tab Delimited, Semicolon, Pipe
+   - Configurable delimiters, quote characters, line endings, and encoding
+   - International encoding support (UTF-8, UTF-16, Windows-1252, etc.)
+   - Persistent configuration settings saved to localStorage
 
 3. **JSON Export**
    - Pretty formatted JSON for readability
@@ -421,6 +468,25 @@ WHERE e.ID IN (
    - Web-ready format with clean styling
    - Print-friendly optimization
    - Email-ready reports
+
+#### Advanced CSV Export Features
+
+The Enhanced SuiteQL Query Tool includes a comprehensive CSV export system with professional-grade configuration options:
+
+**Export Presets:**
+- **Standard CSV**: RFC 4180 compliant format with comma delimiters
+- **Excel Compatible**: Optimized for Microsoft Excel with CRLF line endings and BOM
+- **Tab Delimited**: Tab-separated values for data analysis tools
+- **Semicolon Delimited**: European CSV format using semicolons
+- **Pipe Delimited**: Pipe-separated format for specialized applications
+
+**Customizable Options:**
+- **Delimiters**: Comma, Semicolon, Tab, Pipe, Space, or custom characters
+- **Quote Characters**: Double quote, single quote, or no quoting
+- **Line Endings**: Unix (LF) or Windows (CRLF) line endings
+- **Encoding Support**: UTF-8, UTF-16, Windows-1252, ISO-8859-1, and international encodings
+- **Header Control**: Include or exclude column headers
+- **Configuration Persistence**: Settings saved to localStorage for consistent exports
 
 #### Performance Features
 - **Execution Time**: Displays query execution time in milliseconds
@@ -675,8 +741,8 @@ Follow standard NetSuite deployment testing practices:
 
 The Enhanced SuiteQL Query Tool continues to evolve with exciting new features planned for future releases. Here's what's on the horizon:
 
-### 📊 Enhanced Data Export
-- **Enhanced CSV Exporting Options**: Advanced CSV export with customizable delimiters, quote escaping, and encoding options for better data integration workflows
+### 📊 Enhanced Data Export ✅ **COMPLETED in v1.1.0**
+- **✅ Enhanced CSV Exporting Options**: Advanced CSV export with customizable delimiters, quote escaping, and encoding options for better data integration workflows
 
 ### 🔧 Advanced Query Capabilities
 - **Parameterized Queries**: Interactive parameter input dialog for dynamic queries with `?` placeholders, supporting date pickers, dropdowns, and validation
@@ -875,23 +941,27 @@ When reporting issues, please include:
 
 ## 📈 Version History
 
-### v2025.1.0.0 (Current)
+### v1.1.0 (Current - September 2, 2025)
+- **Advanced CSV Export System**: Complete CSV configuration modal with customizable delimiters, encoding, line endings, and presets
+- **Enhanced Query Editor**: Intelligent auto-complete with context-aware suggestions for SQL keywords and NetSuite objects
+- **Cross-Platform Keyboard Shortcuts**: Mac (Cmd) and Windows/Linux (Ctrl) support with automatic detection
+- **Advanced Tab Management**: Tab state persistence, smart numbering, and individual result isolation
+- **Sortable Result Tables**: Click column headers to sort data ascending/descending
+- **Accordion Sidebar Behavior**: Improved space utilization with collapsible sections
+- **Performance Optimizations**: Reduced console logging and improved memory usage
+- **Bug Fixes**: Resolved CSV export, tab switching, and UI consistency issues
+
+### v1.0.0 (September 1, 2025)
 - Production release with complete UI overhaul
 - Split-pane layout with resizable panels
 - CodeMirror integration with syntax highlighting
-- Auto-complete for SQL keywords and NetSuite objects
 - Query history sidebar with click-to-load functionality
 - Dark mode support with theme persistence
 - Enhanced export options (CSV, JSON, PDF, HTML)
 - Virtual views system for query reusability
 - Complete modular architecture refactoring
 - Custom records integration for saved queries and history
-- Improved performance and user experience
-
-### Previous Versions
-- Built upon Tim Dietrich's original SuiteQL Query Tool
-- Maintained backward compatibility while adding modern features
-- Preserved all original functionality with enhanced interface
+- Built upon Tim Dietrich's original SuiteQL Query Tool foundation
 
 ## 🔗 Resources
 
@@ -944,7 +1014,7 @@ If you find this tool useful, please consider giving it a star on GitHub! Your s
 
 ---
 
-**Enhanced SuiteQL Query Tool v2025.1.0.0** - Bringing modern database query interfaces to NetSuite
+**Enhanced SuiteQL Query Tool v1.1.0** - Bringing advanced CSV export capabilities and enhanced user experience to NetSuite
 
 *For professional NetSuite development services, contact [Web Solutions Group, LLC](https://websolutionsgroup.com)*
 
