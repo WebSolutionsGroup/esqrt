@@ -14,16 +14,6 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
 - **International Support**: UTF-8, UTF-16, Windows-1252, and specialized encoding options
 - **Persistent Settings**: CSV configurations saved to localStorage for consistent exports
 
-### 📝 Enhanced Query Editor
-- **Intelligent Auto-Complete**: Context-aware suggestions for SQL keywords, NetSuite tables, and fields
-- **Cross-Platform Shortcuts**: Native Mac (Cmd) and Windows/Linux (Ctrl) keyboard shortcuts
-- **Advanced Tab Management**: Individual tab state persistence with smart numbering and result isolation
-
-### 🎨 User Interface Improvements
-- **Sortable Result Tables**: Click any column header to sort data ascending or descending
-- **Accordion Sidebar**: Improved space utilization with collapsible sections
-- **Enhanced Visual Feedback**: Professional modal styling and improved button states
-
 [📋 View Complete Release Notes](RELEASE_NOTES_v1.1.0.md)
 
 ## 🚀 Features Overview
