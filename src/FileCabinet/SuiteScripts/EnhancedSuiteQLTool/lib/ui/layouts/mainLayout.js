@@ -117,8 +117,12 @@ define([
                                 <span id="${constants.ELEMENT_IDS.QUERY_RESULTS_HEADER}">Query Results</span>
                                 <div style="display: flex; gap: 8px; align-items: center;">
                                     <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="copyResultsToClipboard(); return false;" id="${constants.ELEMENT_IDS.COPY_CLIPBOARD_BTN}" style="display: none;">📋 Copy to Clipboard</button>
-                                    <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="downloadCSV(); return false;" id="downloadCSVBtn" style="display: none;">📥 Download CSV</button>
-                                    <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="copyCSVToClipboard(); return false;" id="copyCSVBtn" style="display: none;">📋 Copy CSV</button>
+                                    <div class="csv-export-group" style="display: none; position: relative;" id="csvExportGroup">
+                                        <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="downloadCSV(); return false;" id="downloadCSVBtn">📥 Download CSV</button>
+                                        <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="copyCSVToClipboard(); return false;" id="copyCSVBtn">📋 Copy CSV</button>
+                                        <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="showCSVPresetMenu(); return false;" id="csvPresetsBtn" title="Quick CSV format presets">📋▼</button>
+                                        <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="showCSVOptionsModal(); return false;" id="csvOptionsBtn" title="Configure CSV export options">⚙️</button>
+                                    </div>
                                     <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="toggleControls(); return false;" id="${constants.ELEMENT_IDS.TOGGLE_CONTROLS_BTN}">⚙ Options</button>
                                     <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="clearResults(); return false;">🗑 Clear</button>
                                 </div>
