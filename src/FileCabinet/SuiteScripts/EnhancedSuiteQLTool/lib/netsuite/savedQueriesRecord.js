@@ -19,9 +19,7 @@
  * - custrecord_sqrt_query_last_modified (Date/Time) - Last modified
  * - custrecord_sqrt_query_execution_count (Integer) - Usage counter
  * - custrecord_sqrt_query_favorite (Checkbox) - Favorite flag
- * - custrecord_sqrt_query_shared_with_roles (Multiple Select - Role) - Shared roles
- * - custrecord_sqrt_query_shared_with_users (Multiple Select - Employee) - Shared users
- * - custrecord_sqrt_query_sharing_level (List) - None/Role/Individual/Public
+
  * 
  * @author Matt Owen - Web Solutions Group, LLC
  * @version 2025.1
@@ -40,19 +38,10 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
         CREATED_BY: 'custrecord_sqrt_query_created_by',
         LAST_MODIFIED: 'custrecord_sqrt_query_last_modified',
         EXECUTION_COUNT: 'custrecord_sqrt_query_execution_count',
-        FAVORITE: 'custrecord_sqrt_query_favorite',
-        SHARED_WITH_ROLES: 'custrecord_sqrt_query_shared_with_roles',
-        SHARED_WITH_USERS: 'custrecord_sqrt_query_shared_with_users',
-        SHARING_LEVEL: 'custrecord_sqrt_query_sharing_level'
+        FAVORITE: 'custrecord_sqrt_query_favorite'
     };
 
-    // Sharing levels (using numeric IDs from custom list)
-    const SHARING_LEVELS = {
-        PRIVATE: '1',     // Only owner can see
-        ROLE: '2',        // Shared with specific roles
-        INDIVIDUAL: '3',  // Shared with specific users
-        PUBLIC: '4'       // Everyone can see
-    };
+
 
     // Category mapping (string to numeric list value ID)
     const CATEGORY_MAPPING = {
@@ -97,9 +86,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
      * @param {string} [queryData.tags] - Comma-separated tags
      * @param {string} [queryData.category] - Query category
      * @param {boolean} [queryData.favorite] - Favorite flag
-     * @param {string} [queryData.sharingLevel] - Sharing level (private/role/individual/public)
-     * @param {Array} [queryData.sharedWithRoles] - Array of role IDs to share with
-     * @param {Array} [queryData.sharedWithUsers] - Array of user IDs to share with
+
      * @returns {number} Record internal ID
      */
     function createSavedQuery(queryData) {
@@ -173,17 +160,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                 }
             } catch(_e) { log.debug('Category field not available', _e.message); }
             try { newRecord.setValue({ fieldId: FIELDS.FAVORITE, value: !!queryData.favorite }); } catch(_e) { log.debug('Favorite field not available', _e.message); }
-            try {
-                if (queryData.sharingLevel && queryData.sharingLevel.trim() !== '') {
-                    const sharingLevelValue = SHARING_LEVELS[queryData.sharingLevel.toUpperCase()];
-                    if (sharingLevelValue) {
-                        newRecord.setValue({ fieldId: FIELDS.SHARING_LEVEL, value: sharingLevelValue });
-                    }
-                }
-                // If no sharing level provided, let NetSuite use the field's default value
-            } catch(_e) { log.debug('Sharing level field not available', _e.message); }
-            try { if (queryData.sharedWithRoles && queryData.sharedWithRoles.length) newRecord.setValue({ fieldId: FIELDS.SHARED_WITH_ROLES, value: queryData.sharedWithRoles }); } catch(_e) { log.debug('Shared with roles field not available', _e.message); }
-            try { if (queryData.sharedWithUsers && queryData.sharedWithUsers.length) newRecord.setValue({ fieldId: FIELDS.SHARED_WITH_USERS, value: queryData.sharedWithUsers }); } catch(_e) { log.debug('Shared with users field not available', _e.message); }
+
             // System/metadata fields
             try {
                 newRecord.setValue({ fieldId: FIELDS.CREATED_BY, value: currentUser.id });
@@ -247,7 +224,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                 description: queryRecord.getValue(FIELDS.DESCRIPTION),
                 tags: queryRecord.getValue(FIELDS.TAGS),
                 category: queryRecord.getValue(FIELDS.CATEGORY),
-                sharingLevel: queryRecord.getValue(FIELDS.SHARING_LEVEL),
+
                 createdBy: queryRecord.getValue(FIELDS.CREATED_BY),
                 lastModified: queryRecord.getValue(FIELDS.LAST_MODIFIED),
                 executionCount: queryRecord.getValue(FIELDS.EXECUTION_COUNT),
@@ -306,15 +283,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                     }
                 }
             } catch(_e) {}
-            try {
-                if (queryData.sharingLevel !== undefined && queryData.sharingLevel.trim() !== '') {
-                    const sharingLevelValue = SHARING_LEVELS[queryData.sharingLevel.toUpperCase()];
-                    if (sharingLevelValue) {
-                        queryRecord.setValue({ fieldId: FIELDS.SHARING_LEVEL, value: sharingLevelValue });
-                    }
-                }
-                // If no sharing level provided, leave the existing value unchanged
-            } catch(_e) {}
+
             try { if (queryData.favorite !== undefined) queryRecord.setValue({ fieldId: FIELDS.FAVORITE, value: queryData.favorite }); } catch(_e) {}
             // Always update last modified
             try { queryRecord.setValue({ fieldId: FIELDS.LAST_MODIFIED, value: new Date() }); } catch(_e) {}
@@ -377,7 +346,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                     search.createColumn({ name: FIELDS.DESCRIPTION }),
                     search.createColumn({ name: FIELDS.TAGS }),
                     search.createColumn({ name: FIELDS.CATEGORY }),
-                    search.createColumn({ name: FIELDS.SHARING_LEVEL }),
+
                     search.createColumn({ name: FIELDS.CREATED_BY }),
                     search.createColumn({ name: FIELDS.LAST_MODIFIED }),
                     search.createColumn({ name: FIELDS.EXECUTION_COUNT }),
@@ -419,13 +388,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                     }));
                 }
 
-                if (filters.sharingLevel !== undefined) {
-                    searchObj.filters.push(search.createFilter({
-                        name: FIELDS.SHARING_LEVEL,
-                        operator: search.Operator.IS,
-                        values: filters.sharingLevel
-                    }));
-                }
+
 
                 if (filters.favorite !== undefined) {
                     searchObj.filters.push(search.createFilter({
@@ -470,7 +433,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                     description: result.getValue(FIELDS.DESCRIPTION),
                     tags: result.getValue(FIELDS.TAGS),
                     category: result.getValue(FIELDS.CATEGORY),
-                    sharingLevel: result.getValue(FIELDS.SHARING_LEVEL),
+
                     createdBy: result.getValue(FIELDS.CREATED_BY),
                     lastModified: result.getValue(FIELDS.LAST_MODIFIED),
                     executionCount: result.getValue(FIELDS.EXECUTION_COUNT),
@@ -481,7 +444,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                     id: queryData.id,
                     title: queryData.title,
                     createdBy: queryData.createdBy,
-                    sharingLevel: queryData.sharingLevel
+
                 });
 
                 results.push(queryData);
@@ -586,22 +549,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                 value: new Date()
             });
 
-            // Reset sharing to private for security
-            queryRecord.setValue({
-                fieldId: FIELDS.SHARING_LEVEL,
-                value: SHARING_LEVELS.PRIVATE
-            });
 
-            // Clear sharing lists
-            queryRecord.setValue({
-                fieldId: FIELDS.SHARED_WITH_ROLES,
-                value: []
-            });
-
-            queryRecord.setValue({
-                fieldId: FIELDS.SHARED_WITH_USERS,
-                value: []
-            });
 
             queryRecord.save();
 
@@ -718,7 +666,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
     return {
         RECORD_TYPE: RECORD_TYPE,
         FIELDS: FIELDS,
-        SHARING_LEVELS: SHARING_LEVELS,
+
         CATEGORY_MAPPING: CATEGORY_MAPPING,
         checkCustomRecordExists: checkCustomRecordExists,
         createSavedQuery: createSavedQuery,

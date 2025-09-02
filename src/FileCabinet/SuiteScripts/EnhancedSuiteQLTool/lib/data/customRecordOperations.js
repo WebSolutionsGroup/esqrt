@@ -48,10 +48,7 @@ define([
                 favorite: requestPayload.favorite || false
             };
 
-            // Only include sharing level if provided
-            if (requestPayload.sharingLevel) {
-                queryData.sharingLevel = requestPayload.sharingLevel;
-            }
+
 
             var recordId = savedQueriesRecord.createSavedQuery(queryData);
 
