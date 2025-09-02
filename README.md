@@ -1,4 +1,4 @@
-# Enhanced SuiteQL Query Tool (ESQRT) v2025.1
+# Enhanced SuiteQL Query Tool (ESQRT) v2025.1.0.0
 
 A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemporary database management tools. This tool provides an enhanced user experience for writing, executing, and managing SuiteQL queries with advanced features like syntax highlighting, query history, export capabilities, and a responsive split-pane interface.
 
@@ -875,7 +875,7 @@ When reporting issues, please include:
 
 ## 📈 Version History
 
-### v2025.1 (Current)
+### v2025.1.0.0 (Current)
 - Production release with complete UI overhaul
 - Split-pane layout with resizable panels
 - CodeMirror integration with syntax highlighting
@@ -944,7 +944,7 @@ If you find this tool useful, please consider giving it a star on GitHub! Your s
 
 ---
 
-**Enhanced SuiteQL Query Tool v2025.1** - Bringing modern database query interfaces to NetSuite
+**Enhanced SuiteQL Query Tool v2025.1.0.0** - Bringing modern database query interfaces to NetSuite
 
 *For professional NetSuite development services, contact [Web Solutions Group, LLC](https://websolutionsgroup.com)*
 
