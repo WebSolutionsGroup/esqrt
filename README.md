@@ -186,34 +186,40 @@ var CONFIG = {
 
 ### Configuration Options
 
-| Setting | Description | Default | Impact |
-|---------|-------------|---------|---------|
-| `DATATABLES_ENABLED` | Enables enhanced table display | `false` | Adds sorting, searching, pagination |
-| `REMOTE_LIBRARY_ENABLED` | Allows remote query libraries | `true` | Shows "Remote Library" button |
-| `ROWS_RETURNED_DEFAULT` | Default pagination size | `25` | Initial value for row limit |
-| `QUERY_FOLDER_ID` | File Cabinet folder for queries | `null` | Enables local query save/load |
-| `WORKBOOKS_ENABLED` | Enables saved search integration | `false` | Shows "Workbooks" button |
+| Setting | Description | Default | Status | Impact |
+|---------|-------------|---------|---------|---------|
+| `DATATABLES_ENABLED` | Enables enhanced table display | `false` | ⚠️ Partial | Code exists but disabled by default |
+| `REMOTE_LIBRARY_ENABLED` | Allows remote query libraries | `true` | ❌ Not Implemented | Shows button but no backend |
+| `ROWS_RETURNED_DEFAULT` | Default pagination size | `25` | ✅ Working | Initial value for row limit |
+| `QUERY_FOLDER_ID` | File Cabinet folder for queries | `null` | ✅ Working | Enables local query save/load |
+| `WORKBOOKS_ENABLED` | Enables saved search integration | `false` | ✅ Working | Shows "Workbooks" button and functionality |
+
+> **Note**: Some features are configured but not fully implemented. Enable with caution and test thoroughly.
 
 ## 🖥 User Interface
 
 ### Layout Structure
 
-The interface consists of three main panels in a responsive split-pane layout:
+The interface consists of three main areas in a responsive split-pane layout:
 
-#### 1. Query Editor Panel (Left)
+#### 1. Sidebar Panel (Left)
+- **Query History Section**: Expandable section with recent executed queries
+  - Last 10 executed queries with timestamps
+  - Click any history item to load it into the editor
+  - Query preview shows first 60 characters of each query
+- **Saved Queries Section**: Expandable section with saved query library
+  - Store and organize frequently used queries
+  - Support for tags and descriptions
+  - Click to load saved queries into the editor
+
+#### 2. Query Editor Panel (Center Top)
 - **CodeMirror Editor**: Syntax-highlighted SQL editor with line numbers
 - **Auto-Complete**: Intelligent suggestions triggered by Ctrl+Space or automatically
 - **Syntax Highlighting**: SQL keywords, strings, and comments highlighted
 - **Query Validation**: Real-time error highlighting and bracket matching
-- **File Info Display**: Shows currently loaded query file information
+- **Tab Support**: Multiple query tabs with individual state management
 
-#### 2. Query History Panel (Center)
-- **Recent Queries**: Last 10 executed queries with timestamps
-- **Click to Load**: Click any history item to load it into the editor
-- **Query Preview**: Shows first 60 characters of each query
-- **Search and Filter**: Find specific queries in history
-
-#### 3. Results Panel (Right)
+#### 3. Results Panel (Center Bottom)
 - **Welcome Screen**: Professional welcome panel displayed on first load with:
   - Getting Started guide with sample query link
   - Key Features overview
@@ -227,14 +233,16 @@ The interface consists of three main panels in a responsive split-pane layout:
 
 #### Primary Actions
 - **Run Query** (Alt+R): Execute the current query
-- **Tables Reference**: Open NetSuite schema reference
 - **Toggle Dark Mode**: Switch between light and dark themes
-- **Clear Editor**: Clear the query editor
+- **Close All Tabs**: Close all open query tabs
 
-#### Library Actions (when enabled)
-- **Saved Queries**: Access saved query library
-- **Remote Library**: Access remote query collections
-- **Workbooks**: Load saved searches as SuiteQL
+#### Library Actions
+- **Saved Queries**: Access saved query library (✅ Working)
+
+#### Planned Features (Not Yet Implemented)
+- **Tables Reference**: Open NetSuite schema reference (❌ Planned)
+- **Remote Library**: Access remote query collections (❌ Planned)
+- **Workbooks**: Load saved searches as SuiteQL (❌ Planned)
 
 #### View Controls
 - **Hide/Show Panels**: Collapse panels for more space
@@ -264,10 +272,10 @@ The CodeMirror editor provides intelligent auto-complete and enhanced editing ca
 - **Line Numbers**: Displayed on the left margin
 
 #### Editor Features
-- **Bracket Matching**: Automatic matching of parentheses and brackets
-- **Smart Indentation**: Intelligent indentation for nested queries
-- **Line Wrapping**: Long lines wrap for better readability
-- **Search and Replace**: Built-in search functionality
+- **Bracket Matching**: Automatic matching of parentheses and brackets (✅ Working)
+- **Smart Indentation**: Intelligent indentation for nested queries (✅ Working)
+- **Line Wrapping**: Long lines wrap for better readability (✅ Working)
+- **Basic Search**: Browser-based find functionality (Ctrl+F) (⚠️ Limited - advanced search/replace planned)
 
 #### Keyboard Shortcuts
 
@@ -362,12 +370,12 @@ WHERE Email LIKE '%@company.com'
 
 ### Advanced Query Features
 
-#### Parameterized Queries
+#### Dynamic Queries
 ```sql
--- Use parameters for dynamic queries
+-- Use hard-coded values for dynamic queries (parameterized queries planned for future release)
 SELECT * FROM Transaction
-WHERE TranDate BETWEEN ? AND ?
-AND Entity = ?
+WHERE TranDate BETWEEN '2024-01-01' AND '2024-12-31'
+AND Entity = 123
 ```
 
 #### Nested Queries Support
@@ -671,12 +679,21 @@ The Enhanced SuiteQL Query Tool continues to evolve with exciting new features p
 - **Enhanced CSV Exporting Options**: Advanced CSV export with customizable delimiters, quote escaping, and encoding options for better data integration workflows
 
 ### 🔧 Advanced Query Capabilities
+- **Parameterized Queries**: Interactive parameter input dialog for dynamic queries with `?` placeholders, supporting date pickers, dropdowns, and validation
 - **Functions & Stored Procedures**: JavaScript functions that allow you to execute code blocks and call them as SuiteQL functions, enabling complex data transformations and business logic
 - **Basic DML Support**: Ability to perform basic INSERT, UPDATE, DELETE operations using SQL-like expressions for data manipulation workflows
 
 ### 🗂️ Data Discovery & Management
 - **Table & Field Browser**: Interactive browser for exploring tables and fields available inside NetSuite, with search, filtering, and documentation features
+- **Advanced Autocomplete**: Enhanced autocomplete ability for existing tables and fields, providing intelligent suggestions based on NetSuite schema and query context
+- **Remote Library Integration**: Access to remote query collections and shared query repositories for collaborative query development
+- **Workbooks Integration**: Load and convert saved searches into SuiteQL queries, bridging the gap between traditional saved searches and modern SQL workflows
 - **File Cabinet Browser**: Integrated file management with basic file editing capabilities for managing scripts, templates, and data files
+
+### ✏️ Editor Features
+- **Search and Replace**: Advanced find/replace functionality with regex support, case sensitivity options, and keyboard shortcuts (Ctrl+F, Ctrl+H)
+- **Jump to Line**: Quick navigation to specific line numbers (Ctrl+G)
+- **Multiple Cursors**: Multi-cursor editing for efficient bulk text operations
 
 ### 💻 Advanced Development Environment
 - **Terminal Emulator Support**: Full terminal emulator integration using [Xterm.js](https://xtermjs.org/) for advanced command-line operations and scripting
@@ -689,6 +706,15 @@ The Enhanced SuiteQL Query Tool continues to evolve with exciting new features p
   - **Microsoft Azure**: Azure SQL, Blob Storage, and Azure services
   - **Amazon Web Services**: RDS, S3, Redshift, and other AWS services
   - **Snowflake**: Direct Snowflake data warehouse connectivity
+
+### 🤖 AI Integration
+- **Natural Language Query Builder**: Convert plain English descriptions into SuiteQL queries using NetSuite AI ("Show me all customers who haven't placed orders in the last 6 months")
+- **Query Optimization Suggestions**: AI-powered analysis of query performance with recommendations for indexes, joins, and query structure improvements
+- **Smart Schema Discovery**: AI-assisted exploration of NetSuite data relationships with automatic suggestion of relevant tables and fields based on query context
+- **Intelligent Error Resolution**: AI-powered error analysis that provides specific suggestions and corrections for SuiteQL syntax and logic errors
+- **Query Pattern Recognition**: Machine learning analysis of query history to suggest commonly used patterns and templates based on user behavior
+- **Data Insights Generation**: AI-powered analysis of query results to automatically identify trends, anomalies, and business insights with natural language explanations
+- **Automated Documentation**: AI-generated documentation for complex queries including purpose, logic explanation, and usage examples
 
 ### 🎯 Coming Soon
 These features are actively being planned and developed. Stay tuned for updates and feel free to contribute ideas or feedback through GitHub Issues.
