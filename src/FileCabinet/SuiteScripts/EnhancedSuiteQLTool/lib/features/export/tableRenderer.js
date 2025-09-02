@@ -65,7 +65,7 @@ define([
                     } else {
                         // For sortable columns, use the current cell index that matches table body
                         const sortColumnIndex = cellIndex;
-                        console.log('Creating header for', headers[i], 'with sort index', sortColumnIndex, 'at cell index', cellIndex);
+                        // console.log('Creating header for', headers[i], 'with sort index', sortColumnIndex, 'at cell index', cellIndex);
                         thead += '<th class="sortable-header" onclick="console.log(\\'Clicked header: ' + headers[i] + ' (index ' + sortColumnIndex + ')\\'); window.sortTable(' + sortColumnIndex + ')" style="cursor: pointer; user-select: none;" title="Click to sort">';
                         thead += headers[i] + ' <span class="sort-indicator" id="sort-indicator-' + sortColumnIndex + '">⇅</span>';
                         thead += '</th>';
@@ -145,9 +145,9 @@ define([
                     const rows = Array.from(tbody.rows);
 
                     // Sort rows
-                    console.log('About to start sorting...');
+                    // console.log('About to start sorting...');
                     try {
-                        console.log('Starting sort operation');
+                        // console.log('Starting sort operation');
                         rows.sort((a, b) => {
                             if (!a.cells[columnIndex] || !b.cells[columnIndex]) {
                                 console.error('Column index', columnIndex, 'not found. Row has', a.cells.length, 'cells');
@@ -155,7 +155,7 @@ define([
                             }
                             let aVal = a.cells[columnIndex].textContent.trim();
                             let bVal = b.cells[columnIndex].textContent.trim();
-                            console.log('Sorting comparison:', aVal, 'vs', bVal);
+                            // console.log('Sorting comparison:', aVal, 'vs', bVal);
 
                         // Log first comparison only to avoid spam
                         if (a === rows[0] && b === rows[1]) {
@@ -201,7 +201,7 @@ define([
                         activeIndicator.style.opacity = '1';
                     }
 
-                    console.log('Sort completed');
+                    // console.log('Sort completed');
                 };
 
                 // Show copy button, hide CSV export buttons
@@ -232,7 +232,7 @@ define([
             let originalTableData = null;
 
             function sortTable(columnIndex) {
-                console.log('sortTable called with columnIndex:', columnIndex);
+                // console.log('sortTable called with columnIndex:', columnIndex);
                 const table = document.getElementById('resultsTable');
                 if (!table) {
                     console.error('Table with id "resultsTable" not found');
@@ -262,8 +262,8 @@ define([
 
                 // Get all rows as array
                 const rows = Array.from(tbody.rows);
-                console.log('Number of rows to sort:', rows.length);
-                console.log('Sorting column index:', columnIndex, 'Direction:', currentSortDirection);
+                // console.log('Number of rows to sort:', rows.length);
+                // console.log('Sorting column index:', columnIndex, 'Direction:', currentSortDirection);
 
                 // Sort rows based on column content
                 rows.sort((a, b) => {

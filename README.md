@@ -1,4 +1,4 @@
-# Enhanced SuiteQL Query Tool (ESQRT) v1.1.0
+# Enhanced SuiteQL Query Tool (ESQRT) v1.1.1
 
 A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemporary database management tools. This tool provides an enhanced user experience for writing, executing, and managing SuiteQL queries with advanced features like syntax highlighting, query history, export capabilities, and a responsive split-pane interface.
 
@@ -1017,3 +1017,38 @@ If you find this tool useful, please consider giving it a star on GitHub! Your s
 - [🛠 Development](#-development)
 - [🐛 Troubleshooting](#-troubleshooting)
 - [🤝 Contributing](#-contributing)
+- [📋 Changelog](#-changelog)
+
+---
+
+## 📋 Changelog
+
+### v1.1.1 (September 2, 2025) - Bug Fixes & Production Stability
+
+#### 🐛 Bug Fixes
+- **Fixed Production Deployment Error**: Resolved `custrecord_esqrt_query_sharing_level` field error by removing incomplete sharing functionality
+- **Removed Sharing Features**: Temporarily removed sharing-related fields and functionality to ensure stable production deployment
+- **Cleaned Up Debug Logging**: Commented out excessive console.log statements for cleaner browser console output
+  - Removed table sorting debug messages
+  - Removed CSV export debug logging
+  - Removed resizer initialization debug output
+  - Reduced noise in browser developer tools
+
+#### 🔧 Technical Improvements
+- **Custom Record Cleanup**: Removed sharing-related fields from `customrecord_sqrt_saved_queries` definition
+- **Code Maintenance**: Cleaned up debug statements in:
+  - `tableRenderer.js` - Table sorting and rendering logs
+  - `csvExporter.js` - CSV configuration and export logs
+  - `layoutUtils.js` - UI resizer and layout logs
+- **Production Ready**: Ensured all features work reliably in production NetSuite environments
+
+#### 📝 Documentation
+- **Updated Version**: Bumped version to v1.1.1 to reflect bug fixes
+- **Added Changelog**: Created comprehensive changelog section for tracking updates
+
+#### 🚀 Deployment Notes
+This release focuses on production stability and resolves deployment issues encountered in v1.1.0. The sharing functionality has been temporarily removed and will be reintroduced in a future release with proper implementation.
+
+**Upgrade Path**: Deploy this version to resolve any production errors related to missing custom record fields. All existing functionality remains intact except for sharing features.
+
+---

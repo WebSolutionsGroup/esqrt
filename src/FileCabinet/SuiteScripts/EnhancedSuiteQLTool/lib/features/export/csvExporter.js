@@ -289,7 +289,7 @@ define([
                 for (let i = 1; i < records.length; i++) {
                     const currentKeys = Object.keys(records[i]).sort();
                     if (JSON.stringify(firstRecordKeys) !== JSON.stringify(currentKeys)) {
-                        console.warn('Inconsistent record structure detected at record', i);
+                        // console.warn('Inconsistent record structure detected at record', i);
                         // Don't fail, just warn - we'll handle missing fields
                     }
                 }
@@ -471,7 +471,7 @@ define([
                         return Object.assign({}, defaultConfig, config);
                     }
                 } catch (e) {
-                    console.warn('Could not load CSV config from localStorage:', e);
+                    // console.warn('Could not load CSV config from localStorage:', e);
                 }
                 return defaultConfig;
             }
@@ -480,7 +480,7 @@ define([
                 try {
                     localStorage.setItem('suiteql-csv-config', JSON.stringify(config));
                 } catch (e) {
-                    console.warn('Could not save CSV config to localStorage:', e);
+                    // console.warn('Could not save CSV config to localStorage:', e);
                 }
             }
 
@@ -828,11 +828,11 @@ define([
 
             // Test function to verify CSV functions are loaded
             window.testCSVFunctions = function() {
-                console.log('CSV Functions Test:');
-                console.log('showCSVOptionsModal:', typeof window.showCSVOptionsModal);
-                console.log('showCSVPresetMenu:', typeof window.showCSVPresetMenu);
-                console.log('applyCSVPreset:', typeof window.applyCSVPreset);
-                console.log('getCurrentCSVConfig:', typeof window.getCurrentCSVConfig);
+                // console.log('CSV Functions Test:');
+                // console.log('showCSVOptionsModal:', typeof window.showCSVOptionsModal);
+                // console.log('showCSVPresetMenu:', typeof window.showCSVPresetMenu);
+                // console.log('applyCSVPreset:', typeof window.applyCSVPreset);
+                // console.log('getCurrentCSVConfig:', typeof window.getCurrentCSVConfig);
                 return 'CSV functions test complete - check console';
             };
 
@@ -840,7 +840,7 @@ define([
 
 
             function applyCSVPreset(presetName) {
-                console.log('Applying preset:', presetName);
+                // console.log('Applying preset:', presetName);
 
                 let config;
                 switch(presetName) {

@@ -30,14 +30,14 @@ define([
                 const sidebar = document.querySelector('.${constants.CSS_CLASSES.CODEOSS_SIDEBAR}');
                 const editorResizer = document.getElementById('editorResizer');
 
-                console.log('Initializing resizers...', {
-                    editorContainer: editorContainer,
-                    resultsContainer: resultsContainer,
-                    editorResizer: editorResizer
-                });
+                // console.log('Initializing resizers...', {
+                //     editorContainer: editorContainer,
+                //     resultsContainer: resultsContainer,
+                //     editorResizer: editorResizer
+                // });
 
                 if (!editorContainer || !resultsContainer || !editorResizer) {
-                    console.warn('Missing required elements for resizers');
+                    // console.warn('Missing required elements for resizers');
                     return;
                 }
                 
@@ -50,7 +50,7 @@ define([
                 
                 // Editor/Results vertical resizer
                 editorResizer.addEventListener('mousedown', function(e) {
-                    console.log('Resizer mousedown event triggered');
+                    // console.log('Resizer mousedown event triggered');
                     isResizing = true;
                     startY = e.clientY;
                     startEditorHeight = editorContainer.offsetHeight;
@@ -85,7 +85,7 @@ define([
                         editorContainer.style.flex = 'none';
                         editorContainer.style.height = finalHeight + 'px';
 
-                        console.log('Resizing editor to height:', finalHeight);
+                        // console.log('Resizing editor to height:', finalHeight);
 
                         if (codeEditor) {
                             codeEditor.refresh();
@@ -106,7 +106,7 @@ define([
                         editorResizer.style.backgroundColor = '';
                         isResizing = false;
                         isSidebarResizing = false;
-                        console.log('Resizing ended');
+                        // console.log('Resizing ended');
                     }
                 });
             }
