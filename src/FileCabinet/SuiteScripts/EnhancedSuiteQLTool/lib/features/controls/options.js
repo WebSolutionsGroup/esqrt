@@ -83,6 +83,7 @@ define([
                         <h5 style="margin: 0 0 8px 0; color: var(--codeoss-text-primary); font-size: 11px; text-transform: uppercase;">Export Options</h5>
                         <div style="display: flex; flex-direction: column; gap: 6px;">
                             <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="exportTableAsCSV()" style="width: 100%; font-size: 10px; padding: 4px 8px;">📊 Export as CSV</button>
+                            <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="showCSVOptionsModal()" style="width: 100%; font-size: 10px; padding: 4px 8px;">⚙️ CSV Export Options</button>
                             <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="exportTableAsJSON()" style="width: 100%; font-size: 10px; padding: 4px 8px;">📋 Export as JSON</button>
                             <button type="button" class="${constants.CSS_CLASSES.CODEOSS_BTN_SECONDARY}" onclick="generatePDFReport()" style="width: 100%; font-size: 10px; padding: 4px 8px;">📄 Generate PDF</button>
                         </div>
@@ -247,8 +248,14 @@ define([
                 document.getElementById('${constants.ELEMENT_IDS.STATUS_TEXT}').textContent = 'Ready';
 
                 // Hide CSV export buttons
-                document.getElementById('downloadCSVBtn').style.display = 'none';
-                document.getElementById('copyCSVBtn').style.display = 'none';
+                const csvExportGroup = document.getElementById('csvExportGroup');
+                if (csvExportGroup) {
+                    csvExportGroup.style.display = 'none';
+                } else {
+                    // Fallback for individual buttons
+                    document.getElementById('downloadCSVBtn').style.display = 'none';
+                    document.getElementById('copyCSVBtn').style.display = 'none';
+                }
 
                 // Clear the response payload
                 queryResponsePayload = null;

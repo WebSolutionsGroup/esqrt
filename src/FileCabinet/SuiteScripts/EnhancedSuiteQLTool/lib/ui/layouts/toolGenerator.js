@@ -24,13 +24,14 @@ define([
     '../../features/queryHistory/historyManager',
 
     '../../features/export/csvExporter',
+    '../../features/export/csvOptionsModal',
     '../../features/export/jsonExporter',
     '../../features/export/tableRenderer',
     '../../features/controls/options',
     '../../features/query/queryExecution',
     '../../features/savedQueries/savedQueriesManager',
     '../../features/ui/layoutUtils'
-], function(constants, themes, modals, sidebarSections, queryTabs, mainLayout, editorSetup, historyManager, csvExporter, jsonExporter, tableRenderer, controlsOptions, queryExecution, savedQueriesManager, layoutUtils) {
+], function(constants, themes, modals, sidebarSections, queryTabs, mainLayout, editorSetup, historyManager, csvExporter, csvOptionsModal, jsonExporter, tableRenderer, controlsOptions, queryExecution, savedQueriesManager, layoutUtils) {
 
     /**
      * Get all JavaScript functions from feature modules
@@ -133,6 +134,7 @@ define([
             ${modals.getModalStyles()}
 
             ${modals.getAllModals()}
+            ${csvOptionsModal.getCSVOptionsModalHTML()}
             ${mainLayout.htmlQueryUI()}
 
             <script>
@@ -181,6 +183,7 @@ define([
                 ${historyManager.getAllQueryHistoryJS()}
                 ${sidebarSections.getAllSidebarSectionsJS()}
                 ${csvExporter.getAllCSVExportJS()}
+                ${csvOptionsModal.getCSVOptionsModalJS()}
                 ${jsonExporter.getAllJSONExportJS()}
                 ${tableRenderer.getAllTableRenderingJS()}
                 ${controlsOptions.getAllControlsJS()}
