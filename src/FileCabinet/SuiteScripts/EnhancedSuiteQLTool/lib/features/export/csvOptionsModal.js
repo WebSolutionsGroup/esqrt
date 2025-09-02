@@ -32,8 +32,9 @@ define([], function() {
                             <select id="csvDelimiter" style="width: 100%; padding: 5px; background: #3c3c3c; color: #cccccc; border: 1px solid #3e3e42;">
                                 <option value=",">Comma (,)</option>
                                 <option value=";">Semicolon (;)</option>
-                                <option value="\\t">Tab</option>
+                                <option value="	">Tab</option>
                                 <option value="|">Pipe (|)</option>
+                                <option value=" ">Space ( )</option>
                             </select>
                         </div>
 
@@ -49,8 +50,10 @@ define([], function() {
                         <div>
                             <label style="display: block; margin-bottom: 5px; color: #cccccc;">Line Ending:</label>
                             <select id="csvLineEnding" style="width: 100%; padding: 5px; background: #3c3c3c; color: #cccccc; border: 1px solid #3e3e42;">
-                                <option value="\\n">LF (Unix)</option>
-                                <option value="\\r\\n">CRLF (Windows)</option>
+                                <option value="
+">LF (Unix)</option>
+                                <option value="
+">CRLF (Windows)</option>
                             </select>
                         </div>
 
@@ -59,6 +62,15 @@ define([], function() {
                             <select id="csvEncoding" style="width: 100%; padding: 5px; background: #3c3c3c; color: #cccccc; border: 1px solid #3e3e42;">
                                 <option value="utf-8">UTF-8</option>
                                 <option value="utf-16">UTF-16</option>
+                                <option value="windows-1252">Western (Windows 1252)</option>
+                                <option value="iso-8859-1">Western (ISO-8859-1)</option>
+                                <option value="gb18030">Chinese Simplified (GB18030)</option>
+                                <option value="gbk">Chinese Simplified (GBK)</option>
+                                <option value="big5">Traditional Chinese (Big5)</option>
+                                <option value="shift-jis">Japanese (Shift-JIS)</option>
+                                <option value="iso-2022-kr">Korean (ISO-2022-KR)</option>
+                                <option value="euc-kr">Korean (EUC-KR)</option>
+                                <option value="macroman">Western (Mac Roman)</option>
                             </select>
                         </div>
                     </div>
@@ -156,7 +168,8 @@ define([], function() {
                     { key: 'standard', name: 'Standard CSV' },
                     { key: 'excel', name: 'Excel Compatible' },
                     { key: 'tab', name: 'Tab Delimited' },
-                    { key: 'semicolon', name: 'Semicolon Delimited' }
+                    { key: 'semicolon', name: 'Semicolon Delimited' },
+                    { key: 'pipe', name: 'Pipe Delimited' }
                 ];
                 
                 let menuHTML = '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #2d2d30; border: 1px solid #3e3e42; border-radius: 6px; padding: 16px; z-index: 10001; box-shadow: 0 4px 12px rgba(0,0,0,0.5); min-width: 300px;">';
@@ -188,7 +201,8 @@ define([], function() {
                     standard: { delimiter: ',', quoteChar: '"', lineEnding: '\\n', encoding: 'utf-8', includeHeaders: true },
                     excel: { delimiter: ',', quoteChar: '"', lineEnding: '\\r\\n', encoding: 'utf-8', includeHeaders: true },
                     tab: { delimiter: '\\t', quoteChar: '"', lineEnding: '\\n', encoding: 'utf-8', includeHeaders: true },
-                    semicolon: { delimiter: ';', quoteChar: '"', lineEnding: '\\r\\n', encoding: 'utf-8', includeHeaders: true }
+                    semicolon: { delimiter: ';', quoteChar: '"', lineEnding: '\\r\\n', encoding: 'utf-8', includeHeaders: true },
+                    pipe: { delimiter: '|', quoteChar: '"', lineEnding: '\\n', encoding: 'utf-8', includeHeaders: true }
                 };
                 
                 const config = presets[presetKey];
