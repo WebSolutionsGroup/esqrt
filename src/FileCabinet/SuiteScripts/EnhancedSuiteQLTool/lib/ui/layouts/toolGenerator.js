@@ -29,9 +29,10 @@ define([
     '../../features/export/tableRenderer',
     '../../features/controls/options',
     '../../features/query/queryExecution',
+    '../../features/query/parameterizedQueries',
     '../../features/savedQueries/savedQueriesManager',
     '../../features/ui/layoutUtils'
-], function(constants, themes, modals, sidebarSections, queryTabs, mainLayout, editorSetup, historyManager, csvExporter, csvOptionsModal, jsonExporter, tableRenderer, controlsOptions, queryExecution, savedQueriesManager, layoutUtils) {
+], function(constants, themes, modals, sidebarSections, queryTabs, mainLayout, editorSetup, historyManager, csvExporter, csvOptionsModal, jsonExporter, tableRenderer, controlsOptions, queryExecution, parameterizedQueries, savedQueriesManager, layoutUtils) {
 
     /**
      * Get all JavaScript functions from feature modules
@@ -188,6 +189,7 @@ define([
                 ${tableRenderer.getAllTableRenderingJS()}
                 ${controlsOptions.getAllControlsJS()}
                 ${queryExecution.getAllQueryExecutionJS()}
+                ${parameterizedQueries.getParameterModalJS()}
                 ${savedQueriesManager.getAllSavedQueriesJS()}
                 ${layoutUtils.getAllLayoutUtilitiesJS()}
 

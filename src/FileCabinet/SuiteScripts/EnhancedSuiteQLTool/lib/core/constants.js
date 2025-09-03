@@ -206,7 +206,8 @@ FROM
         LOCAL_LOAD: 'localLoadModal',
         REMOTE_LOAD: 'remoteLoadModal',
         SAVE: 'saveModal',
-        WORKBOOKS: 'workbooksModal'
+        WORKBOOKS: 'workbooksModal',
+        PARAMETERS: 'parametersModal'
     };
     
     /**

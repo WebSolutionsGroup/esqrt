@@ -38,6 +38,11 @@ define([
             var paginatedRowBegin = requestPayload.rowBegin;
             var paginatedRowEnd = requestPayload.rowEnd;
             var nestedSQL = requestPayload.query + "\n";
+
+            // Handle parameters if provided
+            if (requestPayload.parameters && Array.isArray(requestPayload.parameters)) {
+                queryParams = requestPayload.parameters;
+            }
             
             // Handle virtual views if enabled
             if ((requestPayload.viewsEnabled) && (constants.CONFIG.QUERY_FOLDER_ID !== null)) {
@@ -51,11 +56,17 @@ define([
                 records = executePaginatedQuery(nestedSQL, queryParams, paginatedRowBegin, paginatedRowEnd);
             } else {
                 nsModules.logger.debug('nestedSQL', nestedSQL);
-                records = nsModules.queryUtils.runSuiteQL({ 
-                    query: nestedSQL, 
-                    params: queryParams 
-                }).asMappedResults();
-                nsModules.logger.debug('records', records);
+                nsModules.logger.debug('queryParams before execution', queryParams);
+                try {
+                    records = nsModules.queryUtils.runSuiteQL({
+                        query: nestedSQL,
+                        params: queryParams
+                    }).asMappedResults();
+                    nsModules.logger.debug('records', records);
+                } catch (queryError) {
+                    nsModules.logger.error('Query execution error with parameters', queryError);
+                    throw queryError;
+                }
             }
             
             let elapsedTime = (new Date().getTime() - beginTime);

@@ -26,7 +26,7 @@ define([
         return `
             function querySubmit() {
                 let query = '';
-                
+
                 // Get query text from CodeMirror or textarea
                 if (codeEditor) {
                     const selectedText = codeEditor.getSelection();
@@ -35,31 +35,45 @@ define([
                     const textarea = document.getElementById('${constants.ELEMENT_IDS.QUERY_TEXTAREA}');
                     query = textarea ? textarea.value : '';
                 }
-                
+
                 if (!query || query.trim() === '') {
                     alert('${constants.ERROR_MESSAGES.QUERY_EMPTY}');
                     return;
                 }
-                
+
+                // Check for parameters in the query
+                const parameterInfo = detectQueryParameters(query.trim());
+
+                if (parameterInfo.hasParameters) {
+                    // Show parameter modal instead of executing directly
+                    window.showParameterModal(query.trim(), parameterInfo.parameters);
+                    return;
+                }
+
+                // Execute query without parameters (original flow)
+                executeQueryDirect(query.trim());
+            }
+
+            function executeQueryDirect(query) {
                 // Update status
                 document.getElementById('${constants.ELEMENT_IDS.STATUS_TEXT}').textContent = 'Executing query...';
-                
+
                 // Hide welcome message and show loading
                 document.getElementById('${constants.ELEMENT_IDS.WELCOME_MESSAGE}').style.display = 'none';
                 document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').innerHTML = '<div style="padding: 20px; text-align: center; color: var(--codeoss-text-secondary);"><div style="margin-bottom: 12px;">⏳ Executing query...</div><div style="font-size: 11px;">Please wait while your query is processed.</div></div>';
                 document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'block';
-                
+
                 // Prepare request payload
                 const requestPayload = {
                     'function': '${constants.REQUEST_FUNCTIONS.QUERY_EXECUTE}',
-                    query: query.trim(),
+                    query: query,
                     rowBegin: getRowBegin(),
                     rowEnd: getRowEnd(),
                     paginationEnabled: isPaginationEnabled(),
                     returnTotals: isReturnTotalsEnabled(),
                     viewsEnabled: isViewsEnabled()
                 };
-                
+
                 // Track execution start time
                 const executionStartTime = Date.now();
 
@@ -354,8 +368,129 @@ define([
     }
     
     /**
+     * Generate parameter detection JavaScript functions
+     *
+     * @returns {string} JavaScript code for parameter detection
+     */
+    function getParameterDetectionJS() {
+        return `
+            function detectQueryParameters(query) {
+                if (!query || typeof query !== 'string') {
+                    return {
+                        hasParameters: false,
+                        parameterCount: 0,
+                        parameters: []
+                    };
+                }
+
+                // Find all ? placeholders that are not inside quoted strings
+                const parameters = [];
+                let parameterIndex = 0;
+                let inSingleQuote = false;
+                let inDoubleQuote = false;
+                let escaped = false;
+
+                for (let i = 0; i < query.length; i++) {
+                    const char = query[i];
+
+                    // Handle escape sequences
+                    if (escaped) {
+                        escaped = false;
+                        continue;
+                    }
+
+                    if (char === '\\\\') {
+                        escaped = true;
+                        continue;
+                    }
+
+                    // Handle quotes
+                    if (char === "'" && !inDoubleQuote) {
+                        inSingleQuote = !inSingleQuote;
+                        continue;
+                    }
+
+                    if (char === '"' && !inSingleQuote) {
+                        inDoubleQuote = !inDoubleQuote;
+                        continue;
+                    }
+
+                    // If we're inside quotes, skip parameter detection
+                    if (inSingleQuote || inDoubleQuote) {
+                        continue;
+                    }
+
+                    // Detect parameter placeholder
+                    if (char === '?') {
+                        parameterIndex++;
+
+                        // Try to infer parameter context from surrounding SQL
+                        const context = getParameterContextFromQuery(query, i);
+
+                        parameters.push({
+                            index: parameterIndex,
+                            position: i,
+                            name: \`Parameter \${parameterIndex}\`,
+                            type: context.type,
+                            context: context.description,
+                            required: true,
+                            value: null
+                        });
+                    }
+                }
+
+                return {
+                    hasParameters: parameters.length > 0,
+                    parameterCount: parameters.length,
+                    parameters: parameters
+                };
+            }
+
+            function getParameterContextFromQuery(query, position) {
+                // Get surrounding text (50 characters before and after)
+                const start = Math.max(0, position - 50);
+                const end = Math.min(query.length, position + 50);
+                const context = query.substring(start, end).toLowerCase();
+
+                // Default context
+                let type = 'text';
+                let description = 'Enter value';
+
+                // Look for date-related keywords
+                if (context.includes('date') || context.includes('created') || context.includes('modified') ||
+                    context.includes('lastmodified') || context.includes('datecreated')) {
+                    type = 'date';
+                    description = 'Select date';
+                }
+                // Look for numeric contexts
+                else if (context.includes('id') || context.includes('amount') || context.includes('count') ||
+                         context.includes('number') || context.includes('qty') || context.includes('quantity')) {
+                    type = 'number';
+                    description = 'Enter numeric value';
+                }
+                // Look for email contexts
+                else if (context.includes('email')) {
+                    type = 'email';
+                    description = 'Enter email address';
+                }
+                // Look for boolean contexts
+                else if (context.includes('active') || context.includes('enabled') || context.includes('disabled') ||
+                         context.includes('isinactive') || context.includes('is_inactive')) {
+                    type = 'select';
+                    description = 'Select true/false';
+                }
+
+                return {
+                    type: type,
+                    description: description
+                };
+            }
+        `;
+    }
+
+    /**
      * Get all query execution JavaScript functions
-     * 
+     *
      * @returns {string} Complete JavaScript code for query execution functionality
      */
     function getAllQueryExecutionJS() {
@@ -364,7 +499,8 @@ define([
                getHandleQueryErrorJS() + '\n' +
                getQueryParameterHelpersJS() + '\n' +
                getQueryValidationJS() + '\n' +
-               getResponseGenerateJS();
+               getResponseGenerateJS() + '\n' +
+               getParameterDetectionJS();
     }
     
     /**
@@ -377,6 +513,7 @@ define([
         getQueryParameterHelpersJS: getQueryParameterHelpersJS,
         getQueryValidationJS: getQueryValidationJS,
         getResponseGenerateJS: getResponseGenerateJS,
+        getParameterDetectionJS: getParameterDetectionJS,
         getAllQueryExecutionJS: getAllQueryExecutionJS
     };
     
