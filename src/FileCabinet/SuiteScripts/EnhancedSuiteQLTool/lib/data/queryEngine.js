@@ -18,8 +18,9 @@
 define([
     '../core/constants',
     '../core/modules',
-    '../netsuite/queryHistoryRecord'
-], function(constants, nsModules, queryHistoryRecord) {
+    '../netsuite/queryHistoryRecord',
+    '../features/synthetic/syntheticProcessor'
+], function(constants, nsModules, queryHistoryRecord, syntheticProcessor) {
     
     /**
      * Execute a SuiteQL query with all the enhanced features
@@ -48,7 +49,42 @@ define([
             if ((requestPayload.viewsEnabled) && (constants.CONFIG.QUERY_FOLDER_ID !== null)) {
                 nestedSQL = processVirtualViews(nestedSQL, constants.CONFIG.QUERY_FOLDER_ID);
             }
-            
+
+            // Check for synthetic functions and stored procedures
+            try {
+                var syntheticResult = syntheticProcessor.processQuery(nestedSQL, queryParams);
+
+                if (syntheticResult.wasSynthetic) {
+                    if (!syntheticResult.success) {
+                        throw new Error('Synthetic processing error: ' + syntheticResult.error);
+                    }
+
+                    // Return synthetic result directly
+                    let elapsedTime = syntheticResult.executionTime;
+                    responsePayload = {
+                        'records': syntheticResult.result,
+                        'elapsedTime': elapsedTime,
+                        'synthetic': true
+                    };
+
+                    // Add total count if requested (for synthetic results)
+                    if (requestPayload.returnTotals && Array.isArray(syntheticResult.result) && syntheticResult.result.length > 0) {
+                        responsePayload.totalRecordCount = syntheticResult.result.length;
+                    }
+
+                    // Save query to history if enabled
+                    if (constants.CONFIG.QUERY_HISTORY_ENABLED) {
+                        queryHistoryRecord.saveQueryHistory(nestedSQL, responsePayload.records.length, elapsedTime);
+                    }
+
+                    context.response.write(JSON.stringify(responsePayload, null, 2));
+                    return;
+                }
+            } catch (syntheticError) {
+                nsModules.logger.error('Synthetic processing error', syntheticError);
+                // Fall through to normal query processing
+            }
+
             let beginTime = new Date().getTime();
             
             // Execute query with or without pagination
