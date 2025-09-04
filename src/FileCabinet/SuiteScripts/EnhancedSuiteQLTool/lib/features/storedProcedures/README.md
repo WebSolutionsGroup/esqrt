@@ -6,7 +6,16 @@ This would create a javascript file in the SuiteScripts/EnhancedSuiteQLTool/lib/
 
 Usage Examples:
 1. Create the procedure using CREATE OR REPLACE PROCEDURE (execute the statement below)
-2. Execute the procedure like: CALL apply_discount(transaction_type='salesorder', threshold_amount=1000, update_records=false)
+2. Execute the procedure with basic output:
+   CALL apply_discount(transaction_type='salesorder', threshold_amount=1000, update_records=false)
+3. Execute the procedure with real-time output display:
+   CALL apply_discount(transaction_type='salesorder', threshold_amount=1000, update_records=false, show_output=true)
+
+Real-Time Output Feature:
+- By default, stored procedures run silently and only show final results or errors
+- Set show_output=true to see real-time console.log output during execution
+- Output appears in the query results panel as the procedure executes
+- Useful for debugging, monitoring progress, and understanding procedure execution flow
 
 */
 
@@ -22,7 +31,15 @@ function apply_discount(context) {
     var transaction_type = (params.transaction_type || '').toLowerCase().trim();
     var threshold_amount = parseFloat(params.threshold_amount) || 0;
     var update_records = params.update_records === true; // Boolean to control updates
+    var show_output = params.show_output === true; // Boolean to control output display
     var valid_types = ['salesorder', 'invoice', 'estimate'];
+
+    // Use console.log for real-time output (will be captured if show_output=true)
+    if (show_output) {
+        console.log('Starting discount application process...');
+        console.log('Transaction Type: ' + transaction_type);
+        console.log('Threshold Amount: $' + threshold_amount);
+    }
 
     // Initialize output
     var output = {

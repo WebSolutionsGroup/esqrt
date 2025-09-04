@@ -110,25 +110,26 @@ define([
 
     /**
      * Execute a stored procedure
-     * 
+     *
      * @param {string} procedureName - Name of procedure to execute
      * @param {Object} parameters - Named parameters
      * @returns {ExecutionResult} Execution result
      */
     function executeProcedure(procedureName, parameters) {
         var startTime = Date.now();
-        
+
         try {
             // Get function registry
             var registry = syntheticFunctions.buildFunctionRegistry();
             var procedureMeta = registry.procedures[procedureName];
-            
+
             if (!procedureMeta) {
                 return {
                     success: false,
                     result: null,
                     error: 'Procedure not found: ' + procedureName,
-                    executionTime: Date.now() - startTime
+                    executionTime: Date.now() - startTime,
+                    outputLog: []
                 };
             }
 
@@ -139,21 +140,34 @@ define([
                     success: false,
                     result: null,
                     error: 'Failed to compile procedure: ' + procedureName,
-                    executionTime: Date.now() - startTime
+                    executionTime: Date.now() - startTime,
+                    outputLog: []
                 };
             }
 
-            // Create execution context
-            var context = createExecutionContext(parameters, procedureMeta.parameters);
-            
+            // Check if real-time output is requested
+            var showOutput = parameters && (parameters.show_output === true || parameters.show_output === 'true');
+            var outputLog = [];
+
+            // Create execution context with output capture
+            var context = createExecutionContextWithOutput(parameters, procedureMeta.parameters, showOutput, outputLog);
+
             // Execute procedure
             var result = compiledProcedure(context);
-            
+
+            // Debug procedure result
+            log.debug({
+                title: 'Procedure execution result',
+                details: 'Procedure: ' + procedureName + ', Result: ' + JSON.stringify(result) + ', Type: ' + typeof result + ', Output Lines: ' + outputLog.length
+            });
+
             return {
                 success: true,
                 result: result,
                 error: null,
-                executionTime: Date.now() - startTime
+                executionTime: Date.now() - startTime,
+                outputLog: outputLog,
+                showOutput: showOutput
             };
 
         } catch (error) {
@@ -161,12 +175,13 @@ define([
                 title: 'Procedure execution error',
                 details: 'Procedure: ' + procedureName + ', Error: ' + error.message
             });
-            
+
             return {
                 success: false,
                 result: null,
                 error: error.message,
-                executionTime: Date.now() - startTime
+                executionTime: Date.now() - startTime,
+                outputLog: []
             };
         }
     }
@@ -238,6 +253,7 @@ define([
                 '};\n' +
                 'var exports = {};\n' +
                 'var module = { exports: exports };\n' +
+                'var console = modules.console || { log: function() {}, error: function() {}, info: function() {} };\n' +
                 content + '\n' +
                 'return ' + functionName + ';';
 
@@ -253,7 +269,8 @@ define([
                     log: log,
                     format: format,
                     runtime: runtime,
-                    file: file
+                    file: file,
+                    console: context.console || { log: function() {}, error: function() {}, info: function() {} }
                 };
 
                 // Get the actual function
@@ -263,7 +280,8 @@ define([
                     throw new Error('Function not found: ' + functionName + ' (type: ' + typeof actualFunction + ')');
                 }
 
-                // Execute with context
+                // Execute the function with the provided context
+                // Console is now injected directly into the function code
                 return actualFunction(context);
             };
 
@@ -337,8 +355,89 @@ define([
     }
 
     /**
+     * Create execution context with output capture for stored procedures
+     *
+     * @param {Array|Object} parameters - Function parameters
+     * @param {Array} expectedParams - Expected parameter definitions
+     * @param {boolean} showOutput - Whether to capture output
+     * @param {Array} outputLog - Array to capture output messages
+     * @param {Object} rowData - Current row data (optional)
+     * @returns {ExecutionContext} Execution context with output capture
+     */
+    function createExecutionContextWithOutput(parameters, expectedParams, showOutput, outputLog, rowData) {
+        var context = createExecutionContext(parameters, expectedParams, rowData);
+
+        // Add output capture functionality
+        if (showOutput && outputLog) {
+            // Create a custom console object that captures output
+            context.console = {
+                log: function() {
+                    var message = Array.prototype.slice.call(arguments).map(function(arg) {
+                        return typeof arg === 'object' ? JSON.stringify(arg) : String(arg);
+                    }).join(' ');
+                    outputLog.push({
+                        type: 'log',
+                        message: message,
+                        timestamp: new Date().toISOString()
+                    });
+                },
+                info: function() {
+                    var message = Array.prototype.slice.call(arguments).map(function(arg) {
+                        return typeof arg === 'object' ? JSON.stringify(arg) : String(arg);
+                    }).join(' ');
+                    outputLog.push({
+                        type: 'info',
+                        message: message,
+                        timestamp: new Date().toISOString()
+                    });
+                },
+                warn: function() {
+                    var message = Array.prototype.slice.call(arguments).map(function(arg) {
+                        return typeof arg === 'object' ? JSON.stringify(arg) : String(arg);
+                    }).join(' ');
+                    outputLog.push({
+                        type: 'warn',
+                        message: message,
+                        timestamp: new Date().toISOString()
+                    });
+                },
+                error: function() {
+                    var message = Array.prototype.slice.call(arguments).map(function(arg) {
+                        return typeof arg === 'object' ? JSON.stringify(arg) : String(arg);
+                    }).join(' ');
+                    outputLog.push({
+                        type: 'error',
+                        message: message,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            };
+
+            // Also provide a direct output function
+            context.output = function(message, type) {
+                outputLog.push({
+                    type: type || 'log',
+                    message: String(message),
+                    timestamp: new Date().toISOString()
+                });
+            };
+        } else {
+            // Provide silent console and output functions
+            context.console = {
+                log: function() {},
+                info: function() {},
+                warn: function() {},
+                error: function() {}
+            };
+            context.output = function() {};
+        }
+
+        return context;
+    }
+
+    /**
      * Validate function parameters
-     * 
+     *
      * @param {Array|Object} parameters - Provided parameters
      * @param {Array} expectedParams - Expected parameter definitions
      * @returns {Object} Validation result

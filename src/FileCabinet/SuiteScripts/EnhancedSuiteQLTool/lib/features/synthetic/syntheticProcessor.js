@@ -152,7 +152,7 @@ define([
 
     /**
      * Process stored procedure call
-     * 
+     *
      * @param {Object} analysis - Query analysis
      * @param {number} startTime - Processing start time
      * @returns {ProcessResult} Processing result
@@ -165,7 +165,7 @@ define([
 
             // For now, handle single procedure call
             var procedureCall = analysis.procedures[0];
-            
+
             // Execute the stored procedure
             var result = executionEngine.executeProcedure(
                 procedureCall.name,
@@ -176,13 +176,23 @@ define([
                 throw new Error(result.error);
             }
 
+            // Format result for stored procedure with output handling
+            var formattedResult = formatStoredProcedureResult(result);
+
+            log.debug({
+                title: 'Formatted procedure result',
+                details: 'Formatted result: ' + JSON.stringify(formattedResult) + ', Type: ' + typeof formattedResult + ', Length: ' + (Array.isArray(formattedResult) ? formattedResult.length : 'N/A')
+            });
+
             return {
                 success: true,
-                result: result.result,
+                result: formattedResult,
                 error: null,
                 executionTime: Date.now() - startTime,
                 wasSynthetic: true,
-                analysis: analysis
+                analysis: analysis,
+                outputLog: result.outputLog || [],
+                showOutput: result.showOutput || false
             };
 
         } catch (error) {
@@ -190,14 +200,16 @@ define([
                 title: 'Error processing stored procedure',
                 details: error.message
             });
-            
+
             return {
                 success: false,
                 result: null,
                 error: error.message,
                 executionTime: Date.now() - startTime,
                 wasSynthetic: true,
-                analysis: analysis
+                analysis: analysis,
+                outputLog: [],
+                showOutput: false
             };
         }
     }
@@ -258,6 +270,60 @@ define([
                 wasSynthetic: true,
                 analysis: analysis
             };
+        }
+    }
+
+    /**
+     * Format stored procedure result for display
+     *
+     * @param {Object} result - Execution result from stored procedure
+     * @returns {Array|Object} Formatted result for display
+     */
+    function formatStoredProcedureResult(result) {
+        // If the result has output log and should show output, format it for display
+        if (result.showOutput && result.outputLog && result.outputLog.length > 0) {
+            // Create a combined result that includes both the procedure result and output
+            var formattedResult = [];
+
+            // Add output log entries as rows
+            result.outputLog.forEach(function(logEntry, index) {
+                formattedResult.push({
+                    sequence: index + 1,
+                    type: logEntry.type.toUpperCase(),
+                    message: logEntry.message,
+                    timestamp: logEntry.timestamp
+                });
+            });
+
+            // Add the actual procedure result as a final summary row
+            if (result.result && typeof result.result === 'object') {
+                formattedResult.push({
+                    sequence: result.outputLog.length + 1,
+                    type: 'RESULT',
+                    message: JSON.stringify(result.result, null, 2),
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            return formattedResult;
+        } else {
+            // No output requested or no output generated, return the result as-is
+            // But format it as a single-row result for consistent display
+            if (result.result && typeof result.result === 'object') {
+                // If it's already an array, return it
+                if (Array.isArray(result.result)) {
+                    return result.result;
+                }
+
+                // If it's an object, wrap it in an array for table display
+                return [result.result];
+            } else {
+                // Simple value, wrap in an object for display
+                return [{
+                    result: result.result,
+                    message: 'Stored procedure executed successfully'
+                }];
+            }
         }
     }
 

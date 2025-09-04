@@ -99,12 +99,23 @@ define([
                 // Update the header with results info
                 updateQueryResultsHeader(records.length, queryResponsePayload.totalRecordCount, queryResponsePayload.elapsedTime);
 
-                // Create simple table content (exactly like original)
-                let content = '<div style="overflow: auto; max-height: 400px;">';
-                content += '<table class="` + constants.CSS_CLASSES.CODEOSS_TABLE + `" id="resultsTable">';
+                // Create table with fixed header and scrollable body
+                let content = '<div class="codeoss-table-wrapper" style="display: flex; flex-direction: column; height: calc(100% - 5px); flex: 1;">';
+
+                // Fixed header table
+                content += '<div class="codeoss-table-header" style="flex-shrink: 0; overflow: hidden; border-bottom: 2px solid var(--codeoss-border);">';
+                content += '<table class="` + constants.CSS_CLASSES.CODEOSS_TABLE + `" style="margin-bottom: 0;">';
                 content += thead;
+                content += '</table>';
+                content += '</div>';
+
+                // Scrollable body
+                content += '<div class="codeoss-table-body" style="flex: 1; overflow: auto; margin-bottom: 5px;">';
+                content += '<table class="` + constants.CSS_CLASSES.CODEOSS_TABLE + `" id="resultsTable" style="margin-top: 0;">';
                 content += tbody;
                 content += '</table>';
+                content += '</div>';
+
                 content += '</div>';
 
                 // Add hidden textarea for copying (like original)
@@ -113,6 +124,11 @@ define([
                 document.getElementById('` + constants.ELEMENT_IDS.RESULTS_DIV + `').innerHTML = content;
                 document.getElementById('` + constants.ELEMENT_IDS.WELCOME_MESSAGE + `').style.display = 'none';
                 document.getElementById('` + constants.ELEMENT_IDS.STATUS_TEXT + `').textContent = 'Query completed - ' + records.length + ' rows';
+
+                // Synchronize column widths between header and body tables
+                setTimeout(function() {
+                    synchronizeTableColumnWidths();
+                }, 10);
 
                 // Define sorting functions directly after table creation
                 window.currentSortColumn = -1;
@@ -370,7 +386,7 @@ define([
                         pageLength: ` + constants.CONFIG.ROWS_RETURNED_DEFAULT + `,
                         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                         scrollX: true,
-                        scrollY: '400px',
+                        scrollY: 'calc(100vh - 305px)', // Dynamic height with 5px bottom spacing
                         scrollCollapse: true,
                         responsive: true,
                         order: [],
@@ -540,9 +556,59 @@ define([
                getTableSortingJS() + '\n' +
                getDataTablesInitJS() + '\n' +
                getTableExportJS() + '\n' +
-               getTableFilteringJS();
+               getTableFilteringJS() + '\n' +
+               getColumnSyncJS();
     }
-    
+
+    /**
+     * Generate the column width synchronization JavaScript
+     *
+     * @returns {string} JavaScript code for synchronizing column widths
+     */
+    function getColumnSyncJS() {
+        return `
+            // Function to synchronize column widths between header and body tables
+            function synchronizeTableColumnWidths() {
+                const headerTable = document.querySelector('.codeoss-table-header table');
+                const bodyTable = document.querySelector('.codeoss-table-body table');
+
+                if (!headerTable || !bodyTable) return;
+
+                const headerCells = headerTable.querySelectorAll('th');
+                const bodyRows = bodyTable.querySelectorAll('tr');
+
+                if (bodyRows.length === 0) return;
+
+                const firstBodyRow = bodyRows[0];
+                const bodyCells = firstBodyRow.querySelectorAll('td');
+
+                // Calculate and apply column widths
+                for (let i = 0; i < Math.min(headerCells.length, bodyCells.length); i++) {
+                    const bodyCell = bodyCells[i];
+                    const headerCell = headerCells[i];
+
+                    // Get the natural width of the body cell
+                    const cellWidth = bodyCell.offsetWidth;
+
+                    // Apply the width to both header and body columns
+                    headerCell.style.width = cellWidth + 'px';
+                    headerCell.style.minWidth = cellWidth + 'px';
+                    headerCell.style.maxWidth = cellWidth + 'px';
+
+                    // Apply to all body cells in this column
+                    bodyRows.forEach(row => {
+                        const cell = row.querySelectorAll('td')[i];
+                        if (cell) {
+                            cell.style.width = cellWidth + 'px';
+                            cell.style.minWidth = cellWidth + 'px';
+                            cell.style.maxWidth = cellWidth + 'px';
+                        }
+                    });
+                }
+            }
+        `;
+    }
+
     /**
      * Export the table rendering functions
      */
@@ -552,6 +618,7 @@ define([
         getDataTablesInitJS: getDataTablesInitJS,
         getTableExportJS: getTableExportJS,
         getTableFilteringJS: getTableFilteringJS,
+        getColumnSyncJS: getColumnSyncJS,
         getAllTableRenderingJS: getAllTableRenderingJS
     };
     

@@ -483,9 +483,63 @@ define([
 
                 .codeoss-results-content {
                     flex: 1;
-                    overflow: auto;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
                     padding: 12px;
                     background-color: var(--codeoss-panel-bg);
+                }
+
+                /* Table wrapper with fixed header and scrollable body */
+                .codeoss-table-wrapper {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    min-height: 0;
+                    margin-bottom: 5px;
+                }
+
+                /* Fixed table header */
+                .codeoss-table-header {
+                    flex-shrink: 0;
+                    background-color: var(--codeoss-bg-secondary);
+                    border-bottom: 2px solid var(--codeoss-border);
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .codeoss-table-header table {
+                    margin-bottom: 0 !important;
+                    border-bottom: none;
+                }
+
+                .codeoss-table-header th {
+                    border-bottom: none !important;
+                }
+
+                /* Scrollable table body */
+                .codeoss-table-body {
+                    flex: 1;
+                    overflow: auto;
+                    background-color: var(--codeoss-panel-bg);
+                }
+
+                .codeoss-table-body table {
+                    margin-top: 0 !important;
+                }
+
+                /* Ensure header and body column widths match */
+                .codeoss-table-header table,
+                .codeoss-table-body table {
+                    table-layout: fixed;
+                    width: 100%;
+                }
+
+                /* Legacy container support */
+                .codeoss-table-container {
+                    flex: 1;
+                    overflow: auto;
+                    min-height: 0;
+                    margin-bottom: 4px;
                 }
 
                 /* Controls panel */

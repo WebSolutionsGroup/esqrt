@@ -16,7 +16,7 @@
  * @version 1.0.0
  */
 
-define(['N/file', 'N/log', 'N/query'], function(file, log, query) {
+define(['N/file', 'N/log', 'N/query', './syntheticFunctions'], function(file, log, query, syntheticFunctions) {
     'use strict';
 
     /**
@@ -205,7 +205,10 @@ define(['N/file', 'N/log', 'N/query'], function(file, log, query) {
                     title: 'Updated ' + type,
                     details: 'Updated ' + type + ': ' + name + ' (File ID: ' + fileId + ')'
                 });
-                
+
+                // Clear registry cache so new/updated function is immediately available
+                syntheticFunctions.clearRegistryCache();
+
                 return {
                     success: true,
                     message: 'Successfully updated ' + type + ' "' + name + '"',
@@ -228,7 +231,10 @@ define(['N/file', 'N/log', 'N/query'], function(file, log, query) {
                     title: 'Created ' + type,
                     details: 'Created ' + type + ': ' + name + ' (File ID: ' + fileId + ')'
                 });
-                
+
+                // Clear registry cache so new function is immediately available
+                syntheticFunctions.clearRegistryCache();
+
                 return {
                     success: true,
                     message: 'Successfully created ' + type + ' "' + name + '"',

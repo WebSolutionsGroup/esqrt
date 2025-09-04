@@ -772,6 +772,33 @@ The Enhanced SuiteQL Query Tool continues to evolve with exciting new features p
 - **Data Insights Generation**: AI-powered analysis of query results to automatically identify trends, anomalies, and business insights with natural language explanations
 - **Automated Documentation**: AI-generated documentation for complex queries including purpose, logic explanation, and usage examples
 
+### 🛑 Version 2.0: Enterprise Operation Management
+
+#### Advanced Operation Control & Cancellation
+- **Cancellable Operations**: Cooperative cancellation pattern for long-running stored procedures, functions, and queries
+- **Real-Time Progress Tracking**: Live progress bars with ETA calculations and detailed status updates
+- **Operation Queue Management**: Dashboard for viewing, managing, and prioritizing running operations
+- **Checkpoint & Resume**: Ability to pause operations and resume from last checkpoint
+- **Smart Batch Processing**: Adaptive batch sizes with automatic governance limit awareness
+- **Operation Analytics**: Performance monitoring, execution statistics, and optimization recommendations
+
+#### Enterprise UI/UX Enhancements
+- **Operation Dashboard**: Centralized view of all running, queued, and completed operations
+- **Advanced Progress Visualization**: Real-time progress with detailed execution metrics
+- **Smart Notifications**: Operation completion alerts, failure notifications, and status updates
+- **Bulk Operation Management**: Handle multiple long-running operations simultaneously
+- **Resource Monitoring**: Track memory usage, execution time, and governance consumption
+- **Error Recovery System**: Intelligent rollback and partial operation recovery
+
+#### Background Processing Architecture
+- **Cooperative Cancellation Framework**: Built-in cancellation support for all synthetic operations
+- **State Management System**: Robust operation state tracking using NetSuite custom records
+- **Governance Optimization**: Smart yielding, rescheduling, and resource management
+- **Resumable Operations**: Pick up interrupted operations exactly where they left off
+- **Performance Intelligence**: Automatic optimization based on execution patterns
+
+**Technical Implementation**: Version 2.0 will introduce a comprehensive operation management framework that transforms the tool from a query interface into a full enterprise data processing platform with professional-grade operation control capabilities.
+
 ### 🎯 Coming Soon
 These features are actively being planned and developed. Stay tuned for updates and feel free to contribute ideas or feedback through GitHub Issues.
 

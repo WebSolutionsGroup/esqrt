@@ -74,6 +74,11 @@ define(['N/log'], function(log) {
             if (analysis.queryType === 'CALL' || analysis.queryType === 'MIXED') {
                 analysis.procedures = detectStoredProcedureCalls(trimmedQuery);
                 analysis.hasStoredProcedures = analysis.procedures.length > 0;
+
+                log.debug({
+                    title: 'After procedure detection',
+                    details: 'Procedures assigned: ' + analysis.procedures.length + ', Has procedures: ' + analysis.hasStoredProcedures + ', Query type: ' + analysis.queryType
+                });
             }
 
             // Detect function calls in SELECT statements
@@ -83,8 +88,13 @@ define(['N/log'], function(log) {
             }
 
             log.debug({
+                title: 'Before final analysis log',
+                details: 'Functions array: ' + JSON.stringify(analysis.functions) + ', Procedures array: ' + JSON.stringify(analysis.procedures)
+            });
+
+            log.debug({
                 title: 'Query Analysis Complete',
-                details: 'Functions: ' + analysis.functions.length + 
+                details: 'Functions: ' + analysis.functions.length +
                         ', Procedures: ' + analysis.procedures.length +
                         ', Type: ' + analysis.queryType
             });
@@ -131,10 +141,37 @@ define(['N/log'], function(log) {
      */
     function detectStoredProcedureCalls(query) {
         var procedures = [];
-        
+
         try {
-            // Regex to match CALL statements
-            var callPattern = /\bCALL\s+(\w+)\s*\((.*?)\)/gi;
+            log.debug({
+                title: 'Detecting stored procedure calls',
+                details: 'Query: ' + query.substring(0, 100) + (query.length > 100 ? '...' : '')
+            });
+
+            // Debug: Test different regex patterns
+            log.debug({
+                title: 'Regex debugging',
+                details: 'Query length: ' + query.length + ', First 200 chars: ' + query.substring(0, 200)
+            });
+
+            // Test if CALL exists at all
+            var hasCall = /\bCALL\b/i.test(query);
+            log.debug({
+                title: 'CALL keyword test',
+                details: 'Has CALL: ' + hasCall
+            });
+
+            // Test simpler pattern first
+            var simplePattern = /CALL\s+(\w+)/gi;
+            var simpleMatch = simplePattern.exec(query);
+            log.debug({
+                title: 'Simple pattern test',
+                details: 'Simple match: ' + (simpleMatch ? simpleMatch[0] + ' -> ' + simpleMatch[1] : 'null')
+            });
+
+            // Regex to match CALL statements - use [\s\S] to match across lines
+            var callPattern = /\bCALL\s+(\w+)\s*\(([\s\S]*?)\)/gi;
+            callPattern.lastIndex = 0; // Reset regex position
             var match;
 
             while ((match = callPattern.exec(query)) !== null) {
@@ -143,6 +180,11 @@ define(['N/log'], function(log) {
                 var fullMatch = match[0];
                 var startIndex = match.index;
                 var endIndex = match.index + fullMatch.length;
+
+                log.debug({
+                    title: 'Found CALL statement match',
+                    details: 'Procedure: ' + procedureName + ', Parameters: ' + parametersString + ', Full match: ' + fullMatch
+                });
 
                 // Parse named parameters
                 var parameters = parseNamedParameters(parametersString);
@@ -155,6 +197,16 @@ define(['N/log'], function(log) {
                     endIndex: endIndex
                 });
             }
+
+            log.debug({
+                title: 'Stored procedure detection complete',
+                details: 'Found ' + procedures.length + ' procedures: ' + procedures.map(function(p) { return p.name; }).join(', ')
+            });
+
+            log.debug({
+                title: 'About to return procedures',
+                details: 'Returning ' + procedures.length + ' procedures: ' + JSON.stringify(procedures)
+            });
 
         } catch (error) {
             log.error({
@@ -205,6 +257,33 @@ define(['N/log'], function(log) {
                     log.debug({
                         title: 'Skipping built-in function',
                         details: 'Function: ' + functionName
+                    });
+                    continue;
+                }
+
+                // Skip if this appears to be part of a subquery context
+                if (isInSubqueryContext(query, startIndex)) {
+                    log.debug({
+                        title: 'Skipping potential function in subquery context',
+                        details: 'Function: ' + functionName + ' at position ' + startIndex
+                    });
+                    continue;
+                }
+
+                // Skip if this looks like a SQL keyword in a complex expression
+                if (isSQLKeywordInContext(query, functionName, startIndex)) {
+                    log.debug({
+                        title: 'Skipping SQL keyword in context',
+                        details: 'Keyword: ' + functionName
+                    });
+                    continue;
+                }
+
+                // Skip if this is a SELECT statement (correlated subquery protection)
+                if (functionName.toUpperCase() === 'SELECT') {
+                    log.debug({
+                        title: 'Skipping SELECT statement (not a function)',
+                        details: 'SELECT at position ' + startIndex
                     });
                     continue;
                 }
@@ -391,15 +470,147 @@ define(['N/log'], function(log) {
      */
     function isSQLBuiltinFunction(functionName) {
         var builtinFunctions = [
-            'COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'UPPER', 'LOWER', 'SUBSTR', 'LENGTH',
-            'TRIM', 'LTRIM', 'RTRIM', 'REPLACE', 'CONCAT', 'TO_CHAR', 'TO_DATE', 'TO_NUMBER',
+            // Aggregate functions (comprehensive list)
+            'COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'STDDEV', 'VARIANCE', 'MEDIAN',
+            'LISTAGG', 'STRING_AGG', 'GROUP_CONCAT', 'COLLECT',
+
+            // String functions
+            'UPPER', 'LOWER', 'SUBSTR', 'SUBSTRING', 'LENGTH', 'LEN', 'TRIM', 'LTRIM', 'RTRIM',
+            'REPLACE', 'CONCAT', 'INSTR', 'LPAD', 'RPAD', 'LEFT', 'RIGHT', 'REVERSE',
+            'CHARINDEX', 'PATINDEX', 'STUFF', 'TRANSLATE',
+
+            // Date functions
+            'TO_CHAR', 'TO_DATE', 'TO_NUMBER', 'SYSDATE', 'CURRENT_DATE', 'CURRENT_TIMESTAMP',
+            'ADD_MONTHS', 'MONTHS_BETWEEN', 'EXTRACT', 'DATE_PART', 'DATEADD', 'DATEDIFF',
+            'DATEPART', 'DATENAME', 'GETDATE', 'NOW', 'CURDATE', 'CURTIME',
+
+            // Conditional functions
             'CASE', 'COALESCE', 'NULLIF', 'DECODE', 'NVL', 'NVL2', 'GREATEST', 'LEAST',
-            'ROUND', 'TRUNC', 'CEIL', 'FLOOR', 'ABS', 'SIGN', 'MOD', 'POWER', 'SQRT',
-            'SYSDATE', 'CURRENT_DATE', 'CURRENT_TIMESTAMP', 'ADD_MONTHS', 'MONTHS_BETWEEN',
-            'EXTRACT', 'DATE_PART', 'INSTR', 'LPAD', 'RPAD'
+            'IIF', 'CHOOSE', 'ISNULL', 'IFNULL',
+
+            // Math functions
+            'ROUND', 'TRUNC', 'TRUNCATE', 'CEIL', 'CEILING', 'FLOOR', 'ABS', 'SIGN', 'MOD',
+            'POWER', 'SQRT', 'EXP', 'LOG', 'LOG10', 'SIN', 'COS', 'TAN', 'ASIN', 'ACOS', 'ATAN',
+            'ATAN2', 'DEGREES', 'RADIANS', 'PI', 'RAND', 'RANDOM',
+
+            // SQL operators and keywords that use parentheses (CRITICAL FIX)
+            'IN', 'EXISTS', 'NOT', 'CAST', 'CONVERT', 'TRY_CAST', 'TRY_CONVERT',
+            'ISNULL', 'IFNULL', 'BETWEEN', 'LIKE', 'ESCAPE',
+
+            // SQL statement keywords (to prevent SELECT(...) from being treated as function)
+            'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'WITH', 'UNION', 'INTERSECT', 'EXCEPT',
+
+            // Window functions
+            'ROW_NUMBER', 'RANK', 'DENSE_RANK', 'NTILE', 'LAG', 'LEAD', 'FIRST_VALUE', 'LAST_VALUE',
+            'NTH_VALUE', 'PERCENT_RANK', 'CUME_DIST', 'PERCENTILE_CONT', 'PERCENTILE_DISC',
+
+            // Analytical functions
+            'OVER', 'PARTITION', 'WITHIN', 'RESPECT', 'IGNORE', 'NULLS',
+
+            // NetSuite specific functions
+            'BUILTIN', 'FORMULATEXT', 'FORMULANUMERIC', 'FORMULADATE', 'FORMULACURRENCY',
+            'HIERARCHYLEVEL', 'HIERARCHYOF'
         ];
-        
+
         return builtinFunctions.includes(functionName.toUpperCase());
+    }
+
+    /**
+     * Check if a potential function call is within a subquery context
+     *
+     * @param {string} query - Full query string
+     * @param {number} position - Position of the potential function call
+     * @returns {boolean} True if within subquery context
+     */
+    function isInSubqueryContext(query, position) {
+        // Look backwards from position to find context
+        var beforeText = query.substring(0, position).toUpperCase();
+        var afterText = query.substring(position).toUpperCase();
+
+        // Count parentheses to determine nesting level
+        var openParens = (beforeText.match(/\(/g) || []).length;
+        var closeParens = (beforeText.match(/\)/g) || []).length;
+        var nestingLevel = openParens - closeParens;
+
+        // If we're nested inside parentheses, check if it's a subquery context
+        if (nestingLevel > 0) {
+            // Look for subquery indicators before this position
+            var subqueryPatterns = [
+                /\bEXISTS\s*\(\s*SELECT\b/i,
+                /\bIN\s*\(\s*SELECT\b/i,
+                /\bNOT\s+IN\s*\(\s*SELECT\b/i,
+                /\bNOT\s+EXISTS\s*\(\s*SELECT\b/i,
+                /\b(?:=|<>|!=|<|>|<=|>=)\s*\(\s*SELECT\b/i,
+                // Correlated subqueries in SELECT clause
+                /\bSELECT\s+.*,\s*\(\s*SELECT\b/i,
+                /\bSELECT\s+\(\s*SELECT\b/i,
+                // Subqueries in FROM clause
+                /\bFROM\s*\(\s*SELECT\b/i,
+                // Subqueries in JOIN conditions
+                /\bJOIN\s*\(\s*SELECT\b/i,
+                /\bLEFT\s+JOIN\s*\(\s*SELECT\b/i,
+                /\bRIGHT\s+JOIN\s*\(\s*SELECT\b/i,
+                /\bINNER\s+JOIN\s*\(\s*SELECT\b/i,
+                /\bOUTER\s+JOIN\s*\(\s*SELECT\b/i
+            ];
+
+            for (var i = 0; i < subqueryPatterns.length; i++) {
+                if (subqueryPatterns[i].test(beforeText)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a function name is actually a SQL keyword in a specific context
+     *
+     * @param {string} query - Full query string
+     * @param {string} functionName - Function name to check
+     * @param {number} position - Position in query
+     * @returns {boolean} True if it's a SQL keyword in context
+     */
+    function isSQLKeywordInContext(query, functionName, position) {
+        var upperFunctionName = functionName.toUpperCase();
+        var beforeText = query.substring(0, position).toUpperCase();
+        var afterText = query.substring(position).toUpperCase();
+
+        // Check for specific SQL keyword patterns that might be missed
+        var keywordPatterns = [
+            // Pattern: WHERE field IN (...)
+            { keyword: 'IN', pattern: /\bWHERE\s+\w+\s*$/ },
+            // Pattern: AND field IN (...)
+            { keyword: 'IN', pattern: /\bAND\s+\w+\s*$/ },
+            // Pattern: OR field IN (...)
+            { keyword: 'IN', pattern: /\bOR\s+\w+\s*$/ },
+            // Pattern: WHERE EXISTS (...)
+            { keyword: 'EXISTS', pattern: /\bWHERE\s*$/ },
+            // Pattern: AND EXISTS (...)
+            { keyword: 'EXISTS', pattern: /\bAND\s*$/ },
+            // Pattern: OR EXISTS (...)
+            { keyword: 'EXISTS', pattern: /\bOR\s*$/ },
+            // Pattern: SELECT field, (SELECT ...) - correlated subquery
+            { keyword: 'SELECT', pattern: /\bSELECT\s+.*,\s*\(\s*$/ },
+            { keyword: 'SELECT', pattern: /\bSELECT\s+\(\s*$/ },
+            // Pattern: FROM (SELECT ...) - derived table
+            { keyword: 'SELECT', pattern: /\bFROM\s*\(\s*$/ },
+            // Pattern: JOIN (SELECT ...) - subquery in JOIN
+            { keyword: 'SELECT', pattern: /\bJOIN\s*\(\s*$/ },
+            { keyword: 'SELECT', pattern: /\bLEFT\s+JOIN\s*\(\s*$/ },
+            { keyword: 'SELECT', pattern: /\bRIGHT\s+JOIN\s*\(\s*$/ },
+            { keyword: 'SELECT', pattern: /\bINNER\s+JOIN\s*\(\s*$/ }
+        ];
+
+        for (var i = 0; i < keywordPatterns.length; i++) {
+            var pattern = keywordPatterns[i];
+            if (pattern.keyword === upperFunctionName && pattern.pattern.test(beforeText)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -426,6 +637,8 @@ define(['N/log'], function(log) {
         detectFunctionCalls: detectFunctionCalls,
         parseNamedParameters: parseNamedParameters,
         parsePositionalParameters: parsePositionalParameters,
-        isSQLBuiltinFunction: isSQLBuiltinFunction
+        isSQLBuiltinFunction: isSQLBuiltinFunction,
+        isInSubqueryContext: isInSubqueryContext,
+        isSQLKeywordInContext: isSQLKeywordInContext
     };
 });

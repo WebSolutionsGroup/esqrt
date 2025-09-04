@@ -67,7 +67,7 @@ define([
                 // Hide welcome message and show loading
                 document.getElementById('${constants.ELEMENT_IDS.WELCOME_MESSAGE}').style.display = 'none';
                 document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').innerHTML = '<div style="padding: 20px; text-align: center; color: var(--codeoss-text-secondary);"><div style="margin-bottom: 12px;">⏳ Executing query...</div><div style="font-size: 11px;">Please wait while your query is processed.</div></div>';
-                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'block';
+                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'flex';
 
                 // Prepare request payload
                 const requestPayload = {
@@ -137,7 +137,7 @@ define([
 
                 // Hide welcome message and show results
                 document.getElementById('${constants.ELEMENT_IDS.WELCOME_MESSAGE}').style.display = 'none';
-                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'block';
+                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'flex';
 
                 // Create success/error message display
                 const messageClass = data.success ? 'create-success' : 'create-error';
@@ -327,7 +327,7 @@ define([
                 \`;
                 
                 document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').innerHTML = errorHTML;
-                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'block';
+                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'flex';
                 document.getElementById('${constants.ELEMENT_IDS.WELCOME_MESSAGE}').style.display = 'none';
                 document.getElementById('${constants.ELEMENT_IDS.STATUS_TEXT}').textContent = 'Query failed';
                 document.getElementById('${constants.ELEMENT_IDS.COPY_CLIPBOARD_BTN}').style.display = 'none';

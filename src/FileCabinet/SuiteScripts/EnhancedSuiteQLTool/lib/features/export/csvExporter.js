@@ -82,7 +82,7 @@ define([
                 \`;
 
                 document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').innerHTML = csvDisplay;
-                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'block';
+                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'flex';
 
                 // Show CSV export buttons in header
                 const csvExportGroup = document.getElementById('csvExportGroup');

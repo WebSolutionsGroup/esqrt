@@ -343,7 +343,7 @@ define([
                     if (resultsDiv && welcomeMessage && statusText && queryResultsHeader) {
                         // Restore results content
                         resultsDiv.innerHTML = tab.results.resultsHTML || '';
-                        resultsDiv.style.display = tab.results.hasResults ? 'block' : 'none';
+                        resultsDiv.style.display = tab.results.hasResults ? 'flex' : 'none';
                         welcomeMessage.style.display = tab.results.welcomeVisible ? 'block' : 'none';
                         statusText.textContent = tab.results.statusText || 'Ready';
                         queryResultsHeader.textContent = tab.results.queryResultsHeader || 'Query Results';

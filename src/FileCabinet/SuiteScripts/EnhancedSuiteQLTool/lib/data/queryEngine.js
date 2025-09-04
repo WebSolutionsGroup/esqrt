@@ -82,6 +82,12 @@ define([
                             'synthetic': true
                         };
 
+                        // Add output log for stored procedures if available
+                        if (syntheticResult.outputLog && syntheticResult.outputLog.length > 0) {
+                            responsePayload.outputLog = syntheticResult.outputLog;
+                            responsePayload.showOutput = syntheticResult.showOutput;
+                        }
+
                         // Add total count if requested (for synthetic results)
                         if (requestPayload.returnTotals && Array.isArray(syntheticResult.result) && syntheticResult.result.length > 0) {
                             responsePayload.totalRecordCount = syntheticResult.result.length;

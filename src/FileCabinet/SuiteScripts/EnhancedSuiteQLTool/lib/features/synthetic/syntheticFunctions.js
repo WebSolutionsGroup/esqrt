@@ -22,7 +22,7 @@ define(['N/query', 'N/file', 'N/log'], function(query, file, log) {
     var procedureCache = {};
     var registryCache = null;
     var registryCacheExpiry = null;
-    var CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+    var CACHE_DURATION = 10 * 1000; // 10 seconds for debugging
 
     /**
      * Function registry structure
@@ -52,8 +52,17 @@ define(['N/query', 'N/file', 'N/log'], function(query, file, log) {
      */
     function buildFunctionRegistry() {
         try {
+            log.debug({
+                title: 'buildFunctionRegistry called',
+                details: 'Cache exists: ' + (registryCache ? 'Yes' : 'No') + ', Cache expired: ' + (registryCacheExpiry && Date.now() >= registryCacheExpiry ? 'Yes' : 'No')
+            });
+
             // Check cache first
             if (registryCache && registryCacheExpiry && Date.now() < registryCacheExpiry) {
+                log.debug({
+                    title: 'Returning cached registry',
+                    details: 'Functions: ' + Object.keys(registryCache.functions).length + ', Procedures: ' + Object.keys(registryCache.procedures).length
+                });
                 return registryCache;
             }
 
@@ -117,8 +126,25 @@ define(['N/query', 'N/file', 'N/log'], function(query, file, log) {
 
                 if (proceduresFolder) {
                     var procedureFiles = scanDirectoryForJSFiles(proceduresFolder.id);
+
+                    log.debug({
+                        title: 'Procedure files found',
+                        details: 'Count: ' + procedureFiles.length + ', Files: ' + JSON.stringify(procedureFiles.map(function(f) { return f.name; }))
+                    });
+
                     procedureFiles.forEach(function(fileInfo) {
+                        log.debug({
+                            title: 'Processing procedure file',
+                            details: 'File: ' + fileInfo.name + ', ID: ' + fileInfo.id
+                        });
+
                         var metadata = extractFunctionMetadata(fileInfo, 'procedure');
+
+                        log.debug({
+                            title: 'Procedure metadata extracted',
+                            details: 'File: ' + fileInfo.name + ', Metadata: ' + (metadata ? JSON.stringify(metadata) : 'null')
+                        });
+
                         if (metadata) {
                             registry.procedures[metadata.name] = metadata;
                         }
