@@ -175,11 +175,16 @@ define(['N/log'], function(log) {
      */
     function detectFunctionCalls(query) {
         var functions = [];
-        
+
         try {
+            log.debug({
+                title: 'Detecting function calls in query',
+                details: 'Query: ' + query
+            });
+
             // Regex to match function calls with optional property access
             // Matches: function_name(params) or function_name(params).property.chain
-            var functionPattern = /\b([a-zA-Z_]\w*)\s*\((.*?)\)(\.[a-zA-Z_]\w*)*(?:\.[a-zA-Z_]\w*)*/g;
+            var functionPattern = /\b([a-zA-Z_]\w*)\s*\((.*?)\)(\.[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*)?/g;
             var match;
 
             while ((match = functionPattern.exec(query)) !== null) {
@@ -190,22 +195,38 @@ define(['N/log'], function(log) {
                 var startIndex = match.index;
                 var endIndex = match.index + fullMatch.length;
 
+                log.debug({
+                    title: 'Found potential function call',
+                    details: 'Function: ' + functionName + ', Full match: ' + fullMatch
+                });
+
                 // Skip SQL built-in functions
                 if (isSQLBuiltinFunction(functionName)) {
+                    log.debug({
+                        title: 'Skipping built-in function',
+                        details: 'Function: ' + functionName
+                    });
                     continue;
                 }
 
                 // Parse positional parameters
                 var parameters = parsePositionalParameters(parametersString);
 
-                functions.push({
+                var functionCall = {
                     name: functionName,
                     parameters: parameters,
                     fullMatch: fullMatch,
                     startIndex: startIndex,
                     endIndex: endIndex,
                     propertyAccess: propertyAccess
+                };
+
+                log.debug({
+                    title: 'Adding synthetic function call',
+                    details: 'Function: ' + functionName + ', Parameters: ' + JSON.stringify(parameters)
                 });
+
+                functions.push(functionCall);
             }
 
         } catch (error) {

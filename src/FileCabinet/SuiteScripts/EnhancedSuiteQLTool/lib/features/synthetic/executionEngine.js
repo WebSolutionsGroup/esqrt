@@ -76,10 +76,16 @@ define([
 
             // Create execution context
             var context = createExecutionContext(parameters, functionMeta.parameters, rowData);
-            
+
             // Execute function
             var result = compiledFunction(context);
-            
+
+            // Debug function result
+            log.debug({
+                title: 'Function execution result',
+                details: 'Function: ' + functionName + ', Result: ' + JSON.stringify(result) + ', Type: ' + typeof result
+            });
+
             return {
                 success: true,
                 result: result,
@@ -216,8 +222,8 @@ define([
      */
     function compileFunction(content, functionName) {
         try {
-            // Create a safe execution environment
-            var functionCode = '(function() {\n' +
+            // Create a simpler, more reliable compilation approach
+            var functionCode =
                 'var require = function(module) {\n' +
                 '    switch(module) {\n' +
                 '        case "N/record": return modules.record;\n' +
@@ -230,13 +236,14 @@ define([
                 '        default: throw new Error("Module not available: " + module);\n' +
                 '    }\n' +
                 '};\n' +
+                'var exports = {};\n' +
+                'var module = { exports: exports };\n' +
                 content + '\n' +
-                'return ' + functionName + ';\n' +
-                '})()';
+                'return ' + functionName + ';';
 
             // Compile the function
             var compiledWrapper = new Function('modules', functionCode);
-            
+
             return function(context) {
                 // Provide NetSuite modules to the function
                 var modules = {
@@ -248,10 +255,14 @@ define([
                     runtime: runtime,
                     file: file
                 };
-                
+
                 // Get the actual function
                 var actualFunction = compiledWrapper(modules);
-                
+
+                if (typeof actualFunction !== 'function') {
+                    throw new Error('Function not found: ' + functionName + ' (type: ' + typeof actualFunction + ')');
+                }
+
                 // Execute with context
                 return actualFunction(context);
             };
@@ -298,7 +309,24 @@ define([
         if (Array.isArray(parameters)) {
             // Positional parameters
             for (var i = 0; i < parameters.length && i < expectedParams.length; i++) {
-                context.params[expectedParams[i].name] = parameters[i];
+                var paramValue = parameters[i];
+
+                // Check if parameter is a column reference
+                if (typeof paramValue === 'string' && rowData && rowData.hasOwnProperty(paramValue)) {
+                    // Resolve column reference to actual value
+                    paramValue = rowData[paramValue];
+                } else if (typeof paramValue === 'string' && rowData) {
+                    // Try case-insensitive column lookup
+                    var lowerParamValue = paramValue.toLowerCase();
+                    for (var key in rowData) {
+                        if (key.toLowerCase() === lowerParamValue) {
+                            paramValue = rowData[key];
+                            break;
+                        }
+                    }
+                }
+
+                context.params[expectedParams[i].name] = paramValue;
             }
         } else if (typeof parameters === 'object' && parameters !== null) {
             // Named parameters
@@ -377,7 +405,7 @@ define([
             return resultSet.map(function(row) {
                 var modifiedRow = Object.assign({}, row);
 
-                functionCalls.forEach(function(funcCall) {
+                functionCalls.forEach(function(funcCall, index) {
                     var result = executeFunction(funcCall.name, funcCall.parameters, row);
 
                     if (result.success) {
@@ -395,13 +423,42 @@ define([
                             }
                         }
 
-                        // Add result to row with function call as column name
-                        var columnName = funcCall.fullMatch.replace(/\s+/g, '_');
-                        modifiedRow[columnName] = value;
+                        // Look for placeholder column to replace
+                        var placeholderKey = 'FUNCTION_PLACEHOLDER_' + index;
+                        var placeholderFound = false;
+
+                        // Replace placeholder column with actual result
+                        for (var key in modifiedRow) {
+                            if (modifiedRow[key] === placeholderKey) {
+                                modifiedRow[key] = value;
+                                placeholderFound = true;
+                                break;
+                            }
+                        }
+
+                        // If no placeholder found, add as new column (fallback)
+                        if (!placeholderFound) {
+                            var columnName = funcCall.fullMatch.replace(/\s+/g, '_');
+                            modifiedRow[columnName] = value;
+                        }
                     } else {
-                        // Add error indicator
-                        var columnName = funcCall.fullMatch.replace(/\s+/g, '_');
-                        modifiedRow[columnName] = 'ERROR: ' + result.error;
+                        // Look for placeholder column to replace with error
+                        var placeholderKey = 'FUNCTION_PLACEHOLDER_' + index;
+                        var placeholderFound = false;
+
+                        for (var key in modifiedRow) {
+                            if (modifiedRow[key] === placeholderKey) {
+                                modifiedRow[key] = 'ERROR: ' + result.error;
+                                placeholderFound = true;
+                                break;
+                            }
+                        }
+
+                        // If no placeholder found, add error as new column (fallback)
+                        if (!placeholderFound) {
+                            var columnName = funcCall.fullMatch.replace(/\s+/g, '_');
+                            modifiedRow[columnName] = 'ERROR: ' + result.error;
+                        }
                     }
                 });
 

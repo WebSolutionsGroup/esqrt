@@ -1,8 +1,12 @@
-/* 
+/*
 
-Sample command to create a stored procedure in Netsuite - executed inside the query window
+Sample command to create a stored procedure in NetSuite - executed inside the query window
 
-This would create a javascript file in the src/FileCabinet/SuiteScripts/EnhancedSuiteQLTool/lib/features/storedProcedures/ directory named apply_discount.js
+This would create a javascript file in the SuiteScripts/EnhancedSuiteQLTool/lib/features/storedProcedures/ directory named apply_discount.js
+
+Usage Examples:
+1. Create the procedure using CREATE OR REPLACE PROCEDURE (execute the statement below)
+2. Execute the procedure like: CALL apply_discount(transaction_type='salesorder', threshold_amount=1000, update_records=false)
 
 */
 

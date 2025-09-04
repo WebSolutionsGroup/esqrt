@@ -12,8 +12,9 @@ define([
     'N/log', 'N/query',
     './queryParser',
     './executionEngine',
-    './syntheticFunctions'
-], function(log, query, queryParser, executionEngine, syntheticFunctions) {
+    './syntheticFunctions',
+    './createStatements'
+], function(log, query, queryParser, executionEngine, syntheticFunctions, createStatements) {
     'use strict';
 
     /**
@@ -36,16 +37,29 @@ define([
      */
     function processQuery(sqlQuery, queryParams) {
         var startTime = Date.now();
-        
+
         try {
+            log.debug({
+                title: 'Synthetic Processor Called',
+                details: 'Query: ' + sqlQuery.substring(0, 100) + '...'
+            });
+
+            // Check for CREATE OR REPLACE statements first
+            var createAnalysis = createStatements.analyzeCreateStatement(sqlQuery);
+            if (createAnalysis.isCreateStatement) {
+                return processCreateStatement(sqlQuery, startTime);
+            }
+
             // Analyze query for synthetic elements
             var analysis = queryParser.analyzeQuery(sqlQuery);
-            
+
             log.debug({
                 title: 'Processing synthetic query',
-                details: 'Type: ' + analysis.queryType + 
+                details: 'Type: ' + analysis.queryType +
                         ', Functions: ' + analysis.functions.length +
-                        ', Procedures: ' + analysis.procedures.length
+                        ', Procedures: ' + analysis.procedures.length +
+                        ', Has Synthetic Functions: ' + analysis.hasSyntheticFunctions +
+                        ', Functions Found: ' + JSON.stringify(analysis.functions)
             });
 
             // Route to appropriate processor
@@ -68,16 +82,70 @@ define([
         } catch (error) {
             log.error({
                 title: 'Error processing synthetic query',
+                details: 'Error: ' + error.message + ', Stack: ' + (error.stack || 'No stack trace')
+            });
+
+            return {
+                success: false,
+                result: null,
+                error: 'Synthetic processing error: ' + error.message + ' (Stack: ' + (error.stack || 'No stack trace') + ')',
+                executionTime: Date.now() - startTime,
+                wasSynthetic: true,
+                analysis: null
+            };
+        }
+    }
+
+    /**
+     * Process CREATE OR REPLACE statement
+     *
+     * @param {string} sqlQuery - CREATE statement
+     * @param {number} startTime - Processing start time
+     * @returns {ProcessResult} Processing result
+     */
+    function processCreateStatement(sqlQuery, startTime) {
+        try {
+            var result = createStatements.processCreateStatement(sqlQuery);
+
+            if (result.success) {
+                // Clear function cache to pick up new/updated function
+                if (typeof executionEngine.clearCache === 'function') {
+                    executionEngine.clearCache();
+                }
+
+                // Clear registry cache to pick up new function
+                if (typeof syntheticFunctions.clearRegistryCache === 'function') {
+                    syntheticFunctions.clearRegistryCache();
+                }
+            }
+
+            return {
+                success: result.success,
+                result: {
+                    message: result.message,
+                    fileName: result.fileName,
+                    fileId: result.fileId,
+                    type: result.type
+                },
+                error: result.success ? null : result.message,
+                executionTime: Date.now() - startTime,
+                wasSynthetic: true,
+                analysis: { queryType: 'CREATE', isCreateStatement: true }
+            };
+
+        } catch (error) {
+            log.error({
+                title: 'Error processing CREATE statement',
                 details: error.message
             });
-            
+
             return {
                 success: false,
                 result: null,
                 error: error.message,
                 executionTime: Date.now() - startTime,
                 wasSynthetic: true,
-                analysis: null
+                analysis: { queryType: 'CREATE', isCreateStatement: true }
             };
         }
     }
@@ -202,7 +270,7 @@ define([
      */
     function removeFunctionCallsFromQuery(originalQuery, functionCalls) {
         var modifiedQuery = originalQuery;
-        
+
         // Sort function calls by position (reverse order to maintain positions)
         var sortedCalls = functionCalls.slice().sort(function(a, b) {
             return b.startIndex - a.startIndex;
@@ -212,11 +280,22 @@ define([
         sortedCalls.forEach(function(funcCall, index) {
             var before = modifiedQuery.substring(0, funcCall.startIndex);
             var after = modifiedQuery.substring(funcCall.endIndex);
-            
+
             // For SELECT clause, replace with a placeholder column
             if (isInSelectClause(originalQuery, funcCall.startIndex)) {
-                var placeholder = "'FUNCTION_PLACEHOLDER_" + index + "' AS " + 
-                                 funcCall.name + "_result";
+                // Check if there's an AS clause after the function call
+                var asMatch = after.match(/^\s+as\s+(\w+)/i);
+                var placeholder;
+
+                if (asMatch) {
+                    // Use the existing alias name and remove the AS clause from after
+                    placeholder = "'FUNCTION_PLACEHOLDER_" + index + "' AS " + asMatch[1];
+                    after = after.substring(asMatch[0].length);
+                } else {
+                    // No existing alias, create one
+                    placeholder = "'FUNCTION_PLACEHOLDER_" + index + "' AS " + funcCall.name + "_result";
+                }
+
                 modifiedQuery = before + placeholder + after;
             } else {
                 // For WHERE clause or other contexts, might need different handling

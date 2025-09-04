@@ -1,8 +1,12 @@
-/* 
+/*
 
-Sample command to create function in Netsuite - executed inside the query window
+Sample command to create function in NetSuite - executed inside the query window
 
-This would create a javascript file in the src/FileCabinet/SuiteScripts/EnhancedSuiteQLTool/lib/features/functions/ directory named parse_full_address.js
+This would create a javascript file in the SuiteScripts/EnhancedSuiteQLTool/lib/features/functions/ directory named parse_full_address.js
+
+Usage Examples:
+1. Create the function using CREATE OR REPLACE FUNCTION (execute the statement below)
+2. Use the function in queries like: SELECT parse_full_address(billing_address).city FROM customers
 
 */
 

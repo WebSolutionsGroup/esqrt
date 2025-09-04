@@ -14,7 +14,7 @@
  * @version 1.0.0
  */
 
-define(['N/query', 'N/file', 'N/log', '../core/constants'], function(query, file, log, constants) {
+define(['N/query', 'N/file', 'N/log'], function(query, file, log) {
     'use strict';
 
     // Cache for compiled functions to improve performance
@@ -66,10 +66,33 @@ define(['N/query', 'N/file', 'N/log', '../core/constants'], function(query, file
             // Scan functions directory
             var functionsPath = 'SuiteScripts/EnhancedSuiteQLTool/lib/features/functions';
             var functionsFolder = findFolderByPath(functionsPath);
+
+            log.debug({
+                title: 'Functions folder lookup',
+                details: 'Path: ' + functionsPath + ', Found: ' + (functionsFolder ? 'Yes (ID: ' + functionsFolder.id + ')' : 'No')
+            });
+
             if (functionsFolder) {
                 var functionFiles = scanDirectoryForJSFiles(functionsFolder.id);
+
+                log.debug({
+                    title: 'Function files found',
+                    details: 'Count: ' + functionFiles.length + ', Files: ' + JSON.stringify(functionFiles.map(function(f) { return f.name; }))
+                });
+
                 functionFiles.forEach(function(fileInfo) {
+                    log.debug({
+                        title: 'Processing function file',
+                        details: 'File: ' + fileInfo.name + ', ID: ' + fileInfo.id
+                    });
+
                     var metadata = extractFunctionMetadata(fileInfo, 'function');
+
+                    log.debug({
+                        title: 'Function metadata extracted',
+                        details: 'File: ' + fileInfo.name + ', Metadata: ' + (metadata ? JSON.stringify(metadata) : 'null')
+                    });
+
                     if (metadata) {
                         registry.functions[metadata.name] = metadata;
                     }
@@ -78,15 +101,35 @@ define(['N/query', 'N/file', 'N/log', '../core/constants'], function(query, file
 
             // Scan stored procedures directory
             var proceduresPath = 'SuiteScripts/EnhancedSuiteQLTool/lib/features/storedProcedures';
-            var proceduresFolder = findFolderByPath(proceduresPath);
-            if (proceduresFolder) {
-                var procedureFiles = scanDirectoryForJSFiles(proceduresFolder.id);
-                procedureFiles.forEach(function(fileInfo) {
-                    var metadata = extractFunctionMetadata(fileInfo, 'procedure');
-                    if (metadata) {
-                        registry.procedures[metadata.name] = metadata;
-                    }
+
+            log.debug({
+                title: 'Procedures folder lookup',
+                details: 'Path: ' + proceduresPath
+            });
+
+            try {
+                var proceduresFolder = findFolderByPath(proceduresPath);
+
+                log.debug({
+                    title: 'Procedures folder result',
+                    details: 'Found: ' + (proceduresFolder ? 'Yes (ID: ' + proceduresFolder.id + ')' : 'No')
                 });
+
+                if (proceduresFolder) {
+                    var procedureFiles = scanDirectoryForJSFiles(proceduresFolder.id);
+                    procedureFiles.forEach(function(fileInfo) {
+                        var metadata = extractFunctionMetadata(fileInfo, 'procedure');
+                        if (metadata) {
+                            registry.procedures[metadata.name] = metadata;
+                        }
+                    });
+                }
+            } catch (e) {
+                log.error({
+                    title: 'Error scanning procedures folder',
+                    details: 'Path: ' + proceduresPath + ', Error: ' + e.message
+                });
+                // Continue without procedures - don't let this break the whole registry
             }
 
             // Cache the registry
@@ -118,6 +161,7 @@ define(['N/query', 'N/file', 'N/log', '../core/constants'], function(query, file
      */
     function findFolderByPath(folderPath) {
         try {
+            // Use SuiteQL to find folder by path - need to traverse the path
             var pathParts = folderPath.split('/');
             var currentFolderId = null;
 
@@ -126,33 +170,17 @@ define(['N/query', 'N/file', 'N/log', '../core/constants'], function(query, file
                 var folderName = pathParts[i];
                 if (!folderName) continue;
 
-                var folderQuery = query.create({
-                    type: query.Type.FOLDER
-                });
-                
-                folderQuery.columns = [
-                    folderQuery.createColumn({ fieldId: 'id' }),
-                    folderQuery.createColumn({ fieldId: 'name' })
-                ];
+                var sql = currentFolderId ?
+                    "SELECT id FROM mediaitemfolder WHERE name = ? AND parent = ?" :
+                    "SELECT id FROM mediaitemfolder WHERE name = ? AND parent IS NULL";
 
-                folderQuery.condition = folderQuery.createCondition({
-                    fieldId: 'name',
-                    operator: query.Operator.IS,
-                    values: folderName
-                });
+                var params = currentFolderId ? [folderName, currentFolderId] : [folderName];
 
-                if (currentFolderId) {
-                    folderQuery.condition = folderQuery.and([
-                        folderQuery.condition,
-                        folderQuery.createCondition({
-                            fieldId: 'parent',
-                            operator: query.Operator.IS,
-                            values: currentFolderId
-                        })
-                    ]);
-                }
+                var results = query.runSuiteQL({
+                    query: sql,
+                    params: params
+                }).asMappedResults();
 
-                var results = folderQuery.run().asMappedResults();
                 if (results.length === 0) {
                     return null;
                 }
@@ -161,7 +189,6 @@ define(['N/query', 'N/file', 'N/log', '../core/constants'], function(query, file
             }
 
             return { id: currentFolderId };
-
         } catch (error) {
             log.error({
                 title: 'Error finding folder',
@@ -179,31 +206,14 @@ define(['N/query', 'N/file', 'N/log', '../core/constants'], function(query, file
      */
     function scanDirectoryForJSFiles(folderId) {
         try {
-            var fileQuery = query.create({
-                type: query.Type.FILE
-            });
+            // Use SuiteQL to find JavaScript files in the folder
+            var sql = "SELECT id, name, folder, lastModifiedDate FROM file WHERE folder = ? AND name LIKE '%.js'";
+            var results = query.runSuiteQL({
+                query: sql,
+                params: [folderId]
+            }).asMappedResults();
 
-            fileQuery.columns = [
-                fileQuery.createColumn({ fieldId: 'id' }),
-                fileQuery.createColumn({ fieldId: 'name' }),
-                fileQuery.createColumn({ fieldId: 'folder' }),
-                fileQuery.createColumn({ fieldId: 'modified' })
-            ];
-
-            fileQuery.condition = fileQuery.and([
-                fileQuery.createCondition({
-                    fieldId: 'folder',
-                    operator: query.Operator.IS,
-                    values: folderId
-                }),
-                fileQuery.createCondition({
-                    fieldId: 'name',
-                    operator: query.Operator.ENDSWITH,
-                    values: '.js'
-                })
-            ]);
-
-            return fileQuery.run().asMappedResults();
+            return results;
 
         } catch (error) {
             log.error({
@@ -238,7 +248,7 @@ define(['N/query', 'N/file', 'N/log', '../core/constants'], function(query, file
                 parameters: extractParametersFromContent(content),
                 returnType: type === 'function' ? 'any' : 'object',
                 description: extractDescriptionFromContent(content),
-                lastModified: new Date(fileInfo.modified),
+                lastModified: new Date(fileInfo.lastModifiedDate),
                 type: type
             };
 
@@ -325,11 +335,24 @@ define(['N/query', 'N/file', 'N/log', '../core/constants'], function(query, file
         }
     }
 
+    /**
+     * Clear registry cache to force rebuild on next access
+     */
+    function clearRegistryCache() {
+        registryCache = null;
+        registryCacheExpiry = null;
+        log.debug({
+            title: 'Function registry cache cleared',
+            details: 'Registry will be rebuilt on next access'
+        });
+    }
+
     // Public API
     return {
         buildFunctionRegistry: buildFunctionRegistry,
         findFolderByPath: findFolderByPath,
         scanDirectoryForJSFiles: scanDirectoryForJSFiles,
-        extractFunctionMetadata: extractFunctionMetadata
+        extractFunctionMetadata: extractFunctionMetadata,
+        clearRegistryCache: clearRegistryCache
     };
 });

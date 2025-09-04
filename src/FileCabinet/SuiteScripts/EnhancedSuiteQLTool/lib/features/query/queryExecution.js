@@ -41,17 +41,23 @@ define([
                     return;
                 }
 
-                // Check for parameters in the query
-                const parameterInfo = detectQueryParameters(query.trim());
+                // Check for CREATE OR REPLACE statements first (these should not trigger parameter detection)
+                const trimmedQuery = query.trim();
+                const isCreateStatement = /^CREATE\s+OR\s+REPLACE\s+(FUNCTION|PROCEDURE)/i.test(trimmedQuery);
 
-                if (parameterInfo.hasParameters) {
-                    // Show parameter modal instead of executing directly
-                    window.showParameterModal(query.trim(), parameterInfo.parameters);
-                    return;
+                if (!isCreateStatement) {
+                    // Check for parameters in the query
+                    const parameterInfo = detectQueryParameters(trimmedQuery);
+
+                    if (parameterInfo.hasParameters) {
+                        // Show parameter modal instead of executing directly
+                        window.showParameterModal(trimmedQuery, parameterInfo.parameters);
+                        return;
+                    }
                 }
 
                 // Execute query without parameters (original flow)
-                executeQueryDirect(query.trim());
+                executeQueryDirect(trimmedQuery);
             }
 
             function executeQueryDirect(query) {
@@ -112,7 +118,108 @@ define([
             }
         `;
     }
-    
+
+    /**
+     * Generate the CREATE statement response handling JavaScript
+     *
+     * @returns {string} JavaScript code for handling CREATE statement responses
+     */
+    function getHandleCreateStatementResponseJS() {
+        return `
+            function handleCreateStatementResponse(data) {
+                // Update status
+                const elapsedTime = data.elapsedTime || 'N/A';
+                const statusText = data.success ?
+                    \`\${data.message} (completed in \${elapsedTime}ms)\` :
+                    \`Error: \${data.message}\`;
+
+                document.getElementById('${constants.ELEMENT_IDS.STATUS_TEXT}').textContent = statusText;
+
+                // Hide welcome message and show results
+                document.getElementById('${constants.ELEMENT_IDS.WELCOME_MESSAGE}').style.display = 'none';
+                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'block';
+
+                // Create success/error message display
+                const messageClass = data.success ? 'create-success' : 'create-error';
+                const messageIcon = data.success ? '✅' : '❌';
+
+                let resultHTML = \`
+                    <div class="create-statement-result \${messageClass}">
+                        <div class="create-message">
+                            <span class="create-icon">\${messageIcon}</span>
+                            <span class="create-text">\${data.message}</span>
+                        </div>
+                \`;
+
+                if (data.success) {
+                    resultHTML += \`
+                        <div class="create-details">
+                            <div><strong>Type:</strong> \${data.type}</div>
+                            <div><strong>File Name:</strong> \${data.fileName}</div>
+                            <div><strong>File ID:</strong> \${data.fileId}</div>
+                            <div><strong>Execution Time:</strong> \${elapsedTime}ms</div>
+                        </div>
+                    \`;
+                }
+
+                resultHTML += \`</div>\`;
+
+                // Add CSS for CREATE statement results if not already added
+                if (!document.getElementById('create-statement-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'create-statement-styles';
+                    style.textContent = \`
+                        .create-statement-result {
+                            padding: 20px;
+                            border-radius: 8px;
+                            margin: 20px 0;
+                            font-family: var(--codeoss-font-family);
+                        }
+                        .create-success {
+                            background-color: var(--codeoss-success-bg, #d4edda);
+                            border: 1px solid var(--codeoss-success-border, #c3e6cb);
+                            color: var(--codeoss-success-text, #155724);
+                        }
+                        .create-error {
+                            background-color: var(--codeoss-error-bg, #f8d7da);
+                            border: 1px solid var(--codeoss-error-border, #f5c6cb);
+                            color: var(--codeoss-error-text, #721c24);
+                        }
+                        .create-message {
+                            display: flex;
+                            align-items: center;
+                            font-size: 16px;
+                            font-weight: 500;
+                            margin-bottom: 12px;
+                        }
+                        .create-icon {
+                            margin-right: 8px;
+                            font-size: 18px;
+                        }
+                        .create-details {
+                            font-size: 14px;
+                            line-height: 1.5;
+                        }
+                        .create-details div {
+                            margin: 4px 0;
+                        }
+                        .create-details strong {
+                            font-weight: 600;
+                        }
+                    \`;
+                    document.head.appendChild(style);
+                }
+
+                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').innerHTML = resultHTML;
+
+                // Update query results header
+                document.getElementById('${constants.ELEMENT_IDS.QUERY_RESULTS_HEADER}').textContent =
+                    data.success ? \`\${data.type.charAt(0).toUpperCase() + data.type.slice(1)} Created Successfully\` :
+                                  \`\${data.type ? data.type.charAt(0).toUpperCase() + data.type.slice(1) : 'Statement'} Creation Failed\`;
+            }
+        `;
+    }
+
     /**
      * Generate the query response handling JavaScript
      * 
@@ -125,7 +232,13 @@ define([
                     handleQueryError(data.error);
                     return;
                 }
-                
+
+                // Handle CREATE statement responses
+                if (data.isCreateStatement) {
+                    handleCreateStatementResponse(data);
+                    return;
+                }
+
                 if (!data.records) {
                     handleQueryError({ message: 'No records returned from query' });
                     return;
@@ -383,6 +496,16 @@ define([
                     };
                 }
 
+                // Skip parameter detection for CREATE OR REPLACE statements
+                const trimmedQuery = query.trim();
+                if (/^CREATE\\s+OR\\s+REPLACE\\s+(FUNCTION|PROCEDURE)/i.test(trimmedQuery)) {
+                    return {
+                        hasParameters: false,
+                        parameterCount: 0,
+                        parameters: []
+                    };
+                }
+
                 // Find all ? placeholders that are not inside quoted strings
                 const parameters = [];
                 let parameterIndex = 0;
@@ -496,6 +619,7 @@ define([
     function getAllQueryExecutionJS() {
         return getQuerySubmitJS() + '\n' +
                getHandleQueryResponseJS() + '\n' +
+               getHandleCreateStatementResponseJS() + '\n' +
                getHandleQueryErrorJS() + '\n' +
                getQueryParameterHelpersJS() + '\n' +
                getQueryValidationJS() + '\n' +
@@ -509,6 +633,7 @@ define([
     return {
         getQuerySubmitJS: getQuerySubmitJS,
         getHandleQueryResponseJS: getHandleQueryResponseJS,
+        getHandleCreateStatementResponseJS: getHandleCreateStatementResponseJS,
         getHandleQueryErrorJS: getHandleQueryErrorJS,
         getQueryParameterHelpersJS: getQueryParameterHelpersJS,
         getQueryValidationJS: getQueryValidationJS,

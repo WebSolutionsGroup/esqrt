@@ -59,22 +59,39 @@ define([
                         throw new Error('Synthetic processing error: ' + syntheticResult.error);
                     }
 
-                    // Return synthetic result directly
+                    // Handle different types of synthetic results
                     let elapsedTime = syntheticResult.executionTime;
-                    responsePayload = {
-                        'records': syntheticResult.result,
-                        'elapsedTime': elapsedTime,
-                        'synthetic': true
-                    };
 
-                    // Add total count if requested (for synthetic results)
-                    if (requestPayload.returnTotals && Array.isArray(syntheticResult.result) && syntheticResult.result.length > 0) {
-                        responsePayload.totalRecordCount = syntheticResult.result.length;
+                    if (syntheticResult.analysis && syntheticResult.analysis.queryType === 'CREATE') {
+                        // CREATE statement result
+                        responsePayload = {
+                            'success': true,
+                            'message': syntheticResult.result.message,
+                            'fileName': syntheticResult.result.fileName,
+                            'fileId': syntheticResult.result.fileId,
+                            'type': syntheticResult.result.type,
+                            'elapsedTime': elapsedTime,
+                            'synthetic': true,
+                            'isCreateStatement': true
+                        };
+                    } else {
+                        // Function/procedure execution result
+                        responsePayload = {
+                            'records': syntheticResult.result,
+                            'elapsedTime': elapsedTime,
+                            'synthetic': true
+                        };
+
+                        // Add total count if requested (for synthetic results)
+                        if (requestPayload.returnTotals && Array.isArray(syntheticResult.result) && syntheticResult.result.length > 0) {
+                            responsePayload.totalRecordCount = syntheticResult.result.length;
+                        }
                     }
 
-                    // Save query to history if enabled
-                    if (constants.CONFIG.QUERY_HISTORY_ENABLED) {
-                        queryHistoryRecord.saveQueryHistory(nestedSQL, responsePayload.records.length, elapsedTime);
+                    // Save query to history if enabled (skip CREATE statements)
+                    if (constants.CONFIG.QUERY_HISTORY_ENABLED && !responsePayload.isCreateStatement) {
+                        var recordCount = Array.isArray(syntheticResult.result) ? syntheticResult.result.length : 1;
+                        queryHistoryRecord.saveQueryHistory(nestedSQL, recordCount, elapsedTime);
                     }
 
                     context.response.write(JSON.stringify(responsePayload, null, 2));
@@ -82,7 +99,19 @@ define([
                 }
             } catch (syntheticError) {
                 nsModules.logger.error('Synthetic processing error', syntheticError);
-                // Fall through to normal query processing
+
+                // If this looks like a synthetic query (contains function calls), show the error
+                if (nestedSQL.match(/\b[a-zA-Z_]\w*\s*\([^)]*\)/)) {
+                    responsePayload = {
+                        'error': 'Synthetic processing failed: ' + syntheticError.message,
+                        'details': syntheticError.stack || syntheticError.toString(),
+                        'elapsedTime': 0
+                    };
+                    context.response.write(JSON.stringify(responsePayload, null, 2));
+                    return;
+                }
+
+                // Fall through to normal query processing for non-synthetic queries
             }
 
             let beginTime = new Date().getTime();
