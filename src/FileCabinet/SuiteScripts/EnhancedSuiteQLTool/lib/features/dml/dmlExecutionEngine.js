@@ -11,8 +11,11 @@
 define([
     'N/log', 'N/error',
     './operations/createRecord',
-    './operations/createList'
-], function(log, error, createRecord, createList) {
+    './operations/createList',
+    './operations/insertRecord',
+    './operations/updateRecord',
+    './operations/deleteRecord'
+], function(log, error, createRecord, createList, insertRecord, updateRecord, deleteRecord) {
     'use strict';
 
     /**
@@ -48,11 +51,23 @@ define([
                 case 'CREATE_RECORD':
                     result = createRecord.execute(parsedStatement);
                     break;
-                    
+
                 case 'CREATE_LIST':
                     result = createList.execute(parsedStatement);
                     break;
-                    
+
+                case 'INSERT':
+                    result = insertRecord.execute(parsedStatement);
+                    break;
+
+                case 'UPDATE':
+                    result = updateRecord.execute(parsedStatement);
+                    break;
+
+                case 'DELETE':
+                    result = deleteRecord.execute(parsedStatement);
+                    break;
+
                 default:
                     throw error.create({
                         name: 'UNSUPPORTED_DML_OPERATION',
@@ -141,7 +156,31 @@ define([
                         validation.errors = validation.errors.concat(listValidation.errors);
                     }
                     break;
-                    
+
+                case 'INSERT':
+                    var insertValidation = validateInsertStatement(parsedStatement);
+                    if (!insertValidation.isValid) {
+                        validation.isValid = false;
+                        validation.errors = validation.errors.concat(insertValidation.errors);
+                    }
+                    break;
+
+                case 'UPDATE':
+                    var updateValidation = validateUpdateStatement(parsedStatement);
+                    if (!updateValidation.isValid) {
+                        validation.isValid = false;
+                        validation.errors = validation.errors.concat(updateValidation.errors);
+                    }
+                    break;
+
+                case 'DELETE':
+                    var deleteValidation = validateDeleteStatement(parsedStatement);
+                    if (!deleteValidation.isValid) {
+                        validation.isValid = false;
+                        validation.errors = validation.errors.concat(deleteValidation.errors);
+                    }
+                    break;
+
                 default:
                     validation.isValid = false;
                     validation.errors.push('Unsupported DML operation: ' + dmlType);
@@ -205,12 +244,92 @@ define([
     }
 
     /**
+     * Validate INSERT statement
+     *
+     * @param {Object} parsedStatement - Parsed INSERT statement
+     * @returns {Object} Validation result
+     */
+    function validateInsertStatement(parsedStatement) {
+        var validation = {
+            isValid: true,
+            errors: []
+        };
+
+        if (!parsedStatement.tableName) {
+            validation.isValid = false;
+            validation.errors.push('Table name is required');
+        }
+
+        if (!parsedStatement.fields || typeof parsedStatement.fields !== 'object') {
+            validation.isValid = false;
+            validation.errors.push('Fields object is required');
+        }
+
+        return validation;
+    }
+
+    /**
+     * Validate UPDATE statement
+     *
+     * @param {Object} parsedStatement - Parsed UPDATE statement
+     * @returns {Object} Validation result
+     */
+    function validateUpdateStatement(parsedStatement) {
+        var validation = {
+            isValid: true,
+            errors: []
+        };
+
+        if (!parsedStatement.tableName) {
+            validation.isValid = false;
+            validation.errors.push('Table name is required');
+        }
+
+        if (!parsedStatement.setFields || typeof parsedStatement.setFields !== 'object') {
+            validation.isValid = false;
+            validation.errors.push('SET fields are required');
+        }
+
+        if (!parsedStatement.whereCondition) {
+            validation.isValid = false;
+            validation.errors.push('WHERE condition is required for UPDATE statements');
+        }
+
+        return validation;
+    }
+
+    /**
+     * Validate DELETE statement
+     *
+     * @param {Object} parsedStatement - Parsed DELETE statement
+     * @returns {Object} Validation result
+     */
+    function validateDeleteStatement(parsedStatement) {
+        var validation = {
+            isValid: true,
+            errors: []
+        };
+
+        if (!parsedStatement.tableName) {
+            validation.isValid = false;
+            validation.errors.push('Table name is required');
+        }
+
+        if (!parsedStatement.whereCondition) {
+            validation.isValid = false;
+            validation.errors.push('WHERE condition is required for DELETE statements');
+        }
+
+        return validation;
+    }
+
+    /**
      * Get supported DML operations
-     * 
+     *
      * @returns {Array} Array of supported operation types
      */
     function getSupportedOperations() {
-        return ['CREATE_RECORD', 'CREATE_LIST'];
+        return ['CREATE_RECORD', 'CREATE_LIST', 'INSERT', 'UPDATE', 'DELETE'];
     }
 
     /**

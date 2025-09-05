@@ -12,8 +12,8 @@ define([
     'N/log',
     './dmlParser',
     './dmlExecutionEngine',
-    '../../queryHistory/historyManager'
-], function(log, dmlParser, dmlExecutionEngine, queryHistory) {
+    '../../netsuite/queryHistoryRecord'
+], function(log, dmlParser, dmlExecutionEngine, queryHistoryRecord) {
     'use strict';
 
     /**
@@ -141,22 +141,15 @@ define([
      */
     function logQueryToHistory(query, executionResult, startTime) {
         try {
-            var historyEntry = {
-                query: query,
-                status: executionResult.success ? 'SUCCESS' : 'ERROR',
-                executionTime: new Date(),
-                elapsedTime: Date.now() - startTime
-            };
-
-            if (executionResult.success) {
-                historyEntry.result = executionResult.message || 'DML operation completed successfully';
-                historyEntry.recordCount = 1; // DML operations typically affect one entity
-            } else {
-                historyEntry.errorMessage = executionResult.error;
-                historyEntry.recordCount = 0;
-            }
-
-            queryHistory.logQuery(historyEntry);
+            // Use the NetSuite query history record module to log the query
+            queryHistoryRecord.addQueryToHistory({
+                queryContent: query,
+                executionTime: Date.now() - startTime,
+                recordCount: executionResult.result && executionResult.result.recordCount ? executionResult.result.recordCount : 1,
+                success: executionResult.success,
+                errorMessage: executionResult.error || null
+                // Omit resultFormat to avoid custom list value issues
+            });
 
         } catch (historyError) {
             log.error({
@@ -203,20 +196,52 @@ define([
         return {
             CREATE_RECORD: [
                 'CREATE RECORD my_custom_record (\n' +
-                '    name FREEFORMTEXT,\n' +
+                '    name = "My Custom Record",\n' +
+                '    description = "Custom record for tracking data",\n' +
+                '    allowAttachments = true,\n' +
+                '    allowQuickAdd = true,\n' +
+                '    contact_name FREEFORMTEXT,\n' +
                 '    email EMAILADDRESS,\n' +
                 '    amount CURRENCY,\n' +
                 '    active CHECKBOX\n' +
                 ');',
-                
+
                 'CREATE RECORD employee_data (\n' +
+                '    name = "Employee Data",\n' +
+                '    description = "Employee information and records",\n' +
+                '    prefix "sqrt_",\n' +
+                '    enableSystemNotes = true,\n' +
+                '    includeInGlobalSearch = true,\n' +
+                '    allowReports = true,\n' +
                 '    employee_name FREEFORMTEXT,\n' +
                 '    hire_date DATE,\n' +
-                '    department LIST(customlist_departments),\n' +
+                '    department LIST(department),\n' +
                 '    salary CURRENCY\n' +
                 ');'
             ],
-            
+            INSERT: [
+                'INSERT INTO customer (companyname, email) VALUES (\'Acme Corp\', \'contact@acme.com\');',
+
+                'INSERT INTO customrecord_employee SET\n' +
+                '    name = \'John Doe\',\n' +
+                '    department = \'Engineering\',\n' +
+                '    hire_date = \'2024-01-15\',\n' +
+                '    active = true;'
+            ],
+            UPDATE: [
+                'UPDATE customer SET companyname = \'New Company Name\' WHERE id = 123;',
+
+                'UPDATE customrecord_employee SET\n' +
+                '    department = \'Marketing\',\n' +
+                '    salary = 75000\n' +
+                'WHERE name = \'John Doe\';'
+            ],
+            DELETE: [
+                'DELETE FROM customer WHERE id = 123;',
+
+                'DELETE FROM customrecord_employee WHERE department = \'Engineering\';'
+            ],
+
             CREATE_LIST: [
                 'CREATE LIST priority_levels (\n' +
                 '    description "Priority levels for tasks"\n' +

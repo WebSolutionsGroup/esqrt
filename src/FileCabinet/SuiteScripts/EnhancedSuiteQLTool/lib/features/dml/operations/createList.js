@@ -94,9 +94,12 @@ define(['N/record', 'N/error', 'N/log'], function(record, error, log) {
             type: record.Type.CUSTOM_LIST
         });
 
+        // NetSuite automatically adds 'customlist_' prefix, so only pass the suffix
+        var listScriptId = parsedStatement.fullListId.replace(/^customlist_/, '');
+
         customList.setValue({
             fieldId: 'scriptid',
-            value: parsedStatement.fullListId
+            value: listScriptId
         });
 
         customList.setValue({

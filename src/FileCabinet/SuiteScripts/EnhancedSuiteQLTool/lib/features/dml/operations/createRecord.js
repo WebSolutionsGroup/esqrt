@@ -51,33 +51,26 @@ define(['N/record', 'N/error', 'N/log'], function(record, error, log) {
         });
 
         try {
-            // Create the custom record type
-            var recordTypeId = createCustomRecordType(parsedStatement);
-            
-            // Create the custom fields
-            var fieldResults = createCustomFields(parsedStatement, recordTypeId);
-            
-            // Log success
+            // Generate manual creation instructions
+            var instructions = createCustomRecordType(parsedStatement);
+
+            // Log the requirement for manual creation
             log.audit({
-                title: 'CREATE RECORD Success',
-                details: 'Created record type: ' + parsedStatement.fullRecordId + ' with ' + fieldResults.length + ' fields'
+                title: 'CREATE RECORD - Manual Creation Required',
+                details: 'Generated instructions for: ' + parsedStatement.fullRecordId + ' with ' + parsedStatement.fields.length + ' fields'
             });
 
             return {
-                success: true,
-                result: {
-                    recordTypeId: recordTypeId,
-                    recordId: parsedStatement.fullRecordId,
-                    fieldsCreated: fieldResults.length,
-                    fields: fieldResults
-                },
-                error: null,
-                message: 'Custom record ' + parsedStatement.fullRecordId + ' created successfully with ' + fieldResults.length + ' fields',
+                success: false,
+                result: instructions,
+                error: 'Manual creation required - NetSuite does not support creating custom record types via SuiteScript',
+                message: 'Custom record types must be created manually in NetSuite. See the detailed instructions in the result.',
                 metadata: {
                     operation: 'CREATE_RECORD',
                     recordId: parsedStatement.recordId,
                     fullRecordId: parsedStatement.fullRecordId,
-                    displayName: parsedStatement.displayName
+                    displayName: parsedStatement.displayName,
+                    requiresManualCreation: true
                 }
             };
 
@@ -109,48 +102,85 @@ define(['N/record', 'N/error', 'N/log'], function(record, error, log) {
      */
     function createCustomRecordType(parsedStatement) {
         log.debug({
-            title: 'Creating custom record type',
-            details: 'Script ID: ' + parsedStatement.fullRecordId + ', Name: ' + parsedStatement.displayName
+            title: 'createCustomRecordType input',
+            details: 'Parsed statement: ' + JSON.stringify(parsedStatement)
         });
 
-        var customRecord = record.create({
-            type: record.Type.CUSTOM_RECORD_TYPE
-        });
-
-        customRecord.setValue({
-            fieldId: 'scriptid',
-            value: parsedStatement.fullRecordId
-        });
-
-        customRecord.setValue({
-            fieldId: 'name',
-            value: parsedStatement.displayName
-        });
-
-        // Set additional default properties
-        customRecord.setValue({
-            fieldId: 'allowattachments',
-            value: true
-        });
-
-        customRecord.setValue({
-            fieldId: 'allowinlineediting',
-            value: true
-        });
-
-        customRecord.setValue({
-            fieldId: 'allowquicksearch',
-            value: true
-        });
-
-        var recordTypeId = customRecord.save();
+        // Ensure we have a valid display name
+        var displayName = parsedStatement.displayName || parsedStatement.recordId || 'Custom Record';
 
         log.debug({
-            title: 'Custom record type created',
-            details: 'Internal ID: ' + recordTypeId + ', Script ID: ' + parsedStatement.fullRecordId
+            title: 'Creating custom record type',
+            details: 'Script ID: ' + parsedStatement.fullRecordId + ', Name: ' + displayName + ', Original Display Name: ' + parsedStatement.displayName + ', Record ID: ' + parsedStatement.recordId
         });
 
-        return recordTypeId;
+
+
+        // IMPORTANT: NetSuite does not allow creating custom record types via SuiteScript
+        // Instead, we'll return detailed instructions for manual creation
+
+        var recordScriptId = parsedStatement.fullRecordId.replace(/^customrecord_/, '');
+
+        var instructions = {
+            operation: 'MANUAL_CREATION_REQUIRED',
+            recordType: 'Custom Record Type',
+            scriptId: recordScriptId,
+            displayName: trimmedDisplayName,
+            steps: [
+                '1. Go to Customization > Lists, Records, & Fields > Record Types > New',
+                '2. Set Record Name: "' + trimmedDisplayName + '"',
+                '3. Set ID: "' + recordScriptId + '"',
+                '4. Configure the following options:'
+            ],
+            configuration: {},
+            fields: []
+        };
+
+        // Add configuration options if provided
+        if (parsedStatement.recordOptions) {
+            if (parsedStatement.recordOptions.description) {
+                instructions.configuration.description = parsedStatement.recordOptions.description;
+                instructions.steps.push('   - Description: "' + parsedStatement.recordOptions.description + '"');
+            }
+            if (parsedStatement.recordOptions.owner) {
+                instructions.configuration.owner = parsedStatement.recordOptions.owner;
+                instructions.steps.push('   - Owner: Employee ID ' + parsedStatement.recordOptions.owner);
+            }
+            if (parsedStatement.recordOptions.allowAttachments !== null) {
+                instructions.configuration.allowAttachments = parsedStatement.recordOptions.allowAttachments;
+                instructions.steps.push('   - Allow Attachments: ' + parsedStatement.recordOptions.allowAttachments);
+            }
+            if (parsedStatement.recordOptions.enableSystemNotes !== null) {
+                instructions.configuration.enableSystemNotes = parsedStatement.recordOptions.enableSystemNotes;
+                instructions.steps.push('   - Enable System Notes: ' + parsedStatement.recordOptions.enableSystemNotes);
+            }
+            if (parsedStatement.recordOptions.includeInGlobalSearch !== null) {
+                instructions.configuration.includeInGlobalSearch = parsedStatement.recordOptions.includeInGlobalSearch;
+                instructions.steps.push('   - Include in Global Search: ' + parsedStatement.recordOptions.includeInGlobalSearch);
+            }
+        }
+
+        instructions.steps.push('5. Save the record type');
+        instructions.steps.push('6. Add the following fields:');
+
+        // Add field creation instructions
+        parsedStatement.fields.forEach(function(field, index) {
+            var fieldScriptId = field.scriptId.replace(/^custrecord_/, '');
+            instructions.fields.push({
+                name: field.name,
+                type: field.type,
+                scriptId: fieldScriptId,
+                listType: field.listType
+            });
+            instructions.steps.push('   Field ' + (index + 1) + ': "' + field.name + '" (Type: ' + field.type + ', ID: "' + fieldScriptId + '")');
+        });
+
+        log.audit({
+            title: 'CREATE RECORD - Manual Creation Required',
+            details: 'Generated instructions for creating custom record type: ' + parsedStatement.fullRecordId
+        });
+
+        return instructions;
     }
 
     /**
@@ -208,6 +238,11 @@ define(['N/record', 'N/error', 'N/log'], function(record, error, log) {
      * @returns {string} Field internal ID
      */
     function createCustomField(field, recordId, recordTypeId) {
+        log.debug({
+            title: 'Creating custom field',
+            details: 'Field: ' + field.name + ', Type: ' + field.type + ', Script ID: ' + field.scriptId
+        });
+
         var fieldType = FIELD_TYPE_MAP[field.type.toUpperCase()];
         if (!fieldType) {
             throw error.create({
@@ -216,17 +251,19 @@ define(['N/record', 'N/error', 'N/log'], function(record, error, log) {
             });
         }
 
+
+
         var customField = record.create({
-            type: record.Type.CUSTOM_FIELD,
+            type: 'customfield',
             isDynamic: true
         });
 
-        // Generate script ID
-        var scriptId = 'custrecord_' + recordId + '_' + field.name;
-        
+        // NetSuite automatically adds 'custrecord_' prefix, so only pass the suffix
+        var fieldScriptId = field.scriptId.replace(/^custrecord_/, '');
+
         customField.setValue({
             fieldId: 'scriptid',
-            value: scriptId
+            value: fieldScriptId
         });
 
         customField.setValue({
@@ -241,9 +278,40 @@ define(['N/record', 'N/error', 'N/log'], function(record, error, log) {
 
         // Set list type if applicable
         if (field.type.toUpperCase() === 'LIST' && field.listType) {
+            log.debug({
+                title: 'Setting list source type',
+                details: 'Field: ' + field.name + ', List Type: ' + field.listType
+            });
+
+            // Standard NetSuite lists that don't need prefixes
+            var standardLists = [
+                'department', 'location', 'subsidiary', 'class', 'currency', 'employee',
+                'customer', 'vendor', 'partner', 'item', 'entity', 'account', 'job',
+                'campaign', 'promotion', 'contact', 'lead', 'prospect', 'salesrep',
+                'territory', 'taxcode', 'taxitem', 'paymentmethod', 'terms', 'pricelevel',
+                'unitstype', 'billingschedule', 'revrecschedule', 'itemgroup', 'kititem',
+                'assemblyitem', 'inventoryitem', 'noninventoryitem', 'serviceitem',
+                'otherchargeitem', 'discountitem', 'paymentitem', 'subtotalitem',
+                'markupitem', 'downloaditem', 'giftcertificateitem'
+            ];
+
+            var listType = field.listType;
+
+            // Check if it's a standard list or already has a proper prefix
+            if (!standardLists.includes(listType.toLowerCase()) &&
+                !listType.startsWith('customlist_') &&
+                !listType.startsWith('customrecord_')) {
+                // Only add customlist_ prefix if it's not a standard list and doesn't have a prefix
+                listType = 'customlist_' + listType;
+                log.debug({
+                    title: 'Added custom list prefix',
+                    details: 'Original: ' + field.listType + ', Corrected: ' + listType
+                });
+            }
+
             customField.setValue({
                 fieldId: 'sourcetype',
-                value: field.listType
+                value: listType
             });
         }
 
