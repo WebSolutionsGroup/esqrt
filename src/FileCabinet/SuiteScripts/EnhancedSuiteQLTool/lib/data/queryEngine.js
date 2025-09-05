@@ -19,8 +19,9 @@ define([
     '../core/constants',
     '../core/modules',
     '../netsuite/queryHistoryRecord',
-    '../features/synthetic/syntheticProcessor'
-], function(constants, nsModules, queryHistoryRecord, syntheticProcessor) {
+    '../features/synthetic/syntheticProcessor',
+    '../features/dml/dmlProcessor'
+], function(constants, nsModules, queryHistoryRecord, syntheticProcessor, dmlProcessor) {
     
     /**
      * Execute a SuiteQL query with all the enhanced features
@@ -137,6 +138,71 @@ define([
                 }
 
                 // Fall through to normal query processing for non-synthetic queries
+            }
+
+            // Check for DML operations
+            try {
+                var dmlResult = dmlProcessor.processQuery(nestedSQL);
+
+                if (dmlResult.wasDML) {
+                    if (!dmlResult.success) {
+                        throw new Error('DML processing error: ' + dmlResult.error);
+                    }
+
+                    // Handle DML operation result
+                    let elapsedTime = dmlResult.executionTime;
+
+                    responsePayload = {
+                        'success': true,
+                        'message': dmlResult.message,
+                        'result': dmlResult.result,
+                        'elapsedTime': elapsedTime,
+                        'dml': true,
+                        'dmlType': dmlResult.analysis ? dmlResult.analysis.dmlType : 'UNKNOWN'
+                    };
+
+                    // Save query to history if enabled
+                    if (constants.CONFIG.QUERY_HISTORY_ENABLED) {
+                        try {
+                            var historyData = {
+                                queryContent: nestedSQL,
+                                executionTime: elapsedTime,
+                                recordCount: 1, // DML operations typically affect one entity
+                                success: true,
+                                resultFormat: 'dml',
+                                sessionId: null
+                            };
+                            nsModules.logger.debug('Attempting to save DML query history', historyData);
+                            var historyRecordId = queryHistoryRecord.addQueryToHistory(historyData);
+                            nsModules.logger.debug('DML query history saved successfully', { recordId: historyRecordId });
+                        } catch(historyErr) {
+                            nsModules.logger.error('DML Query History Save failed', {
+                                error: historyErr.toString(),
+                                message: historyErr.message,
+                                name: historyErr.name,
+                                historyData: historyData
+                            });
+                        }
+                    }
+
+                    context.response.write(JSON.stringify(responsePayload, null, 2));
+                    return;
+                }
+            } catch (dmlError) {
+                nsModules.logger.error('DML processing error', dmlError);
+
+                // If this looks like a DML query, show the error
+                if (dmlProcessor.isDMLQuery(nestedSQL)) {
+                    responsePayload = {
+                        'error': 'DML processing failed: ' + dmlError.message,
+                        'details': dmlError.stack || dmlError.toString(),
+                        'elapsedTime': 0
+                    };
+                    context.response.write(JSON.stringify(responsePayload, null, 2));
+                    return;
+                }
+
+                // Fall through to normal query processing for non-DML queries
             }
 
             let beginTime = new Date().getTime();
