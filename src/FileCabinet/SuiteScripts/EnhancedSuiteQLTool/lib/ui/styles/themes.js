@@ -283,7 +283,13 @@ define([
                     opacity: 0.8;
                 }
 
-                /* Table styles for better sorting experience */
+                /* Single table with sticky header - updated for v1.2.0 */
+                .codeoss-table-wrapper {
+                    background-color: var(--codeoss-panel-bg);
+                    border: 1px solid var(--codeoss-border);
+                    border-radius: 4px;
+                }
+
                 .codeoss-table {
                     width: 100%;
                     border-collapse: collapse;
@@ -291,13 +297,18 @@ define([
                     font-size: 12px;
                 }
 
+                /* Sticky header */
                 .codeoss-table th {
-                    background-color: var(--codeoss-bg-secondary);
+                    position: sticky !important;
+                    top: 0 !important;
+                    background-color: var(--codeoss-bg-secondary) !important;
                     border: 1px solid var(--codeoss-border);
                     padding: 8px 12px;
                     text-align: left;
                     font-weight: 600;
                     color: var(--codeoss-text-primary);
+                    z-index: 10 !important;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
                 }
 
                 .codeoss-table td {

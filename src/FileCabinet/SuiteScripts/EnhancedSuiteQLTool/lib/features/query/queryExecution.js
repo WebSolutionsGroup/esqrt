@@ -221,8 +221,74 @@ define([
     }
 
     /**
+     * Generate the stored procedure response handling JavaScript
+     *
+     * @returns {string} JavaScript code for handling stored procedure responses
+     */
+    function getHandleStoredProcedureResponseJS() {
+        return `
+            function handleStoredProcedureResponse(data) {
+                // Update status
+                const elapsedTime = data.elapsedTime || 'N/A';
+                const outputLines = data.outputLog ? data.outputLog.length : 0;
+                document.getElementById('${constants.ELEMENT_IDS.STATUS_TEXT}').textContent = \`Stored procedure completed: \${outputLines} output lines in \${elapsedTime}ms\`;
+
+                // Update query results header
+                document.getElementById('${constants.ELEMENT_IDS.QUERY_RESULTS_HEADER}').textContent = \`Procedure Output (\${outputLines} lines)\`;
+
+                // Generate console-style output with full height like normal query results
+                // Use CSS class for proper theme support
+                let consoleOutput = '<div class="stored-procedure-console" style="font-family: var(--codeoss-font-family); padding: 15px; border-radius: 4px; height: calc(100vh - 305px); overflow-y: auto; white-space: pre-wrap; line-height: 1.4;">';
+
+                // Add each output line with timestamp and styling
+                data.outputLog.forEach(function(logEntry, index) {
+                    const timestamp = new Date(logEntry.timestamp).toLocaleTimeString();
+                    let lineColor = 'var(--codeoss-text-primary)'; // Default color
+                    let prefix = '';
+
+                    switch(logEntry.type.toUpperCase()) {
+                        case 'LOG':
+                            lineColor = 'var(--codeoss-accent)'; // Theme-aware blue for info
+                            prefix = '[INFO]';
+                            break;
+                        case 'ERROR':
+                            lineColor = 'var(--codeoss-error)'; // Theme-aware red for errors
+                            prefix = '[ERROR]';
+                            break;
+                        case 'RESULT':
+                            lineColor = 'var(--codeoss-success)'; // Theme-aware green for results
+                            prefix = '[RESULT]';
+                            break;
+                        default:
+                            prefix = '[' + logEntry.type + ']';
+                    }
+
+                    consoleOutput += \`<div style="color: \${lineColor}; margin-bottom: 2px;">\`;
+                    consoleOutput += \`<span style="color: var(--codeoss-text-secondary); font-size: 0.9em;">[\${timestamp}]</span> \`;
+                    consoleOutput += \`<span style="font-weight: bold;">\${prefix}</span> \`;
+                    consoleOutput += \`<span>\${logEntry.message}</span>\`;
+                    consoleOutput += '</div>';
+                });
+
+                consoleOutput += '</div>';
+
+                // Display the console output
+                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').innerHTML = consoleOutput;
+
+                // Show copy button
+                document.getElementById('${constants.ELEMENT_IDS.COPY_CLIPBOARD_BTN}').style.display = 'inline-block';
+
+                // Save results to current active tab
+                if (typeof saveResultsToCurrentTab === 'function') {
+                    saveResultsToCurrentTab();
+                }
+            }
+        `;
+    }
+
+    /**
      * Generate the query response handling JavaScript
-     * 
+     *
      * @returns {string} JavaScript code for handling query responses
      */
     function getHandleQueryResponseJS() {
@@ -236,6 +302,12 @@ define([
                 // Handle CREATE statement responses
                 if (data.isCreateStatement) {
                     handleCreateStatementResponse(data);
+                    return;
+                }
+
+                // Handle stored procedure responses with console-style output
+                if (data.outputLog && data.outputLog.length > 0) {
+                    handleStoredProcedureResponse(data);
                     return;
                 }
 
@@ -619,6 +691,7 @@ define([
     function getAllQueryExecutionJS() {
         return getQuerySubmitJS() + '\n' +
                getHandleQueryResponseJS() + '\n' +
+               getHandleStoredProcedureResponseJS() + '\n' +
                getHandleCreateStatementResponseJS() + '\n' +
                getHandleQueryErrorJS() + '\n' +
                getQueryParameterHelpersJS() + '\n' +
@@ -633,6 +706,7 @@ define([
     return {
         getQuerySubmitJS: getQuerySubmitJS,
         getHandleQueryResponseJS: getHandleQueryResponseJS,
+        getHandleStoredProcedureResponseJS: getHandleStoredProcedureResponseJS,
         getHandleCreateStatementResponseJS: getHandleCreateStatementResponseJS,
         getHandleQueryErrorJS: getHandleQueryErrorJS,
         getQueryParameterHelpersJS: getQueryParameterHelpersJS,

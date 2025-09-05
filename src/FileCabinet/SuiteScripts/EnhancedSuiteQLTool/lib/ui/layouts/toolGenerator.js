@@ -311,27 +311,27 @@ define([
                 }
 
                 .CodeMirror-selected { background-color: var(--codeoss-selection); }
-                /* Improve selection styling to look like inline rounded selection */
-                .CodeMirror ::selection { background: rgba(21, 126, 251, 0.35); }
-                .CodeMirror ::-moz-selection { background: rgba(21, 126, 251, 0.35); }
-                .CodeMirror-selected, .CodeMirror-focused .CodeMirror-selected { border-radius: 6px; }
+
+                /* Base selection styling for all themes */
+                .CodeMirror ::selection { background: rgba(21, 126, 251, 0.25); }
+                .CodeMirror ::-moz-selection { background: rgba(21, 126, 251, 0.25); }
                 .CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection {
-                    background: rgba(21, 126, 251, 0.35);
+                    background: rgba(91, 114, 165, 0.05);
                 }
                 .CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection {
-                    background: rgba(21, 126, 251, 0.35);
+                    background: rgba(91, 114, 165, 0.05);
                 }
 
                 /* Higher-contrast selection for both themes (uses mark-selection addon) */
-                .dark-theme .CodeMirror-selected { background-color: rgba(38, 79, 120, 0.85) !important; }
-                .dark-theme .CodeMirror-selectedtext { background-color: rgba(38, 79, 120, 0.85) !important; color: #ffffff !important; border-radius: 6px; }
-                .dark-theme .CodeMirror ::selection { background: rgba(38, 79, 120, 0.85); }
-                .dark-theme .CodeMirror ::-moz-selection { background: rgba(38, 79, 120, 0.85); }
+                .dark-theme .CodeMirror-selected { background-color: rgba(91, 114, 165, transparent) !important; }
+                .dark-theme .CodeMirror-selectedtext { background-color: rgba(91, 114, 165, 0.3) !important; }
+                .dark-theme .CodeMirror ::selection { background: rgba(91, 114, 165, 0.3); }
+                .dark-theme .CodeMirror ::-moz-selection { background: rgba(91, 114, 165, 0.3); }
 
-                .light-theme .CodeMirror-selected { background-color: rgba(173, 214, 255, 0.6) !important; }
-                .light-theme .CodeMirror-selectedtext { background-color: rgba(173, 214, 255, 0.6) !important; color: #000000 !important; border-radius: 6px; }
-                .light-theme .CodeMirror ::selection { background: rgba(173, 214, 255, 0.6); }
-                .light-theme .CodeMirror ::-moz-selection { background: rgba(173, 214, 255, 0.6); }
+                .light-theme .CodeMirror-selected { background-color: rgba(173, 214, 255, 0.25) !important; }
+                .light-theme .CodeMirror-selectedtext { background-color: rgba(173, 214, 255, 0.25) !important; }
+                .light-theme .CodeMirror ::selection { background: rgba(173, 214, 255, 0.25); }
+                .light-theme .CodeMirror ::-moz-selection { background: rgba(173, 214, 255, 0.25); }
 
 
                 /* Custom SQL Syntax Highlighting Colors */
@@ -371,6 +371,39 @@ define([
 
                 .CodeMirror .cm-variable-2 {
                     color: #9cdcfe !important; /* Light blue for table/column names */
+                }
+
+                /* Boolean and atom keywords (TRUE, FALSE, NULL) */
+                .CodeMirror .cm-atom {
+                    color: #569cd6 !important; /* Light blue for boolean values and NULL */
+                    font-weight: bold;
+                }
+
+                /* Dark theme specific overrides for better visibility */
+                .dark-theme .CodeMirror .cm-atom {
+                    color: #4fc1ff !important; /* Brighter blue for dark theme */
+                }
+
+                .light-theme .CodeMirror .cm-atom {
+                    color: #0066cc !important; /* Darker blue for light theme */
+                }
+
+                /* Stored Procedure Console Styling */
+                .stored-procedure-console {
+                    background: var(--codeoss-editor-bg) !important;
+                    color: var(--codeoss-text-primary) !important;
+                    border: 1px solid var(--codeoss-border) !important;
+                }
+
+                /* Ensure console adapts to theme changes */
+                .dark-theme .stored-procedure-console {
+                    background: var(--codeoss-editor-bg) !important;
+                    color: var(--codeoss-text-primary) !important;
+                }
+
+                .light-theme .stored-procedure-console {
+                    background: var(--codeoss-editor-bg) !important;
+                    color: var(--codeoss-text-primary) !important;
                 }
 
                 .CodeMirror .cm-variable-3 {
@@ -490,48 +523,54 @@ define([
                     background-color: var(--codeoss-panel-bg);
                 }
 
-                /* Table wrapper with fixed header and scrollable body */
+                /* Single table with sticky header - v1.2.0 Updated 2025-01-04 */
                 .codeoss-table-wrapper {
                     flex: 1;
-                    display: flex;
-                    flex-direction: column;
+                    background-color: var(--codeoss-panel-bg);
+                    border: 1px solid var(--codeoss-border);
+                    border-radius: 4px;
                     min-height: 0;
                     margin-bottom: 5px;
-                }
-
-                /* Fixed table header */
-                .codeoss-table-header {
-                    flex-shrink: 0;
-                    background-color: var(--codeoss-bg-secondary);
-                    border-bottom: 2px solid var(--codeoss-border);
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                }
-
-                .codeoss-table-header table {
-                    margin-bottom: 0 !important;
-                    border-bottom: none;
-                }
-
-                .codeoss-table-header th {
-                    border-bottom: none !important;
-                }
-
-                /* Scrollable table body */
-                .codeoss-table-body {
-                    flex: 1;
                     overflow: auto;
-                    background-color: var(--codeoss-panel-bg);
+                    position: relative;
                 }
 
-                .codeoss-table-body table {
-                    margin-top: 0 !important;
+                .codeoss-table {
+                    width: max-content;
+                    min-width: 100%;
+                    border-collapse: collapse;
+                    font-family: var(--codeoss-font-family);
+                    font-size: 12px;
                 }
 
-                /* Ensure header and body column widths match */
-                .codeoss-table-header table,
-                .codeoss-table-body table {
-                    table-layout: fixed;
-                    width: 100%;
+                /* Sticky header - IMPORTANT: Override any conflicting styles */
+                .codeoss-table th {
+                    position: sticky !important;
+                    top: 0 !important;
+                    background-color: var(--codeoss-bg-secondary) !important;
+                    border: 1px solid var(--codeoss-border);
+                    padding: 8px 12px;
+                    text-align: left;
+                    font-weight: 600;
+                    color: var(--codeoss-text-primary);
+                    z-index: 10 !important;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+                    white-space: nowrap;
+                }
+
+                .codeoss-table td {
+                    border: 1px solid var(--codeoss-border);
+                    padding: 6px 12px;
+                    color: var(--codeoss-text-primary);
+                    white-space: nowrap;
+                }
+
+                .codeoss-table tbody tr:nth-child(even) {
+                    background-color: var(--codeoss-bg-secondary);
+                }
+
+                .codeoss-table tbody tr:hover {
+                    background-color: var(--codeoss-hover);
                 }
 
                 /* Legacy container support */

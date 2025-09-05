@@ -39,86 +39,24 @@ define([
                     return;
                 }
 
-                // Register custom SQL hint function for auto-complete
-                CodeMirror.registerHelper("hint", "sql", function(cm) {
-                    var cursor = cm.getCursor();
-                    var line = cm.getLine(cursor.line);
-                    var start = cursor.ch;
-                    var end = cursor.ch;
-
-                    // Find the start of the current word
-                    while (start && /\\w/.test(line.charAt(start - 1))) --start;
-                    // Find the end of the current word
-                    while (end < line.length && /\\w/.test(line.charAt(end))) ++end;
-
-                    var word = line.slice(start, end).toLowerCase();
-
-                    // Get suggestions based on context
-                    var suggestions = getSQLSuggestions(word, line, cursor);
-
-                    return {
-                        list: suggestions,
-                        from: CodeMirror.Pos(cursor.line, start),
-                        to: CodeMirror.Pos(cursor.line, end)
+                // Extend CodeMirror's SQL mode with custom keywords
+                if (CodeMirror.modes && CodeMirror.modes.sql) {
+                    // Add our custom keywords to CodeMirror's SQL mode
+                    var customKeywords = {
+                        'create': true, 'replace': true, 'procedure': true, 'function': true,
+                        'call': true, 'returns': true, 'return': true, 'begin': true, 'end': true,
+                        'declare': true, 'set': true, 'if': true, 'while': true, 'for': true, 'loop': true,
+                        'true': true, 'false': true, 'null': true
                     };
-                });
 
-                // Auto-complete suggestion function
-                function getSQLSuggestions(word, line, cursor) {
-                    var suggestions = [];
-                    var keywords = ` + JSON.stringify(constants.CONFIG.SQL_KEYWORDS) + `;
-                    var tables = ` + JSON.stringify(constants.CONFIG.NETSUITE_TABLES) + `;
-                    var fields = ` + JSON.stringify(constants.CONFIG.NETSUITE_FIELDS) + `;
-
-                    // Determine context based on the current line
-                    var lineUpper = line.toUpperCase();
-                    var beforeCursor = line.substring(0, cursor.ch).toUpperCase();
-
-                    // Context-aware suggestions
-                    if (beforeCursor.includes('SELECT') && !beforeCursor.includes('FROM')) {
-                        // In SELECT clause - suggest fields and functions
-                        suggestions = suggestions.concat(
-                            fields.filter(f => f.toLowerCase().startsWith(word)),
-                            ['COUNT(*)', 'SUM(', 'AVG(', 'MIN(', 'MAX(', 'DISTINCT'].filter(f => f.toLowerCase().startsWith(word))
-                        );
-                    } else if (beforeCursor.includes('FROM') && !beforeCursor.includes('WHERE')) {
-                        // In FROM clause - suggest tables
-                        suggestions = suggestions.concat(
-                            tables.filter(t => t.toLowerCase().startsWith(word))
-                        );
-                    } else if (beforeCursor.includes('WHERE') || beforeCursor.includes('AND') || beforeCursor.includes('OR')) {
-                        // In WHERE clause - suggest fields and operators
-                        suggestions = suggestions.concat(
-                            fields.filter(f => f.toLowerCase().startsWith(word)),
-                            ['IS NULL', 'IS NOT NULL', 'LIKE', 'IN', 'BETWEEN'].filter(op => op.toLowerCase().startsWith(word))
-                        );
-                    } else if (beforeCursor.includes('ORDER BY') || beforeCursor.includes('GROUP BY')) {
-                        // In ORDER BY or GROUP BY - suggest fields
-                        suggestions = suggestions.concat(
-                            fields.filter(f => f.toLowerCase().startsWith(word)),
-                            ['ASC', 'DESC'].filter(dir => dir.toLowerCase().startsWith(word))
-                        );
-                    } else if (beforeCursor.includes('JOIN')) {
-                        // After JOIN - suggest tables
-                        suggestions = suggestions.concat(
-                            tables.filter(t => t.toLowerCase().startsWith(word))
-                        );
-                    } else {
-                        // General context - suggest keywords first, then tables and fields
-                        suggestions = suggestions.concat(
-                            keywords.filter(k => k.toLowerCase().startsWith(word)),
-                            tables.filter(t => t.toLowerCase().startsWith(word)),
-                            fields.filter(f => f.toLowerCase().startsWith(word))
-                        );
+                    // Extend the existing SQL keywords
+                    if (CodeMirror.modes.sql.keywords) {
+                        Object.assign(CodeMirror.modes.sql.keywords, customKeywords);
                     }
-
-                    // Remove duplicates and sort
-                    suggestions = [...new Set(suggestions)];
-                    suggestions.sort();
-
-                    // Limit to top 20 suggestions for performance
-                    return suggestions.slice(0, 20);
                 }
+
+                // Auto-complete functionality disabled for v1.2.0
+                // Will be enhanced in v1.3.0 with proper table/field references
 
                 try {
                     codeEditor = CodeMirror.fromTextArea(textarea, {
@@ -132,9 +70,9 @@ define([
                     smartIndent: true,
                     styleSelectedText: true,
                     extraKeys: {
-                        // Auto-complete shortcuts (cross-platform)
-                        "Ctrl-Space": "autocomplete",
-                        "Cmd-Space": "autocomplete",
+                        // Auto-complete disabled for now (will be enhanced in v1.3.0)
+                        // "Ctrl-Space": "autocomplete",
+                        // "Cmd-Space": "autocomplete",
 
                         // Query execution shortcuts (cross-platform)
                         "Ctrl-R": function(cm) { querySubmit(); },
@@ -161,21 +99,22 @@ define([
                             }
                         }
                     },
-                    hintOptions: {
-                        hint: function(cm) {
-                            // Use custom SQL hint if available, otherwise fall back to built-in
-                            if (CodeMirror.hint && CodeMirror.hint.sql) {
-                                return CodeMirror.hint.sql(cm);
-                            } else {
-                                // Fallback to our custom hint function
-                                return CodeMirror.helpers.hint.sql(cm);
-                            }
-                        },
-                        completeSingle: false,
-                        closeOnUnfocus: true,
-                        alignWithWord: true,
-                        closeCharacters: /[\\s()\\[\\]{};:>,]/
-                    }
+                    // Hint options disabled for now (will be enhanced in v1.3.0)
+                    // hintOptions: {
+                    //     hint: function(cm) {
+                    //         // Use custom SQL hint if available, otherwise fall back to built-in
+                    //         if (CodeMirror.hint && CodeMirror.hint.sql) {
+                    //             return CodeMirror.hint.sql(cm);
+                    //         } else {
+                    //             // Fallback to our custom hint function
+                    //             return CodeMirror.helpers.hint.sql(cm);
+                    //         }
+                    //     },
+                    //     completeSingle: false,
+                    //     closeOnUnfocus: true,
+                    //     alignWithWord: true,
+                    //     closeCharacters: /[\\s()\\[\\]{};:>,]/
+                    // }
                     });
 
                     // Set initial empty content - the tab system will override this with saved content if needed
@@ -189,57 +128,13 @@ define([
                     return;
                 }
 
-                // Add event listeners
+                // Add event listeners (autocomplete disabled for v1.2.0)
                 codeEditor.on('change', function(cm, change) {
                     updateCursorPosition();
                     fileInfoRefresh();
 
-                    // Auto-trigger completion for certain characters
-                    if (change.text && change.text.length === 1) {
-                        var text = change.text[0];
-                        var cursor = cm.getCursor();
-                        var line = cm.getLine(cursor.line);
-                        var beforeCursor = line.substring(0, cursor.ch);
-
-                        // Trigger auto-complete after typing certain characters or patterns
-                        if (text === ' ' && /\\b(SELECT|FROM|WHERE|ORDER BY|GROUP BY|JOIN)$/i.test(beforeCursor.trim())) {
-                            setTimeout(function() {
-                                if (cm.showHint) {
-                                    cm.showHint({
-                                        hint: function(cm) {
-                                            if (CodeMirror.hint && CodeMirror.hint.sql) {
-                                                return CodeMirror.hint.sql(cm);
-                                            } else {
-                                                return CodeMirror.helpers.hint.sql(cm);
-                                            }
-                                        },
-                                        completeSingle: false,
-                                        closeOnUnfocus: true
-                                    });
-                                }
-                            }, 100);
-                        } else if (text.match(/[a-zA-Z]/) && beforeCursor.length >= 2) {
-                            // Auto-trigger after typing 2+ characters
-                            var lastWord = beforeCursor.match(/\\b\\w{2,}$/);
-                            if (lastWord) {
-                                setTimeout(function() {
-                                    if (cm.showHint) {
-                                        cm.showHint({
-                                            hint: function(cm) {
-                                                if (CodeMirror.hint && CodeMirror.hint.sql) {
-                                                    return CodeMirror.hint.sql(cm);
-                                                } else {
-                                                    return CodeMirror.helpers.hint.sql(cm);
-                                                }
-                                            },
-                                            completeSingle: false,
-                                            closeOnUnfocus: true
-                                        });
-                                    }
-                                }, 300);
-                            }
-                        }
-                    }
+                    // Auto-completion disabled until v1.3.0
+                    // Will be enhanced with proper table/field references
                 });
 
                 codeEditor.on('cursorActivity', function(cm) {

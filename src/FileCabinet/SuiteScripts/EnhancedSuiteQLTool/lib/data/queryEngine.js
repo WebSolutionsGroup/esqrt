@@ -96,8 +96,27 @@ define([
 
                     // Save query to history if enabled (skip CREATE statements)
                     if (constants.CONFIG.QUERY_HISTORY_ENABLED && !responsePayload.isCreateStatement) {
-                        var recordCount = Array.isArray(syntheticResult.result) ? syntheticResult.result.length : 1;
-                        queryHistoryRecord.saveQueryHistory(nestedSQL, recordCount, elapsedTime);
+                        try {
+                            var recordCount = Array.isArray(syntheticResult.result) ? syntheticResult.result.length : 1;
+                            var historyData = {
+                                queryContent: nestedSQL,
+                                executionTime: elapsedTime,
+                                recordCount: recordCount,
+                                success: true,
+                                resultFormat: 'table',
+                                sessionId: null
+                            };
+                            nsModules.logger.debug('Attempting to save synthetic query history', historyData);
+                            var historyRecordId = queryHistoryRecord.addQueryToHistory(historyData);
+                            nsModules.logger.debug('Synthetic query history saved successfully', { recordId: historyRecordId });
+                        } catch(historyErr) {
+                            nsModules.logger.error('Synthetic Query History Save failed', {
+                                error: historyErr.toString(),
+                                message: historyErr.message,
+                                name: historyErr.name,
+                                historyData: historyData
+                            });
+                        }
                     }
 
                     context.response.write(JSON.stringify(responsePayload, null, 2));

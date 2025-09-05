@@ -22,12 +22,23 @@ function apply_discount(context) {
     var show_output = params.show_output === true; // Boolean to control output display
     var valid_types = ['SalesOrd', 'CustInvc', 'Estimate']; // Use proper case to match input
 
+    // Map transaction types to NetSuite record types for record.submitFields()
+    var recordTypeMap = {
+        'SalesOrd': record.Type.SALES_ORDER,
+        'CustInvc': record.Type.INVOICE,
+        'Estimate': record.Type.ESTIMATE
+    };
+
     // Use console.log for real-time output (will be captured if show_output=true)
     if (show_output) {
         console.log('Starting discount application process...');
         console.log('Transaction Type: ' + transaction_type);
         console.log('Threshold Amount: $' + threshold_amount);
         console.log('Update Records: ' + (update_records ? 'Yes' : 'No (Dry Run)'));
+        if (update_records) {
+            console.log('Custom Field: custbody_discount_applied');
+            console.log('Record Type Mapping: ' + transaction_type + ' -> ' + (recordTypeMap[transaction_type] || 'UNKNOWN'));
+        }
     }
 
     // Initialize output
@@ -61,22 +72,22 @@ function apply_discount(context) {
     }
 
     try {
-        // Build SuiteQL query
+        // Build SuiteQL query - use string interpolation to avoid parameter binding issues
         var suiteQL = `
             SELECT id, tranid, foreignTotal
             FROM transaction
-            WHERE type = ?
-            AND foreignTotal > ?
+            WHERE type = '` + transaction_type + `'
+            AND foreignTotal > ` + threshold_amount + `
             AND tranid = 'SO347'
         `;
 
         if (show_output) {
             console.log('Executing query to find transactions...');
+            console.log('DEBUG - Final query: ' + suiteQL);
         }
 
         var results = query.runSuiteQLPaged({
             query: suiteQL,
-            params: [transaction_type, threshold_amount],
             pageSize: 100
         }).iterator();
 
@@ -91,26 +102,72 @@ function apply_discount(context) {
             pageData.forEach(function(row) {
                 try {
                     var tranId = row.id;
-                    var tranTotal = parseFloat(row.total);
+                    var tranIdDisplay = row.tranid;
+
+                    // Handle currency data type - NetSuite returns lowercase field names
+                    var tranTotal = 0;
+                    var foreignTotalValue = row.foreigntotal; // Note: lowercase!
+
+                    if (foreignTotalValue !== null && foreignTotalValue !== undefined) {
+                        if (typeof foreignTotalValue === 'number') {
+                            tranTotal = foreignTotalValue;
+                        } else if (typeof foreignTotalValue === 'string') {
+                            // Remove currency symbols and parse
+                            tranTotal = parseFloat(foreignTotalValue.replace(/[$,]/g, ''));
+                        } else if (typeof foreignTotalValue === 'object' && foreignTotalValue.value) {
+                            // NetSuite currency object format
+                            tranTotal = parseFloat(foreignTotalValue.value);
+                        }
+                    }
+
+                    if (show_output) {
+                        console.log('DEBUG - foreigntotal value: ' + foreignTotalValue + ' -> parsed: ' + tranTotal);
+                    }
+
+                    // Check if we got a valid number
+                    if (isNaN(tranTotal) || tranTotal <= 0) {
+                        if (show_output) {
+                            console.log('Skipping transaction ' + tranIdDisplay + ' - invalid amount: ' + JSON.stringify(foreignTotalValue));
+                        }
+                        return; // Skip this transaction
+                    }
+
                     var discount = tranTotal * 0.1; // 10% discount
 
                     if (show_output) {
-                        console.log('Processing Transaction ID: ' + tranId + ', Amount: $' + tranTotal + ', Discount: $' + discount.toFixed(2));
+                        console.log('Processing Transaction ' + tranIdDisplay + ' (ID: ' + tranId + '), Amount: $' + tranTotal.toFixed(2) + ', Discount: $' + discount.toFixed(2));
                     }
 
                     // Update record if requested (e.g., set custom field)
                     if (update_records) {
-                        record.submitFields({
-                            type: transaction_type,
-                            id: tranId,
-                            values: {
-                                custbody_discount_applied: discount
-                            },
-                            options: { ignoreMandatoryFields: true }
-                        });
+                        try {
+                            // Get the correct NetSuite record type
+                            var nsRecordType = recordTypeMap[transaction_type];
+                            if (!nsRecordType) {
+                                throw new Error('Unsupported transaction type for record update: ' + transaction_type);
+                            }
 
-                        if (show_output) {
-                            console.log('Updated record for Transaction ID: ' + tranId);
+                            record.submitFields({
+                                type: nsRecordType,
+                                id: tranId,
+                                values: {
+                                    custbody_discount_applied: discount
+                                },
+                                options: {
+                                    ignoreMandatoryFields: true,
+                                    disableTriggers: false // Allow workflows/triggers to run
+                                }
+                            });
+
+                            if (show_output) {
+                                console.log('Updated record for Transaction ' + tranIdDisplay + ' (ID: ' + tranId + ') with discount: $' + discount.toFixed(2));
+                            }
+                        } catch (updateError) {
+                            var errorMsg = 'Failed to update Transaction ' + tranIdDisplay + ': ' + updateError.message;
+                            output.errors.push(errorMsg);
+                            if (show_output) {
+                                console.error(errorMsg);
+                            }
                         }
                     }
 

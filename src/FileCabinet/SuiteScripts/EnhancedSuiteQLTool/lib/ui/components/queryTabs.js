@@ -736,8 +736,6 @@ define([
                 if (tab) {
                     tab.isDirty = false;
                     tab.savedQueryId = queryData.id; // Reference to NetSuite record
-
-
                 }
 
                 renderQueryTabs();

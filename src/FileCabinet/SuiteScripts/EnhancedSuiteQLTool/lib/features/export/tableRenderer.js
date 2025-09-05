@@ -66,7 +66,7 @@ define([
                         // For sortable columns, use the current cell index that matches table body
                         const sortColumnIndex = cellIndex;
                         // console.log('Creating header for', headers[i], 'with sort index', sortColumnIndex, 'at cell index', cellIndex);
-                        thead += '<th class="sortable-header" onclick="console.log(\\'Clicked header: ' + headers[i] + ' (index ' + sortColumnIndex + ')\\'); window.sortTable(' + sortColumnIndex + ')" style="cursor: pointer; user-select: none;" title="Click to sort">';
+                        thead += '<th class="sortable-header" onclick="window.sortTable(' + sortColumnIndex + ')" style="cursor: pointer; user-select: none;" title="Click to sort">';
                         thead += headers[i] + ' <span class="sort-indicator" id="sort-indicator-' + sortColumnIndex + '">⇅</span>';
                         thead += '</th>';
                         cellIndex++; // Increment for each data column
@@ -99,36 +99,33 @@ define([
                 // Update the header with results info
                 updateQueryResultsHeader(records.length, queryResponsePayload.totalRecordCount, queryResponsePayload.elapsedTime);
 
-                // Create table with fixed header and scrollable body
-                let content = '<div class="codeoss-table-wrapper" style="display: flex; flex-direction: column; height: calc(100% - 5px); flex: 1;">';
-
-                // Fixed header table
-                content += '<div class="codeoss-table-header" style="flex-shrink: 0; overflow: hidden; border-bottom: 2px solid var(--codeoss-border);">';
-                content += '<table class="` + constants.CSS_CLASSES.CODEOSS_TABLE + `" style="margin-bottom: 0;">';
+                // Create single table with sticky header
+                let content = '<div class="codeoss-table-wrapper" style="height: calc(100% - 5px);">';
+                content += '<table class="` + constants.CSS_CLASSES.CODEOSS_TABLE + `" id="resultsTable">';
                 content += thead;
-                content += '</table>';
-                content += '</div>';
-
-                // Scrollable body
-                content += '<div class="codeoss-table-body" style="flex: 1; overflow: auto; margin-bottom: 5px;">';
-                content += '<table class="` + constants.CSS_CLASSES.CODEOSS_TABLE + `" id="resultsTable" style="margin-top: 0;">';
                 content += tbody;
                 content += '</table>';
-                content += '</div>';
-
                 content += '</div>';
 
                 // Add hidden textarea for copying (like original)
                 content += '<textarea id="responseData" style="position: absolute; left: -9999px; opacity: 0;"></textarea>';
 
+                console.log('DEBUG: Setting table HTML with single table structure');
+                console.log('DEBUG: Table class:', '` + constants.CSS_CLASSES.CODEOSS_TABLE + `');
                 document.getElementById('` + constants.ELEMENT_IDS.RESULTS_DIV + `').innerHTML = content;
+
+                // Verify the table structure was applied
+                setTimeout(() => {
+                    const table = document.getElementById('resultsTable');
+                    const headers = table ? table.querySelectorAll('th') : [];
+                    console.log('DEBUG: Table found:', !!table);
+                    console.log('DEBUG: Headers found:', headers.length);
+                    console.log('DEBUG: First header position style:', headers[0] ? getComputedStyle(headers[0]).position : 'none');
+                }, 100);
                 document.getElementById('` + constants.ELEMENT_IDS.WELCOME_MESSAGE + `').style.display = 'none';
                 document.getElementById('` + constants.ELEMENT_IDS.STATUS_TEXT + `').textContent = 'Query completed - ' + records.length + ' rows';
 
-                // Synchronize column widths between header and body tables
-                setTimeout(function() {
-                    synchronizeTableColumnWidths();
-                }, 10);
+                // No synchronization needed with single table approach
 
                 // Define sorting functions directly after table creation
                 window.currentSortColumn = -1;
@@ -182,15 +179,30 @@ define([
                         if (aVal === 'null') aVal = '';
                         if (bVal === 'null') bVal = '';
 
-                        // Try numeric comparison first
-                        const aNum = parseFloat(aVal);
-                        const bNum = parseFloat(bVal);
-
                         let comparison = 0;
-                        if (!isNaN(aNum) && !isNaN(bNum)) {
-                            comparison = aNum - bNum;
-                        } else {
-                            comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+
+                        // Try to parse as dates first (common formats: MM/DD/YYYY, M/D/YYYY, YYYY-MM-DD, etc.)
+                        const dateRegex = /^(\\d{1,2}\\/\\d{1,2}\\/\\d{4}|\\d{4}-\\d{1,2}-\\d{1,2}|\\d{1,2}-\\d{1,2}-\\d{4})$/;
+                        if (dateRegex.test(aVal) && dateRegex.test(bVal)) {
+                            const aDate = new Date(aVal);
+                            const bDate = new Date(bVal);
+                            if (!isNaN(aDate.getTime()) && !isNaN(bDate.getTime())) {
+                                comparison = aDate.getTime() - bDate.getTime();
+                            } else {
+                                // Fallback to string comparison if date parsing fails
+                                comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+                            }
+                        }
+                        // Try numeric comparison
+                        else {
+                            const aNum = parseFloat(aVal);
+                            const bNum = parseFloat(bVal);
+
+                            if (!isNaN(aNum) && !isNaN(bNum)) {
+                                comparison = aNum - bNum;
+                            } else {
+                                comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+                            }
                         }
 
                         return window.currentSortDirection === 'asc' ? comparison : -comparison;
@@ -294,17 +306,32 @@ define([
                     if (aVal === 'null') aVal = '';
                     if (bVal === 'null') bVal = '';
 
-                    // Try to parse as numbers for numeric sorting
-                    const aNum = parseFloat(aVal);
-                    const bNum = parseFloat(bVal);
-
                     let comparison = 0;
-                    if (!isNaN(aNum) && !isNaN(bNum)) {
-                        // Numeric comparison
-                        comparison = aNum - bNum;
-                    } else {
-                        // String comparison (case insensitive)
-                        comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+
+                    // Try to parse as dates first (common formats: MM/DD/YYYY, M/D/YYYY, YYYY-MM-DD, etc.)
+                    const dateRegex = /^(\\d{1,2}\\/\\d{1,2}\\/\\d{4}|\\d{4}-\\d{1,2}-\\d{1,2}|\\d{1,2}-\\d{1,2}-\\d{4})$/;
+                    if (dateRegex.test(aVal) && dateRegex.test(bVal)) {
+                        const aDate = new Date(aVal);
+                        const bDate = new Date(bVal);
+                        if (!isNaN(aDate.getTime()) && !isNaN(bDate.getTime())) {
+                            comparison = aDate.getTime() - bDate.getTime();
+                        } else {
+                            // Fallback to string comparison if date parsing fails
+                            comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+                        }
+                    }
+                    // Try to parse as numbers for numeric sorting
+                    else {
+                        const aNum = parseFloat(aVal);
+                        const bNum = parseFloat(bVal);
+
+                        if (!isNaN(aNum) && !isNaN(bNum)) {
+                            // Numeric comparison
+                            comparison = aNum - bNum;
+                        } else {
+                            // String comparison (case insensitive)
+                            comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+                        }
                     }
 
                     return currentSortDirection === 'asc' ? comparison : -comparison;
@@ -561,51 +588,14 @@ define([
     }
 
     /**
-     * Generate the column width synchronization JavaScript
+     * Generate simplified table JavaScript (no synchronization needed)
      *
-     * @returns {string} JavaScript code for synchronizing column widths
+     * @returns {string} JavaScript code for single table approach
      */
     function getColumnSyncJS() {
         return `
-            // Function to synchronize column widths between header and body tables
-            function synchronizeTableColumnWidths() {
-                const headerTable = document.querySelector('.codeoss-table-header table');
-                const bodyTable = document.querySelector('.codeoss-table-body table');
-
-                if (!headerTable || !bodyTable) return;
-
-                const headerCells = headerTable.querySelectorAll('th');
-                const bodyRows = bodyTable.querySelectorAll('tr');
-
-                if (bodyRows.length === 0) return;
-
-                const firstBodyRow = bodyRows[0];
-                const bodyCells = firstBodyRow.querySelectorAll('td');
-
-                // Calculate and apply column widths
-                for (let i = 0; i < Math.min(headerCells.length, bodyCells.length); i++) {
-                    const bodyCell = bodyCells[i];
-                    const headerCell = headerCells[i];
-
-                    // Get the natural width of the body cell
-                    const cellWidth = bodyCell.offsetWidth;
-
-                    // Apply the width to both header and body columns
-                    headerCell.style.width = cellWidth + 'px';
-                    headerCell.style.minWidth = cellWidth + 'px';
-                    headerCell.style.maxWidth = cellWidth + 'px';
-
-                    // Apply to all body cells in this column
-                    bodyRows.forEach(row => {
-                        const cell = row.querySelectorAll('td')[i];
-                        if (cell) {
-                            cell.style.width = cellWidth + 'px';
-                            cell.style.minWidth = cellWidth + 'px';
-                            cell.style.maxWidth = cellWidth + 'px';
-                        }
-                    });
-                }
-            }
+            // Single table approach - no synchronization needed
+            // Sticky headers handle alignment automatically
         `;
     }
 

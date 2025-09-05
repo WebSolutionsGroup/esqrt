@@ -84,7 +84,12 @@ define([], function() {
             'ASC', 'DESC', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END',
             'AS', 'ON', 'USING', 'WITH', 'RECURSIVE', 'OFFSET', 'FETCH',
             'BUILTIN.DF', 'TO_CHAR', 'TO_DATE', 'SUBSTR', 'LENGTH', 'UPPER', 'LOWER',
-            'COALESCE', 'NULLIF', 'CAST', 'CONVERT'
+            'COALESCE', 'NULLIF', 'CAST', 'CONVERT',
+            // Stored procedure and function keywords
+            'FUNCTION', 'PROCEDURE', 'REPLACE', 'CALL', 'RETURNS', 'RETURN',
+            'BEGIN', 'END', 'DECLARE', 'SET', 'IF', 'WHILE', 'FOR', 'LOOP',
+            // Boolean and null values
+            'TRUE', 'FALSE', 'NULL'
         ],
         
         // Common NetSuite tables for auto-completion
