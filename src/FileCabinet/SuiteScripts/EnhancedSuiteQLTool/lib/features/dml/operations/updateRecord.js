@@ -15,10 +15,11 @@
 
 define([
     'N/log',
-    'N/error', 
+    'N/error',
     'N/record',
-    'N/search'
-], function(log, error, record, search) {
+    'N/search',
+    '../dmlUtils'
+], function(log, error, record, search, dmlUtils) {
     'use strict';
 
     /**
@@ -35,7 +36,7 @@ define([
 
         try {
             // Determine record type and operation
-            var recordType = determineRecordType(parsedStatement.tableName);
+            var recordType = dmlUtils.determineRecordType(parsedStatement.tableName);
             var result;
 
             if (recordType.isCustomList) {
@@ -82,65 +83,7 @@ define([
         }
     }
 
-    /**
-     * Determine NetSuite record type from table name
-     * 
-     * @param {string} tableName - Table name from SQL statement
-     * @returns {Object} Record type information
-     */
-    function determineRecordType(tableName) {
-        // Custom record types
-        if (tableName.startsWith('customrecord_')) {
-            return {
-                type: tableName,
-                isCustomRecord: true,
-                isCustomList: false
-            };
-        }
 
-        // Custom lists
-        if (tableName.startsWith('customlist_')) {
-            return {
-                type: tableName,
-                isCustomRecord: false,
-                isCustomList: true
-            };
-        }
-
-        // Standard NetSuite records - map common table names to record types
-        var standardRecordMap = {
-            'customer': record.Type.CUSTOMER,
-            'vendor': record.Type.VENDOR,
-            'employee': record.Type.EMPLOYEE,
-            'item': record.Type.INVENTORY_ITEM,
-            'salesorder': record.Type.SALES_ORDER,
-            'purchaseorder': record.Type.PURCHASE_ORDER,
-            'invoice': record.Type.INVOICE,
-            'bill': record.Type.VENDOR_BILL,
-            'contact': record.Type.CONTACT,
-            'lead': record.Type.LEAD,
-            'opportunity': record.Type.OPPORTUNITY,
-            'task': record.Type.TASK,
-            'event': record.Type.CALENDAR_EVENT,
-            'case': record.Type.SUPPORT_CASE
-        };
-
-        var recordType = standardRecordMap[tableName.toLowerCase()];
-        if (recordType) {
-            return {
-                type: recordType,
-                isCustomRecord: false,
-                isCustomList: false
-            };
-        }
-
-        // Default to treating as custom record if not found
-        return {
-            type: 'customrecord_' + tableName,
-            isCustomRecord: true,
-            isCustomList: false
-        };
-    }
 
     /**
      * Update records based on WHERE condition
@@ -238,10 +181,18 @@ define([
             }
         }
         
-        // For complex conditions, we'd need more sophisticated parsing
+        // Handle RAW conditions (fallback from parser)
+        if (whereCondition.type === 'RAW') {
+            throw error.create({
+                name: 'UNSUPPORTED_WHERE_CONDITION',
+                message: 'Complex WHERE condition not supported: "' + whereCondition.condition + '". Use simple field=value or field IN (values) conditions.'
+            });
+        }
+
+        // For other complex conditions, we'd need more sophisticated parsing
         throw error.create({
             name: 'UNSUPPORTED_WHERE_CONDITION',
-            message: 'Complex WHERE conditions are not yet supported. Use simple field=value or field IN (values) conditions.'
+            message: 'WHERE condition type "' + whereCondition.type + '" is not supported. Use simple field=value or field IN (values) conditions.'
         });
     }
 
@@ -308,9 +259,20 @@ define([
         // Use submitFields for efficiency when possible
         var fieldIds = Object.keys(setFields);
         var values = {};
-        
+
         for (var i = 0; i < fieldIds.length; i++) {
-            values[fieldIds[i]] = setFields[fieldIds[i]];
+            var fieldId = fieldIds[i];
+
+            // Validate field before attempting to set it
+            if (!dmlUtils.validateField(recordType, fieldId)) {
+                log.warn({
+                    title: 'Invalid field detected',
+                    details: 'Field: ' + fieldId + ', Record Type: ' + recordType
+                });
+                // Continue anyway - NetSuite will provide the definitive validation
+            }
+
+            values[fieldId] = setFields[fieldId];
         }
 
         record.submitFields({

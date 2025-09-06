@@ -15,9 +15,10 @@
 
 define([
     'N/log',
-    'N/error', 
-    'N/record'
-], function(log, error, record) {
+    'N/error',
+    'N/record',
+    '../dmlUtils'
+], function(log, error, record, dmlUtils) {
     'use strict';
 
     /**
@@ -34,7 +35,7 @@ define([
 
         try {
             // Determine record type and operation
-            var recordType = determineRecordType(parsedStatement.tableName);
+            var recordType = dmlUtils.determineRecordType(parsedStatement.tableName);
             var result;
 
             if (recordType.isCustomList) {
@@ -81,65 +82,7 @@ define([
         }
     }
 
-    /**
-     * Determine NetSuite record type from table name
-     * 
-     * @param {string} tableName - Table name from SQL statement
-     * @returns {Object} Record type information
-     */
-    function determineRecordType(tableName) {
-        // Custom record types
-        if (tableName.startsWith('customrecord_')) {
-            return {
-                type: tableName,
-                isCustomRecord: true,
-                isCustomList: false
-            };
-        }
 
-        // Custom lists
-        if (tableName.startsWith('customlist_')) {
-            return {
-                type: tableName,
-                isCustomRecord: false,
-                isCustomList: true
-            };
-        }
-
-        // Standard NetSuite records - map common table names to record types
-        var standardRecordMap = {
-            'customer': record.Type.CUSTOMER,
-            'vendor': record.Type.VENDOR,
-            'employee': record.Type.EMPLOYEE,
-            'item': record.Type.INVENTORY_ITEM,
-            'salesorder': record.Type.SALES_ORDER,
-            'purchaseorder': record.Type.PURCHASE_ORDER,
-            'invoice': record.Type.INVOICE,
-            'bill': record.Type.VENDOR_BILL,
-            'contact': record.Type.CONTACT,
-            'lead': record.Type.LEAD,
-            'opportunity': record.Type.OPPORTUNITY,
-            'task': record.Type.TASK,
-            'event': record.Type.CALENDAR_EVENT,
-            'case': record.Type.SUPPORT_CASE
-        };
-
-        var recordType = standardRecordMap[tableName.toLowerCase()];
-        if (recordType) {
-            return {
-                type: recordType,
-                isCustomRecord: false,
-                isCustomList: false
-            };
-        }
-
-        // Default to treating as custom record if not found
-        return {
-            type: 'customrecord_' + tableName,
-            isCustomRecord: true,
-            isCustomList: false
-        };
-    }
 
     /**
      * Insert new record instance
@@ -163,13 +106,22 @@ define([
         // Set field values
         for (var fieldId in parsedStatement.fields) {
             var value = parsedStatement.fields[fieldId];
-            
+
+            // Validate field before attempting to set it
+            if (!dmlUtils.validateField(recordType.type, fieldId)) {
+                log.warn({
+                    title: 'Invalid field detected',
+                    details: 'Field: ' + fieldId + ', Record Type: ' + recordType.type
+                });
+                // Continue anyway - NetSuite will provide the definitive validation
+            }
+
             try {
                 newRecord.setValue({
                     fieldId: fieldId,
                     value: value
                 });
-                
+
                 log.debug({
                     title: 'Field set',
                     details: 'Field: ' + fieldId + ', Value: ' + value
@@ -198,7 +150,7 @@ define([
 
     /**
      * Insert values into custom list
-     * 
+     *
      * @param {Object} parsedStatement - Parsed INSERT statement
      * @param {Object} recordType - Record type information
      * @returns {Object} Insert result
@@ -209,10 +161,19 @@ define([
             details: 'List: ' + recordType.type + ', Values: ' + JSON.stringify(parsedStatement.fields)
         });
 
+        // Find the custom list internal ID by script ID
+        var listInternalId = dmlUtils.findCustomListInternalId(recordType.type);
+        if (!listInternalId) {
+            throw error.create({
+                name: 'CUSTOM_LIST_NOT_FOUND',
+                message: 'Custom list not found: ' + recordType.type
+            });
+        }
+
         // Load the custom list
         var customList = record.load({
             type: record.Type.CUSTOM_LIST,
-            id: recordType.type
+            id: listInternalId
         });
 
         // Add new values to the list
@@ -256,6 +217,8 @@ define([
             valuesAdded: valuesAdded
         };
     }
+
+
 
     // Public API
     return {

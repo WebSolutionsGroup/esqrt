@@ -8,7 +8,7 @@
  * @version 1.0.0
  */
 
-define(['N/record', 'N/error', 'N/log'], function(record, error, log) {
+define(['N/record', 'N/error', 'N/log', 'N/search'], function(record, error, log, search) {
     'use strict';
 
     // Supported languages for translations
@@ -211,10 +211,10 @@ define(['N/record', 'N/error', 'N/log'], function(record, error, log) {
             }
 
             try {
-                // Set translation value
+                // Set translation value - NetSuite uses language code as field ID
                 customList.setSublistValue({
                     sublistId: 'customvalue',
-                    fieldId: 'translation_' + translation.language,
+                    fieldId: translation.language,
                     line: lineIndex,
                     value: translation.value
                 });
