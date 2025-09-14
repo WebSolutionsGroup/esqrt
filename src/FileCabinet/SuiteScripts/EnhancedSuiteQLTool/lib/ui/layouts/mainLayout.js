@@ -132,7 +132,7 @@ define([
                             <div class="codeoss-results-main" style="display: flex; height: 100%;">
                                 <!-- Results Content Area -->
                                 <div class="codeoss-results-content" id="resultsContentArea" style="flex: 1; transition: flex 0.3s ease;">
-                                    <div id="${constants.ELEMENT_IDS.RESULTS_DIV}" style="display: none;"></div>
+                                    <div id="${constants.ELEMENT_IDS.RESULTS_DIV}" style="display: none; flex: 1; flex-direction: column; height: 100%;"></div>
                                     <div id="${constants.ELEMENT_IDS.WELCOME_MESSAGE}" style="padding: 20px; color: var(--codeoss-text-secondary); max-width: 800px; margin: 0 auto;">
                                         ${getWelcomeMessage()}
                                     </div>

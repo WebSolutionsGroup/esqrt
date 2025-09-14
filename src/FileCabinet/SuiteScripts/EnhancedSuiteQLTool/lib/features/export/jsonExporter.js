@@ -60,7 +60,7 @@ define([
                 \`;
 
                 document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').innerHTML = jsonDisplay;
-                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'block';
+                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'flex';
 
                 // Hide CSV export buttons, show copy button
                 document.getElementById('downloadCSVBtn').style.display = 'none';

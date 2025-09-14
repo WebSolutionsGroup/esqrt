@@ -66,7 +66,7 @@ define([
                         // For sortable columns, use the current cell index that matches table body
                         const sortColumnIndex = cellIndex;
                         // console.log('Creating header for', headers[i], 'with sort index', sortColumnIndex, 'at cell index', cellIndex);
-                        thead += '<th class="sortable-header" onclick="console.log(\\'Clicked header: ' + headers[i] + ' (index ' + sortColumnIndex + ')\\'); window.sortTable(' + sortColumnIndex + ')" style="cursor: pointer; user-select: none;" title="Click to sort">';
+                        thead += '<th class="sortable-header" onclick="window.sortTable(' + sortColumnIndex + ')" style="cursor: pointer; user-select: none;" title="Click to sort">';
                         thead += headers[i] + ' <span class="sort-indicator" id="sort-indicator-' + sortColumnIndex + '">⇅</span>';
                         thead += '</th>';
                         cellIndex++; // Increment for each data column
@@ -99,8 +99,8 @@ define([
                 // Update the header with results info
                 updateQueryResultsHeader(records.length, queryResponsePayload.totalRecordCount, queryResponsePayload.elapsedTime);
 
-                // Create simple table content (exactly like original)
-                let content = '<div style="overflow: auto; max-height: 400px;">';
+                // Create single table with sticky header
+                let content = '<div class="codeoss-table-wrapper" style="height: calc(100% - 5px);">';
                 content += '<table class="` + constants.CSS_CLASSES.CODEOSS_TABLE + `" id="resultsTable">';
                 content += thead;
                 content += tbody;
@@ -113,6 +113,8 @@ define([
                 document.getElementById('` + constants.ELEMENT_IDS.RESULTS_DIV + `').innerHTML = content;
                 document.getElementById('` + constants.ELEMENT_IDS.WELCOME_MESSAGE + `').style.display = 'none';
                 document.getElementById('` + constants.ELEMENT_IDS.STATUS_TEXT + `').textContent = 'Query completed - ' + records.length + ' rows';
+
+                // No synchronization needed with single table approach
 
                 // Define sorting functions directly after table creation
                 window.currentSortColumn = -1;
@@ -166,15 +168,30 @@ define([
                         if (aVal === 'null') aVal = '';
                         if (bVal === 'null') bVal = '';
 
-                        // Try numeric comparison first
-                        const aNum = parseFloat(aVal);
-                        const bNum = parseFloat(bVal);
-
                         let comparison = 0;
-                        if (!isNaN(aNum) && !isNaN(bNum)) {
-                            comparison = aNum - bNum;
-                        } else {
-                            comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+
+                        // Try to parse as dates first (common formats: MM/DD/YYYY, M/D/YYYY, YYYY-MM-DD, etc.)
+                        const dateRegex = /^(\\d{1,2}\\/\\d{1,2}\\/\\d{4}|\\d{4}-\\d{1,2}-\\d{1,2}|\\d{1,2}-\\d{1,2}-\\d{4})$/;
+                        if (dateRegex.test(aVal) && dateRegex.test(bVal)) {
+                            const aDate = new Date(aVal);
+                            const bDate = new Date(bVal);
+                            if (!isNaN(aDate.getTime()) && !isNaN(bDate.getTime())) {
+                                comparison = aDate.getTime() - bDate.getTime();
+                            } else {
+                                // Fallback to string comparison if date parsing fails
+                                comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+                            }
+                        }
+                        // Try numeric comparison
+                        else {
+                            const aNum = parseFloat(aVal);
+                            const bNum = parseFloat(bVal);
+
+                            if (!isNaN(aNum) && !isNaN(bNum)) {
+                                comparison = aNum - bNum;
+                            } else {
+                                comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+                            }
                         }
 
                         return window.currentSortDirection === 'asc' ? comparison : -comparison;
@@ -278,17 +295,32 @@ define([
                     if (aVal === 'null') aVal = '';
                     if (bVal === 'null') bVal = '';
 
-                    // Try to parse as numbers for numeric sorting
-                    const aNum = parseFloat(aVal);
-                    const bNum = parseFloat(bVal);
-
                     let comparison = 0;
-                    if (!isNaN(aNum) && !isNaN(bNum)) {
-                        // Numeric comparison
-                        comparison = aNum - bNum;
-                    } else {
-                        // String comparison (case insensitive)
-                        comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+
+                    // Try to parse as dates first (common formats: MM/DD/YYYY, M/D/YYYY, YYYY-MM-DD, etc.)
+                    const dateRegex = /^(\\d{1,2}\\/\\d{1,2}\\/\\d{4}|\\d{4}-\\d{1,2}-\\d{1,2}|\\d{1,2}-\\d{1,2}-\\d{4})$/;
+                    if (dateRegex.test(aVal) && dateRegex.test(bVal)) {
+                        const aDate = new Date(aVal);
+                        const bDate = new Date(bVal);
+                        if (!isNaN(aDate.getTime()) && !isNaN(bDate.getTime())) {
+                            comparison = aDate.getTime() - bDate.getTime();
+                        } else {
+                            // Fallback to string comparison if date parsing fails
+                            comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+                        }
+                    }
+                    // Try to parse as numbers for numeric sorting
+                    else {
+                        const aNum = parseFloat(aVal);
+                        const bNum = parseFloat(bVal);
+
+                        if (!isNaN(aNum) && !isNaN(bNum)) {
+                            // Numeric comparison
+                            comparison = aNum - bNum;
+                        } else {
+                            // String comparison (case insensitive)
+                            comparison = aVal.toLowerCase().localeCompare(bVal.toLowerCase());
+                        }
                     }
 
                     return currentSortDirection === 'asc' ? comparison : -comparison;
@@ -370,7 +402,7 @@ define([
                         pageLength: ` + constants.CONFIG.ROWS_RETURNED_DEFAULT + `,
                         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                         scrollX: true,
-                        scrollY: '400px',
+                        scrollY: 'calc(100vh - 305px)', // Dynamic height with 5px bottom spacing
                         scrollCollapse: true,
                         responsive: true,
                         order: [],
@@ -393,7 +425,7 @@ define([
                         dom: '<"top"lf>rt<"bottom"ip><"clear">'
                     });
                 } catch (e) {
-                    console.warn('DataTables initialization failed:', e);
+                    // Silently handle DataTables initialization errors
                 }
             }
         `;
@@ -540,9 +572,22 @@ define([
                getTableSortingJS() + '\n' +
                getDataTablesInitJS() + '\n' +
                getTableExportJS() + '\n' +
-               getTableFilteringJS();
+               getTableFilteringJS() + '\n' +
+               getColumnSyncJS();
     }
-    
+
+    /**
+     * Generate simplified table JavaScript (no synchronization needed)
+     *
+     * @returns {string} JavaScript code for single table approach
+     */
+    function getColumnSyncJS() {
+        return `
+            // Single table approach - no synchronization needed
+            // Sticky headers handle alignment automatically
+        `;
+    }
+
     /**
      * Export the table rendering functions
      */
@@ -552,6 +597,7 @@ define([
         getDataTablesInitJS: getDataTablesInitJS,
         getTableExportJS: getTableExportJS,
         getTableFilteringJS: getTableFilteringJS,
+        getColumnSyncJS: getColumnSyncJS,
         getAllTableRenderingJS: getAllTableRenderingJS
     };
     

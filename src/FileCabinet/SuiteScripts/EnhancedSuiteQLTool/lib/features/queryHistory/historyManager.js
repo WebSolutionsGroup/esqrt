@@ -84,13 +84,13 @@ define([
                 }).then(response => response.json())
                   .then(data => {
                       if (data.success) {
-                          console.log('History saved to NetSuite:', data);
+                          // History saved successfully
                       } else {
-                          console.warn('Failed to save to NetSuite history:', data.error);
+                          // Failed to save to NetSuite history
                       }
                   })
                   .catch(error => {
-                      console.warn('Failed to save to NetSuite history:', error);
+                      // Failed to save to NetSuite history
                   });
             }
         `;
@@ -293,16 +293,14 @@ define([
                     }).then(response => response.json())
                       .then(data => {
                           if (data.success) {
-                              console.log('Query history cleared from NetSuite:', data.deletedCount, 'records deleted');
+                              // History cleared successfully
                           } else {
-                              console.warn('Failed to clear NetSuite history:', data.error);
                               alert('Failed to clear NetSuite history: ' + data.error);
                               // Reload history from NetSuite to restore UI state
                               loadQueryHistoryFromNetSuite();
                           }
                       })
                       .catch(error => {
-                          console.warn('Failed to clear NetSuite history:', error);
                           alert('Failed to clear NetSuite history due to network error.');
                           // Reload history from NetSuite to restore UI state
                           loadQueryHistoryFromNetSuite();

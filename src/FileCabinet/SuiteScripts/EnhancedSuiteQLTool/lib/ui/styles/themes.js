@@ -40,10 +40,10 @@ define([
             <link rel="stylesheet" href="${constants.CONFIG.CDN.CODEMIRROR_HINT_CSS}">
 
             <!-- CodeMirror JavaScript -->
-            <script src="${constants.CONFIG.CDN.CODEMIRROR_JS}" onload="/* console.log('CodeMirror JS loaded') */" onerror="console.error('Failed to load CodeMirror JS')"></script>
-            <script src="${constants.CONFIG.CDN.CODEMIRROR_SQL}" onload="/* console.log('CodeMirror SQL mode loaded') */" onerror="console.error('Failed to load CodeMirror SQL mode')"></script>
-            <script src="${constants.CONFIG.CDN.CODEMIRROR_HINT_JS}" onload="/* console.log('CodeMirror hint addon loaded') */" onerror="console.error('Failed to load CodeMirror hint addon')"></script>
-            <script src="${constants.CONFIG.CDN.CODEMIRROR_SQL_HINT}" onload="/* console.log('CodeMirror SQL hint loaded') */" onerror="console.error('Failed to load CodeMirror SQL hint')"></script>
+            <script src="${constants.CONFIG.CDN.CODEMIRROR_JS}"></script>
+            <script src="${constants.CONFIG.CDN.CODEMIRROR_SQL}"></script>
+            <script src="${constants.CONFIG.CDN.CODEMIRROR_HINT_JS}"></script>
+            <script src="${constants.CONFIG.CDN.CODEMIRROR_SQL_HINT}"></script>
             <script src="${constants.CONFIG.CDN.CODEMIRROR_ADDON_MARK_SELECTION}" onload="/* console.log('CodeMirror mark-selection addon loaded') */"></script>
 
             <!-- Bootstrap JS (after jQuery) -->
@@ -283,7 +283,13 @@ define([
                     opacity: 0.8;
                 }
 
-                /* Table styles for better sorting experience */
+                /* Single table with sticky header - updated for v1.2.0 */
+                .codeoss-table-wrapper {
+                    background-color: var(--codeoss-panel-bg);
+                    border: 1px solid var(--codeoss-border);
+                    border-radius: 4px;
+                }
+
                 .codeoss-table {
                     width: 100%;
                     border-collapse: collapse;
@@ -291,13 +297,18 @@ define([
                     font-size: 12px;
                 }
 
+                /* Sticky header */
                 .codeoss-table th {
-                    background-color: var(--codeoss-bg-secondary);
+                    position: sticky !important;
+                    top: 0 !important;
+                    background-color: var(--codeoss-bg-secondary) !important;
                     border: 1px solid var(--codeoss-border);
                     padding: 8px 12px;
                     text-align: left;
                     font-weight: 600;
                     color: var(--codeoss-text-primary);
+                    z-index: 10 !important;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
                 }
 
                 .codeoss-table td {

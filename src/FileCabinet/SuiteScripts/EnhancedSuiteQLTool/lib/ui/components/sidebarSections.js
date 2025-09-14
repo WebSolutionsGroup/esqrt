@@ -98,7 +98,7 @@ define([
                         Object.assign(sidebarSectionStates, savedStates);
                     }
                 } catch(e) {
-                    console.warn('Could not load sidebar states from localStorage:', e);
+                    // Silently handle localStorage errors
                 }
                 
                 // Apply saved states to UI

@@ -343,7 +343,7 @@ define([
                     if (resultsDiv && welcomeMessage && statusText && queryResultsHeader) {
                         // Restore results content
                         resultsDiv.innerHTML = tab.results.resultsHTML || '';
-                        resultsDiv.style.display = tab.results.hasResults ? 'block' : 'none';
+                        resultsDiv.style.display = tab.results.hasResults ? 'flex' : 'none';
                         welcomeMessage.style.display = tab.results.welcomeVisible ? 'block' : 'none';
                         statusText.textContent = tab.results.statusText || 'Ready';
                         queryResultsHeader.textContent = tab.results.queryResultsHeader || 'Query Results';
@@ -685,7 +685,7 @@ define([
                         }
                     }
                 } catch(e) {
-                    console.warn('Could not load tabs from localStorage:', e);
+                    // Silently handle localStorage errors
                     queryTabs = [];
                     activeTabId = null;
                 }
@@ -695,7 +695,7 @@ define([
                 try {
                     localStorage.removeItem('suiteql-query-tabs');
                 } catch(e) {
-                    console.warn('Could not clear tabs storage:', e);
+                    // Silently handle localStorage errors
                 }
             }
 
@@ -736,8 +736,6 @@ define([
                 if (tab) {
                     tab.isDirty = false;
                     tab.savedQueryId = queryData.id; // Reference to NetSuite record
-
-
                 }
 
                 renderQueryTabs();

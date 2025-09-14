@@ -18,8 +18,10 @@
 define([
     '../core/constants',
     '../core/modules',
-    '../netsuite/queryHistoryRecord'
-], function(constants, nsModules, queryHistoryRecord) {
+    '../netsuite/queryHistoryRecord',
+    '../features/synthetic/syntheticProcessor',
+    '../features/dml/dmlProcessor'
+], function(constants, nsModules, queryHistoryRecord, syntheticProcessor, dmlProcessor) {
     
     /**
      * Execute a SuiteQL query with all the enhanced features
@@ -29,6 +31,8 @@ define([
      * @returns {void} - Writes response to context
      */
     function queryExecute(context, requestPayload) {
+        var beginTime = new Date().getTime(); // Define beginTime at the top for all error handlers
+
         try {
             var responsePayload;
             var moreRecords = true;
@@ -38,24 +42,257 @@ define([
             var paginatedRowBegin = requestPayload.rowBegin;
             var paginatedRowEnd = requestPayload.rowEnd;
             var nestedSQL = requestPayload.query + "\n";
+
+            // Handle parameters if provided
+            if (requestPayload.parameters && Array.isArray(requestPayload.parameters)) {
+                queryParams = requestPayload.parameters;
+            }
             
             // Handle virtual views if enabled
             if ((requestPayload.viewsEnabled) && (constants.CONFIG.QUERY_FOLDER_ID !== null)) {
                 nestedSQL = processVirtualViews(nestedSQL, constants.CONFIG.QUERY_FOLDER_ID);
             }
-            
-            let beginTime = new Date().getTime();
-            
+
+            // Check for synthetic functions and stored procedures
+            try {
+                var syntheticResult = syntheticProcessor.processQuery(nestedSQL, queryParams);
+
+                if (syntheticResult.wasSynthetic) {
+                    if (!syntheticResult.success) {
+                        throw new Error('Synthetic processing error: ' + syntheticResult.error);
+                    }
+
+                    // Handle different types of synthetic results
+                    let elapsedTime = syntheticResult.executionTime;
+
+                    if (syntheticResult.analysis && syntheticResult.analysis.queryType === 'CREATE') {
+                        // CREATE statement result
+                        responsePayload = {
+                            'success': true,
+                            'message': syntheticResult.result.message,
+                            'fileName': syntheticResult.result.fileName,
+                            'fileId': syntheticResult.result.fileId,
+                            'type': syntheticResult.result.type,
+                            'elapsedTime': elapsedTime,
+                            'synthetic': true,
+                            'isCreateStatement': true
+                        };
+                    } else {
+                        // Function/procedure execution result
+                        responsePayload = {
+                            'records': syntheticResult.result,
+                            'elapsedTime': elapsedTime,
+                            'synthetic': true
+                        };
+
+                        // Add output log for stored procedures if available
+                        if (syntheticResult.outputLog && syntheticResult.outputLog.length > 0) {
+                            responsePayload.outputLog = syntheticResult.outputLog;
+                            responsePayload.showOutput = syntheticResult.showOutput;
+                        }
+
+                        // Add total count if requested (for synthetic results)
+                        if (requestPayload.returnTotals && Array.isArray(syntheticResult.result) && syntheticResult.result.length > 0) {
+                            responsePayload.totalRecordCount = syntheticResult.result.length;
+                        }
+                    }
+
+                    // Save query to history if enabled (skip CREATE statements)
+                    if (constants.CONFIG.QUERY_HISTORY_ENABLED && !responsePayload.isCreateStatement) {
+                        try {
+                            var recordCount = Array.isArray(syntheticResult.result) ? syntheticResult.result.length : 1;
+                            var historyData = {
+                                queryContent: nestedSQL,
+                                executionTime: elapsedTime,
+                                recordCount: recordCount,
+                                success: true,
+                                resultFormat: 'table',
+                                sessionId: null
+                            };
+                            nsModules.logger.debug('Attempting to save synthetic query history', historyData);
+                            var historyRecordId = queryHistoryRecord.addQueryToHistory(historyData);
+                            nsModules.logger.debug('Synthetic query history saved successfully', { recordId: historyRecordId });
+                        } catch(historyErr) {
+                            nsModules.logger.error('Synthetic Query History Save failed', {
+                                error: historyErr.toString(),
+                                message: historyErr.message,
+                                name: historyErr.name,
+                                historyData: historyData
+                            });
+                        }
+                    }
+
+                    context.response.write(JSON.stringify(responsePayload, null, 2));
+                    return;
+                }
+            } catch (syntheticError) {
+                nsModules.logger.error('Synthetic processing error', syntheticError);
+
+                // If this looks like a synthetic query (contains function calls), show the error
+                if (nestedSQL.match(/\b[a-zA-Z_]\w*\s*\([^)]*\)/)) {
+                    responsePayload = {
+                        'error': 'Synthetic processing failed: ' + syntheticError.message,
+                        'details': syntheticError.stack || syntheticError.toString(),
+                        'elapsedTime': 0
+                    };
+                    context.response.write(JSON.stringify(responsePayload, null, 2));
+                    return;
+                }
+
+                // Fall through to normal query processing for non-synthetic queries
+            }
+
+            // Check for DML operations
+            try {
+                nsModules.logger.debug('Checking for DML operations', {
+                    query: nestedSQL.substring(0, 100) + '...',
+                    isDMLQuery: dmlProcessor.isDMLQuery(nestedSQL)
+                });
+
+                var dmlResult = dmlProcessor.processQuery(nestedSQL);
+
+                nsModules.logger.debug('DML processing result', {
+                    wasDML: dmlResult.wasDML,
+                    success: dmlResult.success,
+                    error: dmlResult.error
+                });
+
+                if (dmlResult.wasDML) {
+                    if (!dmlResult.success) {
+                        throw new Error('DML processing error: ' + dmlResult.error);
+                    }
+
+                    // Handle DML operation result
+                    let elapsedTime = dmlResult.executionTime;
+
+                    responsePayload = {
+                        'success': true,
+                        'message': dmlResult.message,
+                        'result': dmlResult.result,
+                        'elapsedTime': elapsedTime,
+                        'dml': true,
+                        'dmlType': dmlResult.analysis ? dmlResult.analysis.dmlType : 'UNKNOWN'
+                    };
+
+                    // Save query to history if enabled
+                    if (constants.CONFIG.QUERY_HISTORY_ENABLED) {
+                        try {
+                            // Calculate record count from DML result
+                            var recordCount = 1; // Default
+                            if (dmlResult.result) {
+                                if (dmlResult.result.recordsCreated) {
+                                    recordCount = dmlResult.result.recordsCreated;
+                                } else if (dmlResult.result.recordsUpdated) {
+                                    recordCount = dmlResult.result.recordsUpdated;
+                                } else if (dmlResult.result.recordsDeleted) {
+                                    recordCount = dmlResult.result.recordsDeleted;
+                                } else if (dmlResult.result.valuesAdded) {
+                                    recordCount = dmlResult.result.valuesAdded;
+                                } else if (dmlResult.result.recordIds && Array.isArray(dmlResult.result.recordIds)) {
+                                    recordCount = dmlResult.result.recordIds.length;
+                                }
+                            }
+
+                            var historyData = {
+                                queryContent: nestedSQL,
+                                executionTime: elapsedTime,
+                                recordCount: recordCount,
+                                success: true,
+                                resultFormat: 'table',  // Use 'table' format like synthetic operations
+                                sessionId: null
+                            };
+                            nsModules.logger.debug('Attempting to save DML query history', historyData);
+                            var historyRecordId = queryHistoryRecord.addQueryToHistory(historyData);
+                            nsModules.logger.debug('DML query history saved successfully', { recordId: historyRecordId });
+                        } catch(historyErr) {
+                            nsModules.logger.error('DML Query History Save failed', {
+                                error: historyErr.toString(),
+                                message: historyErr.message,
+                                name: historyErr.name,
+                                historyData: historyData
+                            });
+                        }
+                    }
+
+                    context.response.write(JSON.stringify(responsePayload, null, 2));
+                    return;
+                }
+            } catch (dmlError) {
+                nsModules.logger.error('DML processing error', dmlError);
+
+                // Check if this is a DML query for error handling
+                var isDMLQueryCheck = dmlProcessor.isDMLQuery(nestedSQL);
+                nsModules.logger.debug('DML error handling check', {
+                    isDMLQuery: isDMLQueryCheck,
+                    query: nestedSQL.substring(0, 100) + '...',
+                    errorMessage: dmlError.message
+                });
+
+                // If this looks like a DML query, show the error
+                if (isDMLQueryCheck) {
+                    var dmlElapsedTime = (new Date().getTime() - beginTime);
+
+                    // Save failed DML query to history (matching regular query pattern)
+                    if (constants.CONFIG.QUERY_HISTORY_ENABLED) {
+                        try {
+                            var failedDmlHistoryData = {
+                                queryContent: nestedSQL,
+                                executionTime: dmlElapsedTime,
+                                recordCount: 0,
+                                success: false,
+                                errorMessage: dmlError.message || dmlError.toString(),
+                                resultFormat: 'table',  // Use 'table' format like synthetic operations
+                                sessionId: null
+                            };
+                            nsModules.logger.debug('Attempting to save failed DML query history', failedDmlHistoryData);
+                            var failedDmlHistoryRecordId = queryHistoryRecord.addQueryToHistory(failedDmlHistoryData);
+                            nsModules.logger.debug('Failed DML query history saved successfully', { recordId: failedDmlHistoryRecordId });
+                        } catch(dmlHistoryErr) {
+                            nsModules.logger.error('Failed DML Query History Save failed', {
+                                error: dmlHistoryErr.toString(),
+                                message: dmlHistoryErr.message,
+                                name: dmlHistoryErr.name,
+                                historyData: failedDmlHistoryData
+                            });
+                        }
+                    }
+
+                    responsePayload = {
+                        'error': 'DML processing failed: ' + dmlError.message,
+                        'details': dmlError.stack || dmlError.toString(),
+                        'elapsedTime': dmlElapsedTime
+                    };
+                    context.response.write(JSON.stringify(responsePayload, null, 2));
+                    return;
+                }
+
+                // Fall through to normal query processing for non-DML queries
+                nsModules.logger.debug('Falling through to standard SuiteQL processing', {
+                    query: nestedSQL.substring(0, 100) + '...',
+                    reason: 'DML processing failed but not identified as DML query'
+                });
+            }
+
             // Execute query with or without pagination
+            nsModules.logger.debug('Executing standard SuiteQL query', {
+                query: nestedSQL.substring(0, 100) + '...',
+                paginationEnabled: requestPayload.paginationEnabled
+            });
             if (requestPayload.paginationEnabled) {
                 records = executePaginatedQuery(nestedSQL, queryParams, paginatedRowBegin, paginatedRowEnd);
             } else {
                 nsModules.logger.debug('nestedSQL', nestedSQL);
-                records = nsModules.queryUtils.runSuiteQL({ 
-                    query: nestedSQL, 
-                    params: queryParams 
-                }).asMappedResults();
-                nsModules.logger.debug('records', records);
+                nsModules.logger.debug('queryParams before execution', queryParams);
+                try {
+                    records = nsModules.queryUtils.runSuiteQL({
+                        query: nestedSQL,
+                        params: queryParams
+                    }).asMappedResults();
+                    nsModules.logger.debug('records', records);
+                } catch (queryError) {
+                    nsModules.logger.error('Query execution error with parameters', queryError);
+                    throw queryError;
+                }
             }
             
             let elapsedTime = (new Date().getTime() - beginTime);

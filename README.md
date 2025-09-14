@@ -1,20 +1,33 @@
-# Enhanced SuiteQL Query Tool (ESQRT) v1.1.1
+# Enhanced SuiteQL Query Tool (ESQRT) v1.2.0
 
-A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemporary database management tools. This tool provides an enhanced user experience for writing, executing, and managing SuiteQL queries with advanced features like syntax highlighting, query history, export capabilities, and a responsive split-pane interface.
+A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemporary database management tools. This tool provides an enhanced user experience for writing, executing, and managing SuiteQL queries with advanced features like syntax highlighting, query history, export capabilities, synthetic SQL functions, stored procedures, and comprehensive DML operations.
 
 [![NetSuite](https://img.shields.io/badge/NetSuite-Compatible-blue.svg)](https://www.netsuite.com/)
 [![SuiteScript](https://img.shields.io/badge/SuiteScript-2.1-green.svg)](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4387799721.html)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🆕 What's New in v1.1.0
+## 🆕 What's New in v1.2.0 - Major DML & Synthetic SQL Release
 
-### 🔧 Advanced CSV Export System
-- **Professional CSV Configuration**: Complete modal interface with customizable delimiters, encoding, and line endings
-- **Export Presets**: Standard, Excel Compatible, Tab Delimited, Semicolon, and Pipe formats
-- **International Support**: UTF-8, UTF-16, Windows-1252, and specialized encoding options
-- **Persistent Settings**: CSV configurations saved to localStorage for consistent exports
+### 🚀 Synthetic SQL Functions & Stored Procedures
+- **JavaScript-Based Functions**: Create custom SQL functions stored in NetSuite File Cabinet
+- **Stored Procedures**: Implement complex business logic with parameterized procedures
+- **Inline Execution**: Call functions and procedures directly in SuiteQL queries
+- **Dynamic Registry**: Automatic discovery and registration of custom functions/procedures
 
-[📋 View Complete Release Notes](RELEASE_NOTES_v1.1.0.md)
+### 🛠 Complete DML Operations Suite
+- **INSERT Operations**: Full INSERT support with preview/commit safety model
+- **UPDATE Operations**: Comprehensive UPDATE with compound WHERE conditions
+- **DELETE Operations**: Safe DELETE operations with preview mode
+- **Preview Mode**: All DML operations default to safe preview mode
+- **Commit Mode**: Explicit COMMIT keyword required for actual data changes
+
+### 🔧 Advanced WHERE Clause Support
+- **Compound Conditions**: Support for complex AND/OR logic in WHERE clauses
+- **Boolean Field Handling**: Proper conversion for NetSuite boolean fields
+- **IS NULL/IS NOT NULL**: Complete null condition support
+- **Custom List Operations**: Full DML support for NetSuite custom lists
+
+[📋 View Complete Release Notes](RELEASE_NOTES_v1.2.0.md)
 
 ## 🚀 Features Overview
 
@@ -48,6 +61,19 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
 - **Virtual Views**: Support for custom view definitions using #viewname syntax
 - **Pagination Control**: Configurable result pagination with row range selection
 - **Custom Records Integration**: Full NetSuite custom record support for saved queries and history
+
+### Synthetic SQL Extensions
+- **Custom Functions**: JavaScript-based SQL functions with inline execution
+- **Stored Procedures**: Complex business logic procedures with parameter support
+- **Dynamic Registry**: Automatic function/procedure discovery and registration
+- **File Cabinet Integration**: Functions and procedures stored as JavaScript files
+
+### Data Manipulation Language (DML)
+- **Complete DML Suite**: INSERT, UPDATE, DELETE operations for NetSuite records
+- **Safety-First Design**: All operations default to preview mode for data protection
+- **Compound WHERE Clauses**: Support for complex AND/OR conditions
+- **Custom List Support**: Full DML operations for NetSuite custom lists
+- **Boolean Field Handling**: Proper conversion for NetSuite boolean field types
 - **Modular Architecture**: Clean, maintainable codebase with separated concerns
 
 ## 📋 Table of Contents
@@ -57,6 +83,8 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
 - [Configuration](#-configuration)
 - [User Interface](#-user-interface)
 - [Query Features](#-query-features)
+- [DML Operations](#-dml-operations)
+- [Synthetic SQL](#-synthetic-sql)
 - [Custom Records Setup](#-custom-records-setup)
 - [Architecture](#-architecture)
 - [Development](#-development)
@@ -290,13 +318,16 @@ The Enhanced SuiteQL Query Tool provides sophisticated tab management capabiliti
 The CodeMirror editor provides intelligent auto-complete and enhanced editing capabilities:
 
 #### Auto-Complete System
-- **Context-Aware Suggestions**: Intelligent suggestions based on SQL context
-- **SQL Keywords**: SELECT, FROM, WHERE, JOIN, ORDER BY, GROUP BY, and more
-- **NetSuite Tables**: Employee, Customer, Vendor, Transaction, Item, and 30+ more
-- **NetSuite Fields**: ID, Name, Email, TranDate, Amount, and 40+ common fields
-- **SQL Functions**: COUNT, SUM, AVG, BUILTIN.DF, TO_CHAR, and more
-- **Automatic Triggering**: Auto-complete appears after keywords or when typing
-- **Manual Triggering**: Press Ctrl+Space anytime for suggestions
+- **Status**: Currently disabled in v1.2.0 - will be enhanced in future releases
+- **Planned Features**: Context-aware suggestions based on SQL context
+- **Future Capabilities**:
+  - SQL Keywords: SELECT, FROM, WHERE, JOIN, ORDER BY, GROUP BY, and more
+  - NetSuite Tables: Employee, Customer, Vendor, Transaction, Item, and 30+ more
+  - NetSuite Fields: ID, Name, Email, TranDate, Amount, and 40+ common fields
+  - SQL Functions: COUNT, SUM, AVG, BUILTIN.DF, TO_CHAR, and more
+  - Synthetic Functions: Custom JavaScript functions and stored procedures
+  - Automatic Triggering: Auto-complete will appear after keywords or when typing
+  - Manual Triggering: Ctrl+Space for suggestions
 
 #### Syntax Highlighting
 - **SQL Keywords**: SELECT, FROM, WHERE, ORDER BY, GROUP BY, HAVING highlighted in blue
@@ -484,6 +515,445 @@ The Enhanced SuiteQL Query Tool includes a comprehensive CSV export system with 
 - **Memory Optimization**: Efficient handling of large datasets
 - **Pagination**: Configurable row ranges and infinite scrolling
 
+## 🛠 DML Operations
+
+The Enhanced SuiteQL Query Tool provides comprehensive Data Manipulation Language (DML) operations that allow you to safely modify NetSuite data using familiar SQL syntax.
+
+### Safety-First Design
+
+All DML operations follow a **safety-first approach**:
+- **Preview Mode (Default)**: All operations default to preview mode showing what would be changed
+- **Explicit Commit**: Add `COMMIT` keyword to actually modify data
+- **Clear Instructions**: Preview mode provides clear instructions for committing changes
+- **Consistent Styling**: Light orange warnings for preview, green success for commits
+
+### INSERT Operations
+
+Create new records and custom list values using standard SQL INSERT syntax.
+
+#### Basic INSERT Syntax
+```sql
+-- Preview mode (default) - shows what would be inserted
+INSERT INTO customrecord_test SET name = 'New Record', active = true;
+
+-- Commit mode - actually creates the record
+INSERT INTO customrecord_test SET name = 'New Record', active = true COMMIT;
+```
+
+#### Multiple Values INSERT
+```sql
+-- Insert multiple custom list values
+INSERT INTO customlist_categories (name, externalid) VALUES
+    ('Category 1', 'cat_001'),
+    ('Category 2', 'cat_002'),
+    ('Category 3', 'cat_003') COMMIT;
+```
+
+### UPDATE Operations
+
+Modify existing records with support for complex WHERE conditions.
+
+#### Basic UPDATE Syntax
+```sql
+-- Preview mode - shows what would be updated
+UPDATE customer SET active = true WHERE id = 123;
+
+-- Commit mode - actually updates the record
+UPDATE customer SET active = true WHERE id = 123 COMMIT;
+```
+
+#### Complex WHERE Conditions
+```sql
+-- Compound conditions with AND/OR logic
+UPDATE employee SET department = 'Engineering', active = true
+WHERE (title LIKE '%Developer%' OR title LIKE '%Engineer%')
+  AND hiredate >= '2024-01-01'
+  AND isinactive = false COMMIT;
+```
+
+#### Boolean Field Handling
+```sql
+-- Automatic boolean conversion for NetSuite fields
+UPDATE customrecord_test SET
+    isinactive = false,    -- Converted to boolean false
+    active = true,         -- Converted to boolean true
+    processed = 'F'        -- String values also supported
+WHERE externalid IS NOT NULL;
+```
+
+### DELETE Operations
+
+Safely remove records with preview mode protection.
+
+#### Basic DELETE Syntax
+```sql
+-- Preview mode - shows what would be deleted
+DELETE FROM customrecord_temp WHERE created < '2024-01-01';
+
+-- Commit mode - actually deletes the records
+DELETE FROM customrecord_temp WHERE created < '2024-01-01' COMMIT;
+```
+
+#### Complex DELETE Conditions
+```sql
+-- Delete with complex WHERE clause
+DELETE FROM customlist_old_data
+WHERE (category = 'obsolete' OR status = 'inactive')
+  AND last_used < '2023-01-01'
+  AND isinactive = true COMMIT;
+```
+
+### Supported Record Types
+
+DML operations work with:
+- **Standard NetSuite Records**: Customer, Vendor, Employee, Item, etc.
+- **Custom Records**: Any custom record type
+- **Custom Lists**: Custom list values and properties
+- **Transaction Records**: Sales Orders, Purchase Orders, Invoices, etc.
+
+### WHERE Clause Features
+
+- **Comparison Operators**: =, !=, <, >, <=, >=
+- **Pattern Matching**: LIKE with wildcards (%, _)
+- **List Matching**: IN (value1, value2, value3)
+- **Null Conditions**: IS NULL, IS NOT NULL
+- **Boolean Logic**: AND, OR with proper precedence
+- **Parentheses Grouping**: Complex condition grouping
+- **Date Comparisons**: Full date/datetime comparison support
+
+## 🚀 Synthetic SQL
+
+Extend NetSuite's SuiteQL with custom JavaScript-based functions and stored procedures.
+
+### Synthetic Functions
+
+Create custom SQL functions using JavaScript that can be called inline in queries.
+
+#### Creating Functions
+```sql
+CREATE OR REPLACE FUNCTION standardize_country_name AS
+function standardize_country_name(context) {
+    var country_code = context.params.country_code || '';
+
+    var countryMap = {
+        'US': 'United States',
+        'CA': 'Canada',
+        'UK': 'United Kingdom',
+        'DE': 'Germany',
+        'FR': 'France'
+    };
+
+    return countryMap[country_code] || country_code;
+}
+```
+
+#### Using Functions in Queries
+```sql
+-- Use function in SELECT clause with column values
+SELECT
+    customer,
+    standardize_country_name(country) AS country_full_name
+FROM customers
+WHERE country IN ('US', 'CA', 'UK');
+
+-- Use function with literal values
+SELECT standardize_country_name('US') AS country FROM Dual;
+
+-- Access object properties from function results
+SELECT
+    customer,
+    parse_full_address(billing_address).city AS billing_city,
+    parse_full_address(billing_address).state AS billing_state
+FROM customers;
+
+-- Use functions in WHERE clauses
+SELECT * FROM customers
+WHERE standardize_country_name(country) = 'United States';
+```
+
+#### Function Features
+- **JavaScript Implementation**: Full JavaScript language support
+- **Parameter Support**: Multiple parameters with type checking
+- **Return Values**: Any JavaScript data type
+- **File Cabinet Storage**: Functions stored as .js files in NetSuite
+- **Dynamic Registry**: Automatic discovery and registration
+- **Error Handling**: Comprehensive error handling and logging
+
+### Synthetic Stored Procedures
+
+Implement complex business logic with parameterized procedures.
+
+#### Creating Procedures
+```sql
+CREATE OR REPLACE PROCEDURE apply_bulk_discount AS
+/**
+ * Apply bulk discount to qualifying transactions
+ *
+ * @param {Object} context - Execution context
+ * @param {string} context.params.transaction_type - Type of transaction (default: 'SalesOrd')
+ * @param {number} context.params.threshold_amount - Minimum amount for discount (default: 1000)
+ * @param {number} context.params.discount_percent - Discount percentage (default: 5)
+ * @param {boolean} context.params.update_records - Whether to actually update records (default: false)
+ * @param {boolean} context.params.show_output - Whether to display real-time output (default: false)
+ * @returns {Object} Processing results
+ */
+function apply_bulk_discount(context) {
+    // Import NetSuite modules
+    var query = require('N/query');
+    var log = require('N/log');
+
+    // Extract and validate parameters with defaults
+    var params = context.params || {};
+    var transaction_type = params.transaction_type || 'SalesOrd';
+    var threshold_amount = parseFloat(params.threshold_amount) || 1000;
+    var discount_percent = parseFloat(params.discount_percent) || 5;
+    var update_records = params.update_records === true;
+    var show_output = params.show_output === true;
+
+    // Real-time output
+    if (show_output) {
+        console.log('Starting bulk discount application...');
+        console.log('Transaction Type: ' + transaction_type);
+        console.log('Threshold Amount: $' + threshold_amount);
+        console.log('Discount Percent: ' + discount_percent + '%');
+        console.log('Update Records: ' + (update_records ? 'Yes' : 'No (Dry Run)'));
+    }
+
+    // Initialize results
+    var results = {
+        success: true,
+        transactions_found: 0,
+        transactions_updated: 0,
+        total_discount_applied: 0,
+        errors: []
+    };
+
+    try {
+        // Search for qualifying transactions using SuiteQL
+        var searchQuery = "SELECT id, total FROM transaction WHERE type = '" + transaction_type + "' AND total >= " + threshold_amount;
+        var searchResults = suiteql.query(searchQuery);
+
+        if (searchResults.success && searchResults.records) {
+            results.transactions_found = searchResults.records.length;
+
+            if (show_output) {
+                console.log('Found ' + results.transactions_found + ' qualifying transactions');
+            }
+
+            if (update_records) {
+                // Apply discounts to qualifying transactions
+                searchResults.records.forEach(function(txn) {
+                    try {
+                        var discount = txn.total * (discount_percent / 100);
+
+                        // Update transaction with DML
+                        var updateResult = dml.update(
+                            "UPDATE transaction SET discountamount = " + discount + " WHERE id = " + txn.id + " COMMIT"
+                        );
+
+                        if (updateResult.success) {
+                            results.total_discount_applied += discount;
+                            results.transactions_updated++;
+
+                            if (show_output) {
+                                console.log('✓ Applied $' + discount.toFixed(2) + ' discount to transaction ' + txn.id);
+                            }
+                        } else {
+                            var errorMsg = 'Failed to update transaction ' + txn.id + ': ' + (updateResult.error || 'Unknown error');
+                            results.errors.push(errorMsg);
+                            if (show_output) {
+                                console.error('✗ ' + errorMsg);
+                            }
+                        }
+                    } catch (e) {
+                        var errorMsg = 'Error processing transaction ' + txn.id + ': ' + e.message;
+                        results.errors.push(errorMsg);
+                        if (show_output) {
+                            console.error('✗ ' + errorMsg);
+                        }
+                    }
+                });
+            } else {
+                // Dry run mode - calculate what would be done
+                searchResults.records.forEach(function(txn) {
+                    var discount = txn.total * (discount_percent / 100);
+                    results.total_discount_applied += discount;
+                    results.transactions_updated++;
+
+                    if (show_output) {
+                        console.log('✓ Would apply $' + discount.toFixed(2) + ' discount to transaction ' + txn.id + ' [DRY RUN]');
+                    }
+                });
+            }
+        }
+
+        // Final summary
+        if (show_output) {
+            console.log('=== EXECUTION SUMMARY ===');
+            console.log('Transactions found: ' + results.transactions_found);
+            console.log('Transactions processed: ' + results.transactions_updated);
+            console.log('Total discount applied: $' + results.total_discount_applied.toFixed(2));
+            console.log('Errors encountered: ' + results.errors.length);
+            console.log('Records updated: ' + (update_records ? 'Yes' : 'No (Dry Run)'));
+        }
+
+    } catch (e) {
+        results.success = false;
+        var errorMsg = 'Procedure execution failed: ' + e.message;
+        results.errors.push(errorMsg);
+        if (show_output) {
+            console.error(errorMsg);
+        }
+    }
+
+    return results;
+}
+```
+
+#### Executing Procedures
+```sql
+-- Execute with default parameters (dry run mode)
+CALL apply_bulk_discount();
+
+-- Execute with custom parameters (dry run with output)
+CALL apply_bulk_discount(
+    transaction_type='SalesOrd',
+    threshold_amount=500,
+    discount_percent=10,
+    show_output=true
+);
+
+-- Execute with actual updates
+CALL apply_bulk_discount(
+    transaction_type='SalesOrd',
+    threshold_amount=500,
+    discount_percent=10,
+    update_records=true,
+    show_output=true
+);
+
+-- Execute with minimal parameters
+CALL apply_bulk_discount(update_records=true);
+```
+
+#### Procedure Features
+- **Parameter Support**: Named parameters accessed via `context.params` with default value handling
+- **Complex Logic**: Full JavaScript business logic implementation with error handling
+- **NetSuite API Access**: Complete access to NetSuite SuiteScript APIs via `require()`
+- **Return Values**: Structured return data with success/error status
+- **Real-time Output**: Optional real-time logging with `show_output=true` parameter
+- **Dry Run Mode**: Safe testing with `update_records=false` (default)
+- **DML Integration**: Execute UPDATE, INSERT, DELETE operations with COMMIT control
+- **SuiteQL Integration**: Execute SuiteQL queries via `suiteql.query()`
+- **Function Calls**: Call other synthetic functions via `functions.call()`
+- **Case Insensitive**: Procedures stored with original case, executed case-insensitively
+
+#### Enhanced Capabilities in v1.2.0
+
+Stored procedures now have access to the complete DML and Synthetic SQL ecosystem:
+
+**DML Operations Within Procedures**:
+```javascript
+// Execute DML operations from within stored procedures
+var insertResult = dml.insert("INSERT INTO customlist_demo (name) VALUES ('Test Item')");
+var updateResult = dml.update("UPDATE customer SET comments = 'Updated' WHERE id = 123");
+var deleteResult = dml.delete("DELETE FROM customlist_demo WHERE name = 'Test Item'");
+
+console.log('Records affected:', insertResult.recordsAffected);
+```
+
+**Function Calls Within Procedures**:
+```javascript
+// Call other synthetic functions from within procedures
+var taxResult = functions.call('calculateTax', [100, 'CA']);
+var formattedDate = functions.call('formatDate', ['2024-01-01', 'MM/DD/YYYY']);
+
+console.log('Tax calculated:', taxResult);
+```
+
+**SuiteQL Execution Within Procedures**:
+```javascript
+// Execute regular SuiteQL queries from within procedures
+var queryResult = suiteql.query(
+    "SELECT id, entityid FROM customer WHERE isinactive = 'F' LIMIT 10"
+);
+
+if (queryResult.success) {
+    console.log('Found ' + queryResult.recordCount + ' customers');
+    queryResult.records.forEach(function(customer) {
+        console.log('Customer:', customer.entityid);
+    });
+}
+
+// Execute SuiteQL queries WITH synthetic functions from within procedures
+var functionalQuery = suiteql.query(
+    "SELECT id, entityid, test_upper(entityid) AS upper_name FROM customer LIMIT 5"
+);
+
+if (functionalQuery.success) {
+    console.log('Query with functions returned ' + functionalQuery.recordCount + ' records');
+    if (functionalQuery.hasSyntheticFunctions) {
+        console.log('Executed ' + functionalQuery.functionsExecuted + ' synthetic functions');
+    }
+
+    // Access function results in the data
+    functionalQuery.records.forEach(function(customer) {
+        console.log('Customer:', customer.entityid, 'Upper:', customer.upper_name);
+    });
+}
+```
+
+**Complete Business Logic Example**:
+```javascript
+function processCustomerOrders(context) {
+    var customerId = context.params.customer_id;
+    var results = { processed: 0, errors: 0 };
+
+    // Query customer orders
+    var orders = suiteql.query(
+        "SELECT id, total FROM transaction WHERE entity = ? AND type = 'SalesOrd'",
+        [customerId]
+    );
+
+    if (orders.success) {
+        orders.records.forEach(function(order) {
+            try {
+                // Calculate discount using synthetic function
+                var discount = functions.call('calculateDiscount', [order.total, 'BULK']);
+
+                // Update order with discount
+                var updateResult = dml.update(
+                    "UPDATE transaction SET discountamount = " + discount + " WHERE id = " + order.id
+                );
+
+                if (updateResult.success) {
+                    results.processed++;
+                    console.log('Applied discount to order:', order.id);
+                }
+            } catch (e) {
+                results.errors++;
+                console.error('Error processing order:', order.id, e.message);
+            }
+        });
+    }
+
+    return results;
+}
+```
+
+### File Cabinet Integration
+
+Both functions and procedures are stored as JavaScript files in NetSuite's File Cabinet:
+
+**Functions Location**: `SuiteScripts/EnhancedSuiteQLTool/lib/features/functions/`
+**Procedures Location**: `SuiteScripts/EnhancedSuiteQLTool/lib/features/storedProcedures/`
+
+#### Automatic Discovery
+- **Dynamic Registry**: System automatically scans for new functions/procedures
+- **Metadata Extraction**: Extracts function signatures and documentation
+- **Error Validation**: Validates JavaScript syntax before registration
+- **Performance Caching**: Caches registry for optimal performance
+
 ## 📊 Custom Records Setup
 
 The Enhanced SuiteQL Query Tool uses NetSuite custom records to enable advanced features like saved queries and execution history. This setup is optional but highly recommended for team environments.
@@ -597,6 +1067,23 @@ src/FileCabinet/SuiteScripts/EnhancedSuiteQLTool/
     │   ├── queryHistory/              # History management
     │   ├── savedQueries/              # Saved query management
     │   ├── controls/                  # UI controls and options
+    │   ├── dml/                       # Data Manipulation Language operations
+    │   │   ├── operations/            # Individual DML operation modules
+    │   │   │   ├── insertRecord.js    # INSERT operations
+    │   │   │   ├── updateRecord.js    # UPDATE operations
+    │   │   │   ├── deleteRecord.js    # DELETE operations
+    │   │   │   ├── createRecord.js    # CREATE RECORD operations
+    │   │   │   └── createList.js      # CREATE LIST operations
+    │   │   ├── dmlProcessor.js        # Main DML orchestration
+    │   │   ├── dmlParser.js           # SQL statement parsing
+    │   │   ├── dmlExecutionEngine.js  # DML execution engine
+    │   │   └── dmlUtils.js            # DML utility functions
+    │   ├── functions/                 # Synthetic SQL functions
+    │   ├── storedProcedures/          # Synthetic stored procedures
+    │   ├── synthetic/                 # Synthetic SQL engine
+    │   │   ├── syntheticFunctions.js  # Function registry and execution
+    │   │   ├── syntheticProcedures.js # Procedure registry and execution
+    │   │   └── syntheticProcessor.js  # Main synthetic SQL processor
     │   └── ui/                        # UI utilities
     └── netsuite/                      # NetSuite-specific integrations
         ├── savedQueriesRecord.js      # Saved queries CRUD
@@ -734,10 +1221,15 @@ The Enhanced SuiteQL Query Tool continues to evolve with exciting new features p
 ### 📊 Enhanced Data Export ✅ **COMPLETED in v1.1.0**
 - **✅ Enhanced CSV Exporting Options**: Advanced CSV export with customizable delimiters, quote escaping, and encoding options for better data integration workflows
 
-### 🔧 Advanced Query Capabilities
-- **Parameterized Queries**: Interactive parameter input dialog for dynamic queries with `?` placeholders, supporting date pickers, dropdowns, and validation
-- **Functions & Stored Procedures**: JavaScript functions that allow you to execute code blocks and call them as SuiteQL functions, enabling complex data transformations and business logic
-- **Basic DML Support**: Ability to perform basic INSERT, UPDATE, DELETE operations using SQL-like expressions for data manipulation workflows
+### 🛠 DML & Synthetic SQL ✅ **COMPLETED in v1.2.0**
+- **✅ Complete DML Operations**: Full INSERT, UPDATE, DELETE operations with preview/commit safety model for comprehensive data manipulation
+- **✅ Synthetic Functions**: JavaScript-based custom SQL functions stored in NetSuite File Cabinet with inline execution capabilities
+- **✅ Synthetic Stored Procedures**: Complex business logic procedures with parameter support and real-time output options
+- **✅ Advanced WHERE Clauses**: Compound conditions with AND/OR logic, parentheses grouping, and boolean field handling
+- **✅ Custom List Support**: Full DML operations for NetSuite custom lists with proper value management
+
+### 🔧 Advanced Query Capabilities ✅ **COMPLETED in v1.2.0**
+- **✅ Parameterized Queries**: Interactive parameter input dialog for dynamic queries with `?` placeholders, supporting date pickers, dropdowns, and validation
 
 ### 🗂️ Data Discovery & Management
 - **Table & Field Browser**: Interactive browser for exploring tables and fields available inside NetSuite, with search, filtering, and documentation features
@@ -771,6 +1263,33 @@ The Enhanced SuiteQL Query Tool continues to evolve with exciting new features p
 - **Query Pattern Recognition**: Machine learning analysis of query history to suggest commonly used patterns and templates based on user behavior
 - **Data Insights Generation**: AI-powered analysis of query results to automatically identify trends, anomalies, and business insights with natural language explanations
 - **Automated Documentation**: AI-generated documentation for complex queries including purpose, logic explanation, and usage examples
+
+### 🛑 Version 2.0: Enterprise Operation Management
+
+#### Advanced Operation Control & Cancellation
+- **Cancellable Operations**: Cooperative cancellation pattern for long-running stored procedures, functions, and queries
+- **Real-Time Progress Tracking**: Live progress bars with ETA calculations and detailed status updates
+- **Operation Queue Management**: Dashboard for viewing, managing, and prioritizing running operations
+- **Checkpoint & Resume**: Ability to pause operations and resume from last checkpoint
+- **Smart Batch Processing**: Adaptive batch sizes with automatic governance limit awareness
+- **Operation Analytics**: Performance monitoring, execution statistics, and optimization recommendations
+
+#### Enterprise UI/UX Enhancements
+- **Operation Dashboard**: Centralized view of all running, queued, and completed operations
+- **Advanced Progress Visualization**: Real-time progress with detailed execution metrics
+- **Smart Notifications**: Operation completion alerts, failure notifications, and status updates
+- **Bulk Operation Management**: Handle multiple long-running operations simultaneously
+- **Resource Monitoring**: Track memory usage, execution time, and governance consumption
+- **Error Recovery System**: Intelligent rollback and partial operation recovery
+
+#### Background Processing Architecture
+- **Cooperative Cancellation Framework**: Built-in cancellation support for all synthetic operations
+- **State Management System**: Robust operation state tracking using NetSuite custom records
+- **Governance Optimization**: Smart yielding, rescheduling, and resource management
+- **Resumable Operations**: Pick up interrupted operations exactly where they left off
+- **Performance Intelligence**: Automatic optimization based on execution patterns
+
+**Technical Implementation**: Version 2.0 will introduce a comprehensive operation management framework that transforms the tool from a query interface into a full enterprise data processing platform with professional-grade operation control capabilities.
 
 ### 🎯 Coming Soon
 These features are actively being planned and developed. Stay tuned for updates and feel free to contribute ideas or feedback through GitHub Issues.
@@ -931,6 +1450,18 @@ When reporting issues, please include:
 
 ## 📈 Version History
 
+### v1.2.0 (September 7, 2025)
+- **Major DML Operations Suite**: Complete INSERT, UPDATE, DELETE operations with preview/commit safety model
+- **Synthetic SQL Functions**: JavaScript-based custom SQL functions with inline execution capabilities
+- **Synthetic Stored Procedures**: Complex business logic procedures with parameter support and real-time output
+- **Advanced WHERE Clause Engine**: Compound conditions with AND/OR logic, parentheses grouping, and boolean field handling
+- **Custom List DML Support**: Full DML operations for NetSuite custom lists with proper value management
+- **Safety-First Design**: All DML operations default to preview mode with explicit COMMIT requirement
+- **Enhanced User Experience**: Consistent styling for preview (light orange) and commit (green) modes
+- **Comprehensive Documentation**: Complete release notes, testing guide, and feature documentation
+- **Modular DML Architecture**: Extensible design with separate modules for each operation type
+- **NetSuite Integration**: Proper integration with NetSuite record and search APIs
+
 ### v1.1.0 (Current - September 2, 2025)
 - **Advanced CSV Export System**: Complete CSV configuration modal with customizable delimiters, encoding, line endings, and presets
 - **Enhanced Query Editor**: Intelligent auto-complete with context-aware suggestions for SQL keywords and NetSuite objects
@@ -1022,6 +1553,38 @@ If you find this tool useful, please consider giving it a star on GitHub! Your s
 ---
 
 ## 📋 Changelog
+
+### v1.2.0 (September 14, 2025) - Major DML & Synthetic SQL Release
+
+#### 🚀 Major New Features
+- **Complete DML Operations Suite**: Full INSERT, UPDATE, DELETE operations with preview/commit safety model
+- **Synthetic SQL Functions**: JavaScript-based custom SQL functions stored in NetSuite File Cabinet
+- **Synthetic Stored Procedures**: Complex business logic procedures with parameter support
+- **Advanced WHERE Clause Engine**: Compound conditions with AND/OR logic, parentheses grouping
+- **Boolean Field Handling**: Proper conversion for NetSuite boolean fields (isinactive, active, etc.)
+- **Custom List DML Support**: Full DML operations for NetSuite custom lists
+- **IS NULL/IS NOT NULL Support**: Complete null condition handling in WHERE clauses
+
+#### 🛠 DML Operations
+- **INSERT Operations**: Both VALUES and SET syntax, multiple record support, preview/commit modes
+- **UPDATE Operations**: SET clause support, compound WHERE conditions, boolean field conversion
+- **DELETE Operations**: Safe deletion with preview mode, complex WHERE clause support
+- **Safety-First Design**: All operations default to preview mode, explicit COMMIT required
+
+#### 🔧 Technical Improvements
+- **Modular DML Architecture**: Separate modules for each DML operation type
+- **Enhanced SQL Parsing**: Robust parsing for complex SQL statements
+- **NetSuite Integration**: Proper integration with NetSuite record and search APIs
+- **Error Handling**: Comprehensive error handling with clear, actionable messages
+- **Display Consistency**: Unified styling for preview (light orange) and commit (green) modes
+
+#### 📚 Documentation
+- **Comprehensive Release Notes**: Detailed documentation of all new features
+- **Complete Testing Guide**: 50+ test scenarios with expected results
+- **DML Operations Guide**: Complete reference for all DML operations
+- **Synthetic SQL Guide**: Documentation for functions and stored procedures
+
+[📋 View Complete Release Notes](RELEASE_NOTES_v1.2.0.md) | [🧪 View Testing Guide](TESTING_GUIDE_v1.2.0.md)
 
 ### v1.1.1 (September 2, 2025) - Bug Fixes & Production Stability
 

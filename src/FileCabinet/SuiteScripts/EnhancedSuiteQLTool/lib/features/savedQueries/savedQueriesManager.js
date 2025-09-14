@@ -191,6 +191,16 @@ define([], function() {
                     return;
                 }
 
+                // Check if query has content
+                if (!query.content || query.content.trim() === '') {
+                    if (typeof showStatusMessage === 'function') {
+                        showStatusMessage('This saved query appears to be empty. The query content may not have been saved properly.');
+                    } else {
+                        alert('This saved query appears to be empty. The query content may not have been saved properly.');
+                    }
+                    return;
+                }
+
                 // If using query tabs, load into a new tab
                 if (typeof loadQueryIntoTab === 'function') {
                     loadQueryIntoTab(query);
@@ -219,8 +229,6 @@ define([], function() {
             }
             
             function deleteSavedQueryFromNetSuite(queryId) {
-                console.log('Deleting saved query from NetSuite:', queryId);
-
                 // Create request payload for server-side function
                 const requestPayload = {
                     'function': 'savedQueryDelete',

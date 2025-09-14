@@ -82,7 +82,7 @@ define([
                 \`;
 
                 document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').innerHTML = csvDisplay;
-                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'block';
+                document.getElementById('${constants.ELEMENT_IDS.RESULTS_DIV}').style.display = 'flex';
 
                 // Show CSV export buttons in header
                 const csvExportGroup = document.getElementById('csvExportGroup');
@@ -828,19 +828,13 @@ define([
 
             // Test function to verify CSV functions are loaded
             window.testCSVFunctions = function() {
-                // console.log('CSV Functions Test:');
-                // console.log('showCSVOptionsModal:', typeof window.showCSVOptionsModal);
-                // console.log('showCSVPresetMenu:', typeof window.showCSVPresetMenu);
-                // console.log('applyCSVPreset:', typeof window.applyCSVPreset);
-                // console.log('getCurrentCSVConfig:', typeof window.getCurrentCSVConfig);
-                return 'CSV functions test complete - check console';
+                return 'CSV functions test complete';
             };
 
 
 
 
             function applyCSVPreset(presetName) {
-                // console.log('Applying preset:', presetName);
 
                 let config;
                 switch(presetName) {
