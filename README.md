@@ -27,8 +27,6 @@ A modern, feature-rich SuiteQL query interface for NetSuite, inspired by contemp
 - **IS NULL/IS NOT NULL**: Complete null condition support
 - **Custom List Operations**: Full DML support for NetSuite custom lists
 
-[📋 View Complete Release Notes](RELEASE_NOTES_v1.2.0.md)
-
 ## 🚀 Features Overview
 
 ### Modern User Interface
