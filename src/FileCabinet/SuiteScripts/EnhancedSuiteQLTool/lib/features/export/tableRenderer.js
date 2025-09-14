@@ -110,18 +110,7 @@ define([
                 // Add hidden textarea for copying (like original)
                 content += '<textarea id="responseData" style="position: absolute; left: -9999px; opacity: 0;"></textarea>';
 
-                console.log('DEBUG: Setting table HTML with single table structure');
-                console.log('DEBUG: Table class:', '` + constants.CSS_CLASSES.CODEOSS_TABLE + `');
                 document.getElementById('` + constants.ELEMENT_IDS.RESULTS_DIV + `').innerHTML = content;
-
-                // Verify the table structure was applied
-                setTimeout(() => {
-                    const table = document.getElementById('resultsTable');
-                    const headers = table ? table.querySelectorAll('th') : [];
-                    console.log('DEBUG: Table found:', !!table);
-                    console.log('DEBUG: Headers found:', headers.length);
-                    console.log('DEBUG: First header position style:', headers[0] ? getComputedStyle(headers[0]).position : 'none');
-                }, 100);
                 document.getElementById('` + constants.ELEMENT_IDS.WELCOME_MESSAGE + `').style.display = 'none';
                 document.getElementById('` + constants.ELEMENT_IDS.STATUS_TEXT + `').textContent = 'Query completed - ' + records.length + ' rows';
 

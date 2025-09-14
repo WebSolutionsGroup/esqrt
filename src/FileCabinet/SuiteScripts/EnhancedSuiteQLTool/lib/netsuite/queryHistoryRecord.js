@@ -56,12 +56,12 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
         PUBLIC: '4'       // Everyone can see
     };
 
-    // Result format mapping (string to internal ID as string)
-    // These correspond to the internal IDs NetSuite assigns to custom list values
+    // Result format mapping (string to custom list text values)
+    // These correspond to the actual text values in the custom list
     const RESULT_FORMAT_MAPPING = {
-        'table': '1',  // val_sqrt_format_table (ID: 1)
-        'csv': '2',    // val_sqrt_format_csv (ID: 2)
-        'json': '3'    // val_sqrt_format_json (ID: 3)
+        'table': 'Table',  // val_sqrt_format_table
+        'csv': 'CSV',      // val_sqrt_format_csv
+        'json': 'JSON'     // val_sqrt_format_json
     };
     
 
@@ -157,33 +157,7 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                 });
             }
             
-            // Set result format field - all operations use 'table' format consistently
-            if (historyData.resultFormat) {
-                try {
-                    // Try different approaches to set the result format
-                    var formatValue = RESULT_FORMAT_MAPPING[historyData.resultFormat.toLowerCase()];
-                    if (!formatValue) {
-                        formatValue = '1'; // Default to table format
-                    }
-
-                    newRecord.setValue({
-                        fieldId: FIELDS.RESULT_FORMAT,
-                        value: formatValue
-                    });
-                    log.debug('Set result format successfully', {
-                        requestedFormat: historyData.resultFormat,
-                        mappedValue: formatValue
-                    });
-                } catch(formatError) {
-                    // If setting the field fails, try without it but log the issue
-                    log.error('Failed to set result format, continuing without it', {
-                        error: formatError.toString(),
-                        requestedFormat: historyData.resultFormat,
-                        mappedValue: RESULT_FORMAT_MAPPING[historyData.resultFormat.toLowerCase()]
-                    });
-                    // Continue without setting result format - operation should still succeed
-                }
-            }
+            /* Removed Result Format - Not currently used */
             
             if (historyData.sessionId) {
                 newRecord.setValue({

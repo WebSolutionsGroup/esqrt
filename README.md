@@ -1450,16 +1450,6 @@ When reporting issues, please include:
 
 ## 📈 Version History
 
-### v1.1.0 (Current - September 2, 2025)
-- **Advanced CSV Export System**: Complete CSV configuration modal with customizable delimiters, encoding, line endings, and presets
-- **Enhanced Query Editor**: Intelligent auto-complete with context-aware suggestions for SQL keywords and NetSuite objects
-- **Cross-Platform Keyboard Shortcuts**: Mac (Cmd) and Windows/Linux (Ctrl) support with automatic detection
-- **Advanced Tab Management**: Tab state persistence, smart numbering, and individual result isolation
-- **Sortable Result Tables**: Click column headers to sort data ascending/descending
-- **Accordion Sidebar Behavior**: Improved space utilization with collapsible sections
-- **Performance Optimizations**: Reduced console logging and improved memory usage
-- **Bug Fixes**: Resolved CSV export, tab switching, and UI consistency issues
-
 ### v1.2.0 (September 7, 2025)
 - **Major DML Operations Suite**: Complete INSERT, UPDATE, DELETE operations with preview/commit safety model
 - **Synthetic SQL Functions**: JavaScript-based custom SQL functions with inline execution capabilities
@@ -1471,6 +1461,16 @@ When reporting issues, please include:
 - **Comprehensive Documentation**: Complete release notes, testing guide, and feature documentation
 - **Modular DML Architecture**: Extensible design with separate modules for each operation type
 - **NetSuite Integration**: Proper integration with NetSuite record and search APIs
+
+### v1.1.0 (Current - September 2, 2025)
+- **Advanced CSV Export System**: Complete CSV configuration modal with customizable delimiters, encoding, line endings, and presets
+- **Enhanced Query Editor**: Intelligent auto-complete with context-aware suggestions for SQL keywords and NetSuite objects
+- **Cross-Platform Keyboard Shortcuts**: Mac (Cmd) and Windows/Linux (Ctrl) support with automatic detection
+- **Advanced Tab Management**: Tab state persistence, smart numbering, and individual result isolation
+- **Sortable Result Tables**: Click column headers to sort data ascending/descending
+- **Accordion Sidebar Behavior**: Improved space utilization with collapsible sections
+- **Performance Optimizations**: Reduced console logging and improved memory usage
+- **Bug Fixes**: Resolved CSV export, tab switching, and UI consistency issues
 
 ### v1.0.0 (September 1, 2025)
 - Production release with complete UI overhaul
@@ -1554,7 +1554,7 @@ If you find this tool useful, please consider giving it a star on GitHub! Your s
 
 ## 📋 Changelog
 
-### v1.2.0 (September 7, 2025) - Major DML & Synthetic SQL Release
+### v1.2.0 (September 14, 2025) - Major DML & Synthetic SQL Release
 
 #### 🚀 Major New Features
 - **Complete DML Operations Suite**: Full INSERT, UPDATE, DELETE operations with preview/commit safety model
