@@ -685,7 +685,7 @@ define([
                         }
                     }
                 } catch(e) {
-                    console.warn('Could not load tabs from localStorage:', e);
+                    // Silently handle localStorage errors
                     queryTabs = [];
                     activeTabId = null;
                 }
@@ -695,7 +695,7 @@ define([
                 try {
                     localStorage.removeItem('suiteql-query-tabs');
                 } catch(e) {
-                    console.warn('Could not clear tabs storage:', e);
+                    // Silently handle localStorage errors
                 }
             }
 

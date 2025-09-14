@@ -123,9 +123,9 @@ define(['N/file', 'N/log', 'N/query', './syntheticFunctions'], function(file, lo
                 };
             }
 
-            var name = match[1].toLowerCase();
+            var name = match[1]; // Preserve original case
             var content = match[2].trim();
-            
+
             // Validate function name
             if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
                 return {
@@ -134,7 +134,7 @@ define(['N/file', 'N/log', 'N/query', './syntheticFunctions'], function(file, lo
                 };
             }
 
-            // Validate that content starts with function declaration
+            // Validate that content starts with function declaration (case-insensitive)
             var functionPattern = new RegExp('function\\s+' + name + '\\s*\\(', 'i');
             if (!functionPattern.test(content)) {
                 return {

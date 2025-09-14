@@ -1,32 +1,3 @@
-/*
-
-Enhanced SuiteQL Tool - Stored Procedures Documentation
-
-Stored procedures allow you to create reusable JavaScript functions that can execute SuiteQL queries,
-DML operations, and complex business logic within the NetSuite environment.
-
-SYNTAX:
-CREATE OR REPLACE PROCEDURE procedure_name AS
-function procedure_name(context) {
-    // procedure body with access to NetSuite modules, SuiteQL, and DML operations
-}
-
-IMPORTANT NOTES:
-- The procedure name after CREATE OR REPLACE PROCEDURE must match the function name
-- Case sensitivity is preserved during creation and lookup is case-insensitive during execution
-- The function must accept a single 'context' parameter containing params and execution context
-- Use show_output=true parameter to see real-time console output during execution
-- Use update_records=false for dry run mode to preview changes without making them
-
-AVAILABLE CONTEXT OBJECTS:
-- context.params - Input parameters passed to the procedure
-- suiteql.query(sql) - Execute SuiteQL queries
-- dml.update(sql), dml.insert(sql), dml.delete(sql) - Execute DML operations
-- console.log(), console.error() - Real-time output (when show_output=true)
-- NetSuite modules: require('N/query'), require('N/record'), require('N/log'), etc.
-
-*/
-
 /**
  * Deactivate test categories based on name pattern
  *
@@ -118,8 +89,8 @@ function deactivateTestCategories(context) {
                         console.log('Current status: ' + (isCurrentlyInactive ? 'Inactive' : 'Active'));
                     }
 
-                    // Skip if already inactive (Note: false means inactive in NetSuite)
-                    if (!isCurrentlyInactive) {
+                    // Skip if already inactive
+                    if (isCurrentlyInactive) {
                         if (show_output) {
                             console.log('Skipping - already inactive: ' + categoryName);
                         }
@@ -129,7 +100,7 @@ function deactivateTestCategories(context) {
                     // Update category to inactive
                     if (update_records) {
                         var updateResult = dml.update(
-                            "UPDATE CUSTOMLIST_SQRT_QUERY_CATEGORIES SET isinactive = true WHERE id = " + categoryId + " COMMIT"
+                            "UPDATE CUSTOMLIST_SQRT_QUERY_CATEGORIES SET isinactive = true WHERE id = " + categoryId
                         );
 
                         if (updateResult.success) {
@@ -206,78 +177,3 @@ function deactivateTestCategories(context) {
 
     return output;
 }
-
-/*
-
-USAGE EXAMPLES:
-
-1. Create the procedure (execute the CREATE OR REPLACE statement above)
-
-2. Dry run to preview changes:
-   CALL deactivateTestCategories(name="Test", show_output=true)
-
-3. Execute with real updates and detailed output:
-   CALL deactivateTestCategories(name="Test", update_records=true, show_output=true)
-
-4. Silent execution (only final results):
-   CALL deactivateTestCategories(name="Test", update_records=true)
-
-EXPECTED OUTPUT STRUCTURE:
-{
-    "success": true,
-    "processed_count": 4,
-    "found_count": 4,
-    "errors": []
-}
-
-SAMPLE REAL-TIME OUTPUT (with show_output=true):
-[INFO] Starting category deactivation process...
-[INFO] Name pattern: Test
-[INFO] Update Records: Yes
-[INFO] Target List: CUSTOMLIST_SQRT_QUERY_CATEGORIES
-[INFO] Input validation passed
-[INFO] Executing query to find matching categories...
-[INFO] Query: SELECT id, name, isinactive FROM CUSTOMLIST_SQRT_QUERY_CATEGORIES WHERE name LIKE '%Test%' ORDER BY name
-[info] Executing SuiteQL: SELECT id, name, isinactive FROM CUSTOMLIST_SQRT_QUERY_CATEGORIES WHERE name LIKE '%Test%' ORDER BY name
-[INFO] SuiteQL returned 4 record(s)
-[INFO] Query executed. Success: true
-[INFO] Found 4 matching categories
-[INFO] Processing category: "Test Category 1" (ID: 43)
-[INFO] Current status: Active
-[info] Executing UPDATE statement: UPDATE CUSTOMLIST_SQRT_QUERY_CATEGORIES SET isinactive = true WHERE id = 43 COMMIT
-[INFO] UPDATE completed successfully: Updated 1 record(s) in CUSTOMLIST_SQRT_QUERY_CATEGORIES
-[INFO] ✓ Successfully deactivated: "Test Category 1" (ID: 43)
-[INFO] Processing category: "Test Category 5" (ID: 44)
-[INFO] Current status: Active
-[info] Executing UPDATE statement: UPDATE CUSTOMLIST_SQRT_QUERY_CATEGORIES SET isinactive = true WHERE id = 44 COMMIT
-[INFO] UPDATE completed successfully: Updated 1 record(s) in CUSTOMLIST_SQRT_QUERY_CATEGORIES
-[INFO] ✓ Successfully deactivated: "Test Category 5" (ID: 44)
-[INFO] Processing category: "Test Category 6" (ID: 45)
-[INFO] Current status: Active
-[info] Executing UPDATE statement: UPDATE CUSTOMLIST_SQRT_QUERY_CATEGORIES SET isinactive = true WHERE id = 45 COMMIT
-[INFO] UPDATE completed successfully: Updated 1 record(s) in CUSTOMLIST_SQRT_QUERY_CATEGORIES
-[INFO] ✓ Successfully deactivated: "Test Category 6" (ID: 45)
-[INFO] Processing category: "Testing" (ID: 35)
-[INFO] Current status: Active
-[info] Executing UPDATE statement: UPDATE CUSTOMLIST_SQRT_QUERY_CATEGORIES SET isinactive = true WHERE id = 35 COMMIT
-[INFO] UPDATE completed successfully: Updated 1 record(s) in CUSTOMLIST_SQRT_QUERY_CATEGORIES
-[INFO] ✓ Successfully deactivated: "Testing" (ID: 35)
-[INFO] Category processing completed
-[INFO] === EXECUTION SUMMARY ===
-[INFO] Categories found: 4
-[INFO] Categories processed: 4
-[INFO] Errors encountered: 0
-[INFO] Records updated: Yes
-[INFO] Execution completed successfully: Yes
-
-KEY FEATURES DEMONSTRATED:
-- Parameter validation with clear error messages
-- Dry run mode for safe testing (update_records=false)
-- Real-time output for debugging and monitoring (show_output=true)
-- SuiteQL query execution within stored procedures
-- DML UPDATE operations with COMMIT statements
-- Comprehensive error handling and logging
-- Detailed execution summary
-- NetSuite custom list manipulation
-
-*/

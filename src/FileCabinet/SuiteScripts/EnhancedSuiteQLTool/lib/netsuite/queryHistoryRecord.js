@@ -157,22 +157,31 @@ define(['N/record', 'N/search', 'N/runtime', 'N/log'], function(record, search, 
                 });
             }
             
-            // Try to set result format, but don't fail if it doesn't work
+            // Set result format field - all operations use 'table' format consistently
             if (historyData.resultFormat) {
                 try {
-                    const formatValue = RESULT_FORMAT_MAPPING[historyData.resultFormat.toLowerCase()] || RESULT_FORMAT_MAPPING['table'];
+                    // Try different approaches to set the result format
+                    var formatValue = RESULT_FORMAT_MAPPING[historyData.resultFormat.toLowerCase()];
+                    if (!formatValue) {
+                        formatValue = '1'; // Default to table format
+                    }
+
                     newRecord.setValue({
                         fieldId: FIELDS.RESULT_FORMAT,
                         value: formatValue
                     });
-                    log.debug('Set result format successfully', formatValue);
+                    log.debug('Set result format successfully', {
+                        requestedFormat: historyData.resultFormat,
+                        mappedValue: formatValue
+                    });
                 } catch(formatError) {
+                    // If setting the field fails, try without it but log the issue
                     log.error('Failed to set result format, continuing without it', {
                         error: formatError.toString(),
                         requestedFormat: historyData.resultFormat,
                         mappedValue: RESULT_FORMAT_MAPPING[historyData.resultFormat.toLowerCase()]
                     });
-                    // Continue without setting result format - it's not critical
+                    // Continue without setting result format - operation should still succeed
                 }
             }
             

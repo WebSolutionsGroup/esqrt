@@ -50,10 +50,32 @@ INSERT INTO customrecord_employee SET
     hire_date = '2024-01-15',
     active = true;
 
--- Insert into custom list
+-- Insert into custom list using NetSuite field names
 INSERT INTO customlist_departments SET
-    value = 'Engineering',
-    abbreviation = 'ENG';
+    name = 'Engineering',
+    abbreviation = 'ENG',
+    externalid = 'DEPT_ENG',
+    isinactive = false;
+
+-- Insert multiple values using VALUES syntax
+INSERT INTO customlist_departments (name, abbreviation, externalid) VALUES
+    ('Engineering', 'ENG', 'DEPT_ENG'),
+    ('Marketing', 'MKT', 'DEPT_MKT'),
+    ('Sales', 'SAL', 'DEPT_SAL');
+
+-- Minimal insert (only name is required)
+INSERT INTO customlist_priorities SET name = 'High Priority';
+
+-- Insert with inactive status
+INSERT INTO customlist_departments SET
+    name = 'Deprecated Department',
+    isinactive = true;
+
+-- Insert with multiple values using VALUES syntax
+INSERT INTO CUSTOMLIST_SQRT_QUERY_CATEGORIES (name, externalid) VALUES
+    ('Procurement', 'query_00001'),
+    ('Sales', 'query_00002'),
+    ('Inventory', 'query_00003');
 ```
 
 ### UPDATE SET WHERE

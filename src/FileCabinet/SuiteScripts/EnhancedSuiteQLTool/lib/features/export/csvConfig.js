@@ -176,7 +176,7 @@ define([
                 return Object.assign({}, DEFAULT_CONFIG, config);
             }
         } catch (e) {
-            console.warn('Could not load CSV config from localStorage:', e);
+            // Silently handle localStorage errors
         }
         return Object.assign({}, DEFAULT_CONFIG);
     }
@@ -190,7 +190,7 @@ define([
         try {
             localStorage.setItem('suiteql-csv-config', JSON.stringify(config));
         } catch (e) {
-            console.warn('Could not save CSV config to localStorage:', e);
+            // Silently handle localStorage errors
         }
     }
     

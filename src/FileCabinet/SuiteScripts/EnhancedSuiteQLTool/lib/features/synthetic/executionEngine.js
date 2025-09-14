@@ -10,8 +10,11 @@
 
 define([
     'N/file', 'N/log', 'N/record', 'N/query', 'N/search', 'N/format', 'N/runtime',
-    './syntheticFunctions'
-], function(file, log, record, query, search, format, runtime, syntheticFunctions) {
+    './syntheticFunctions',
+    './queryParser',
+    './syntheticProcessor',
+    '../dml/dmlProcessor'
+], function(file, log, record, query, search, format, runtime, syntheticFunctions, queryParser, syntheticProcessor, dmlProcessor) {
     'use strict';
 
     // Cache for compiled functions
@@ -53,7 +56,20 @@ define([
             // Get function registry
             var registry = syntheticFunctions.buildFunctionRegistry();
             var functionMeta = registry.functions[functionName];
-            
+
+            // If not found with exact case, try case-insensitive lookup
+            if (!functionMeta) {
+                var lowerFunctionName = functionName.toLowerCase();
+                var functionNames = Object.keys(registry.functions);
+
+                for (var i = 0; i < functionNames.length; i++) {
+                    if (functionNames[i].toLowerCase() === lowerFunctionName) {
+                        functionMeta = registry.functions[functionNames[i]];
+                        break;
+                    }
+                }
+            }
+
             if (!functionMeta) {
                 return {
                     success: false,
@@ -122,6 +138,19 @@ define([
             // Get function registry
             var registry = syntheticFunctions.buildFunctionRegistry();
             var procedureMeta = registry.procedures[procedureName];
+
+            // If not found with exact case, try case-insensitive lookup
+            if (!procedureMeta) {
+                var lowerProcedureName = procedureName.toLowerCase();
+                var procedureNames = Object.keys(registry.procedures);
+
+                for (var i = 0; i < procedureNames.length; i++) {
+                    if (procedureNames[i].toLowerCase() === lowerProcedureName) {
+                        procedureMeta = registry.procedures[procedureNames[i]];
+                        break;
+                    }
+                }
+            }
 
             if (!procedureMeta) {
                 return {
@@ -254,6 +283,9 @@ define([
                 'var exports = {};\n' +
                 'var module = { exports: exports };\n' +
                 'var console = modules.console || { log: function() {}, error: function() {}, info: function() {} };\n' +
+                'var dml = modules.dml || {};\n' +
+                'var functions = modules.functions || {};\n' +
+                'var suiteql = modules.suiteql || {};\n' +
                 content + '\n' +
                 'return ' + functionName + ';';
 
@@ -261,7 +293,7 @@ define([
             var compiledWrapper = new Function('modules', functionCode);
 
             return function(context) {
-                // Provide NetSuite modules to the function
+                // Provide NetSuite modules and enhanced capabilities to the function
                 var modules = {
                     record: record,
                     query: query,
@@ -270,7 +302,11 @@ define([
                     format: format,
                     runtime: runtime,
                     file: file,
-                    console: context.console || { log: function() {}, error: function() {}, info: function() {} }
+                    console: context.console || { log: function() {}, error: function() {}, info: function() {} },
+                    // Enhanced capabilities for stored procedures
+                    dml: context.dml || {},
+                    functions: context.functions || {},
+                    suiteql: context.suiteql || {}
                 };
 
                 // Get the actual function
@@ -432,6 +468,62 @@ define([
             context.output = function() {};
         }
 
+        // Add DML execution capabilities to stored procedures
+        context.dml = {
+            /**
+             * Execute INSERT statement within stored procedure
+             * @param {string} sql - INSERT SQL statement
+             * @returns {Object} Execution result
+             */
+            insert: function(sql) {
+                return executeDMLInProcedure(sql, 'INSERT', outputLog, showOutput);
+            },
+
+            /**
+             * Execute UPDATE statement within stored procedure
+             * @param {string} sql - UPDATE SQL statement
+             * @returns {Object} Execution result
+             */
+            update: function(sql) {
+                return executeDMLInProcedure(sql, 'UPDATE', outputLog, showOutput);
+            },
+
+            /**
+             * Execute DELETE statement within stored procedure
+             * @param {string} sql - DELETE SQL statement
+             * @returns {Object} Execution result
+             */
+            delete: function(sql) {
+                return executeDMLInProcedure(sql, 'DELETE', outputLog, showOutput);
+            }
+        };
+
+        // Add synthetic function execution capabilities
+        context.functions = {
+            /**
+             * Execute a synthetic function within stored procedure
+             * @param {string} functionName - Name of function to execute
+             * @param {Array|Object} parameters - Function parameters
+             * @returns {*} Function result
+             */
+            call: function(functionName, parameters) {
+                return executeFunctionInProcedure(functionName, parameters, outputLog, showOutput);
+            }
+        };
+
+        // Add SuiteQL execution capabilities
+        context.suiteql = {
+            /**
+             * Execute SuiteQL query within stored procedure
+             * @param {string} sql - SuiteQL query
+             * @param {Array} params - Query parameters (optional)
+             * @returns {Object} Query results
+             */
+            query: function(sql, params) {
+                return executeSuiteQLInProcedure(sql, params, outputLog, showOutput);
+            }
+        };
+
         return context;
     }
 
@@ -570,6 +662,231 @@ define([
                 details: error.message
             });
             return resultSet;
+        }
+    }
+
+    /**
+     * Execute DML statement within stored procedure
+     *
+     * @param {string} sql - DML SQL statement
+     * @param {string} operation - DML operation type (INSERT, UPDATE, DELETE)
+     * @param {Array} outputLog - Output log array
+     * @param {boolean} showOutput - Whether to show output
+     * @returns {Object} DML execution result
+     */
+    function executeDMLInProcedure(sql, operation, outputLog, showOutput) {
+        try {
+            if (showOutput && outputLog) {
+                outputLog.push({
+                    type: 'info',
+                    message: 'Executing ' + operation + ' statement: ' + sql,
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            // Execute DML using the DML processor
+            var result = dmlProcessor.processQuery(sql);
+
+            if (showOutput && outputLog) {
+                if (result.success) {
+                    outputLog.push({
+                        type: 'log',
+                        message: operation + ' completed successfully: ' + (result.message || 'Operation completed'),
+                        timestamp: new Date().toISOString()
+                    });
+                } else {
+                    outputLog.push({
+                        type: 'error',
+                        message: operation + ' failed: ' + (result.error || 'Unknown error'),
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            }
+
+            return {
+                success: result.success,
+                result: result.result,
+                error: result.error,
+                message: result.message,
+                recordsAffected: result.result ? (result.result.recordsCreated || result.result.recordsUpdated || result.result.recordsDeleted || 0) : 0
+            };
+
+        } catch (error) {
+            if (showOutput && outputLog) {
+                outputLog.push({
+                    type: 'error',
+                    message: operation + ' execution error: ' + error.message,
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            return {
+                success: false,
+                result: null,
+                error: error.message,
+                message: null,
+                recordsAffected: 0
+            };
+        }
+    }
+
+    /**
+     * Execute synthetic function within stored procedure
+     *
+     * @param {string} functionName - Name of function to execute
+     * @param {Array|Object} parameters - Function parameters
+     * @param {Array} outputLog - Output log array
+     * @param {boolean} showOutput - Whether to show output
+     * @returns {*} Function result
+     */
+    function executeFunctionInProcedure(functionName, parameters, outputLog, showOutput) {
+        try {
+            if (showOutput && outputLog) {
+                outputLog.push({
+                    type: 'info',
+                    message: 'Calling function: ' + functionName + '(' + JSON.stringify(parameters) + ')',
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            // Execute function using the execution engine
+            var result = executeFunction(functionName, parameters);
+
+            if (showOutput && outputLog) {
+                if (result.success) {
+                    outputLog.push({
+                        type: 'log',
+                        message: 'Function ' + functionName + ' returned: ' + JSON.stringify(result.result),
+                        timestamp: new Date().toISOString()
+                    });
+                } else {
+                    outputLog.push({
+                        type: 'error',
+                        message: 'Function ' + functionName + ' failed: ' + result.error,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            }
+
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+
+            return result.result;
+
+        } catch (error) {
+            if (showOutput && outputLog) {
+                outputLog.push({
+                    type: 'error',
+                    message: 'Function execution error: ' + error.message,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            throw error;
+        }
+    }
+
+    /**
+     * Execute SuiteQL query within stored procedure
+     * Supports both regular SuiteQL and queries with synthetic functions
+     *
+     * @param {string} sql - SuiteQL query
+     * @param {Array} params - Query parameters
+     * @param {Array} outputLog - Output log array
+     * @param {boolean} showOutput - Whether to show output
+     * @returns {Object} Query results
+     */
+    function executeSuiteQLInProcedure(sql, params, outputLog, showOutput) {
+        try {
+            if (showOutput && outputLog) {
+                outputLog.push({
+                    type: 'info',
+                    message: 'Executing SuiteQL: ' + sql + (params ? ' with params: ' + JSON.stringify(params) : ''),
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            // Check if query contains synthetic functions
+            var analysis = queryParser.analyzeQuery(sql);
+
+            var results;
+            var recordCount;
+
+            if (analysis.hasSyntheticFunctions) {
+                // Process query with synthetic functions
+                if (showOutput && outputLog) {
+                    outputLog.push({
+                        type: 'info',
+                        message: 'Query contains ' + analysis.functions.length + ' synthetic function(s), processing...',
+                        timestamp: new Date().toISOString()
+                    });
+                }
+
+                // Remove function calls from query to get base query
+                var baseQuery = syntheticProcessor.removeFunctionCallsFromQuery(sql, analysis.functions);
+
+                // Execute base query
+                var queryObj = params ?
+                    query.runSuiteQL({ query: baseQuery, params: params }) :
+                    query.runSuiteQL({ query: baseQuery });
+
+                var baseResults = queryObj.asMappedResults();
+
+                // Execute functions for each row and add results
+                results = executeFunctionsForResultSet(analysis.functions, baseResults);
+                recordCount = results.length;
+
+                if (showOutput && outputLog) {
+                    outputLog.push({
+                        type: 'log',
+                        message: 'Synthetic functions processed for ' + recordCount + ' record(s)',
+                        timestamp: new Date().toISOString()
+                    });
+                }
+
+            } else {
+                // Execute regular SuiteQL query
+                var queryObj = params ?
+                    query.runSuiteQL({ query: sql, params: params }) :
+                    query.runSuiteQL({ query: sql });
+
+                results = queryObj.asMappedResults();
+                recordCount = results.length;
+            }
+
+            if (showOutput && outputLog) {
+                outputLog.push({
+                    type: 'log',
+                    message: 'SuiteQL returned ' + recordCount + ' record(s)',
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            return {
+                success: true,
+                records: results,
+                recordCount: recordCount,
+                hasSyntheticFunctions: analysis.hasSyntheticFunctions,
+                functionsExecuted: analysis.hasSyntheticFunctions ? analysis.functions.length : 0
+            };
+
+        } catch (error) {
+            if (showOutput && outputLog) {
+                outputLog.push({
+                    type: 'error',
+                    message: 'SuiteQL execution error: ' + error.message,
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            return {
+                success: false,
+                records: [],
+                recordCount: 0,
+                error: error.message,
+                hasSyntheticFunctions: false,
+                functionsExecuted: 0
+            };
         }
     }
 

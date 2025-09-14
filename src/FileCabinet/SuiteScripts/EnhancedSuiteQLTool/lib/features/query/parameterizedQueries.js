@@ -16,8 +16,9 @@
  */
 
 define([
-    '../../core/constants'
-], function(constants) {
+    '../../core/constants',
+    '../../data/netsuiteFieldMetadata'
+], function(constants, fieldMetadata) {
     
     /**
      * Detect parameters in a SQL query
@@ -100,30 +101,105 @@ define([
     
     /**
      * Get context information for a parameter based on surrounding SQL
-     * 
+     *
      * @param {string} query - The full SQL query
      * @param {number} position - Position of the ? in the query
      * @returns {Object} Context information
      */
     function getParameterContext(query, position) {
-        // Get surrounding text (50 characters before and after)
-        const start = Math.max(0, position - 50);
-        const end = Math.min(query.length, position + 50);
-        const context = query.substring(start, end).toLowerCase();
-        
+        // Get surrounding text (100 characters before and after for better context)
+        const start = Math.max(0, position - 100);
+        const end = Math.min(query.length, position + 100);
+        const context = query.substring(start, end);
+
+        // Try to extract table and field information from the SQL context
+        var tableAndField = extractTableAndFieldFromContext(context, position - start);
+
+        if (tableAndField.tableName && tableAndField.fieldName) {
+            // Use NetSuite field metadata for accurate type detection
+            var parameterType = fieldMetadata.getParameterTypeFromField(tableAndField.tableName, tableAndField.fieldName);
+            return {
+                type: parameterType.type,
+                description: parameterType.description,
+                dataType: parameterType.dataType,
+                tableName: tableAndField.tableName,
+                fieldName: tableAndField.fieldName
+            };
+        }
+
+        // Fallback to pattern-based detection if we can't identify the field
+        return getParameterContextFallback(context.toLowerCase());
+    }
+
+    /**
+     * Extract table and field names from SQL context around a parameter
+     *
+     * @param {string} context - SQL context around the parameter
+     * @param {number} paramPosition - Position of ? within the context
+     * @returns {Object} Object with tableName and fieldName
+     */
+    function extractTableAndFieldFromContext(context, paramPosition) {
+        var result = { tableName: null, fieldName: null };
+
+        try {
+            // Look for patterns like "fieldname = ?" or "table.fieldname = ?"
+            var beforeParam = context.substring(0, paramPosition).trim();
+            var afterParam = context.substring(paramPosition + 1).trim();
+
+            // Pattern 1: "fieldname = ?" or "fieldname IN (?)" or "fieldname LIKE ?"
+            var fieldMatch = beforeParam.match(/(\w+\.)?(\w+)\s*(?:=|IN|LIKE|>|<|>=|<=|!=|<>)\s*$/i);
+            if (fieldMatch) {
+                result.fieldName = fieldMatch[2];
+                if (fieldMatch[1]) {
+                    // Remove the dot from "table."
+                    result.tableName = fieldMatch[1].replace('.', '');
+                }
+            }
+
+            // Pattern 2: Look for FROM clause to identify table if not found in field reference
+            if (!result.tableName) {
+                var fromMatch = context.match(/FROM\s+(\w+)/i);
+                if (fromMatch) {
+                    result.tableName = fromMatch[1];
+                }
+            }
+
+            // Pattern 3: Look for JOIN clauses for additional table context
+            if (!result.tableName) {
+                var joinMatch = context.match(/JOIN\s+(\w+)/i);
+                if (joinMatch) {
+                    result.tableName = joinMatch[1];
+                }
+            }
+
+        } catch (e) {
+            // If parsing fails, return null values
+        }
+
+        return result;
+    }
+
+    /**
+     * Fallback parameter context detection using pattern matching
+     *
+     * @param {string} context - Lowercase SQL context
+     * @returns {Object} Context information
+     */
+    function getParameterContextFallback(context) {
         // Default context
         let type = 'text';
         let description = 'Enter value';
-        
+
         // Look for date-related keywords
         if (context.includes('date') || context.includes('created') || context.includes('modified') ||
             context.includes('lastmodified') || context.includes('datecreated')) {
             type = 'date';
             description = 'Select date';
         }
-        // Look for numeric contexts
-        else if (context.includes('id') || context.includes('amount') || context.includes('count') || 
-                 context.includes('number') || context.includes('qty') || context.includes('quantity')) {
+        // Look for amount/currency contexts (but not "id" since many text fields contain "id")
+        else if (context.includes('amount') || context.includes('total') || context.includes('cost') ||
+                 context.includes('price') || context.includes('balance') || context.includes('limit') ||
+                 context.includes('count') || context.includes('qty') || context.includes('quantity')) {
             type = 'number';
             description = 'Enter numeric value';
         }
@@ -134,14 +210,16 @@ define([
         }
         // Look for boolean contexts
         else if (context.includes('active') || context.includes('enabled') || context.includes('disabled') ||
-                 context.includes('isinactive') || context.includes('is_inactive')) {
+                 context.includes('isinactive') || context.includes('is_inactive') || context.includes('voided') ||
+                 context.includes('approved') || context.includes('taxable')) {
             type = 'select';
             description = 'Select true/false';
         }
-        
+
         return {
             type: type,
-            description: description
+            description: description,
+            dataType: type === 'number' ? 'number' : type === 'date' ? 'date' : 'text'
         };
     }
     

@@ -70,6 +70,15 @@ define(['N/log'], function(log) {
         };
 
         try {
+            // Skip synthetic processing for DML statements
+            if (analysis.queryType === 'DML') {
+                log.debug({
+                    title: 'Skipping synthetic processing for DML statement',
+                    details: 'Query type: ' + analysis.queryType
+                });
+                return analysis; // Return early with no synthetic elements
+            }
+
             // Detect stored procedure calls first (CALL statements)
             if (analysis.queryType === 'CALL' || analysis.queryType === 'MIXED') {
                 analysis.procedures = detectStoredProcedureCalls(trimmedQuery);
@@ -116,11 +125,20 @@ define(['N/log'], function(log) {
      * @returns {string} Query type: 'SELECT', 'CALL', or 'MIXED'
      */
     function determineQueryType(query) {
-        var upperQuery = query.toUpperCase();
-        
+        var upperQuery = query.toUpperCase().trim();
+
+        // Check for DML statements first (these should not be processed by synthetic functions)
+        if (upperQuery.startsWith('INSERT INTO') ||
+            upperQuery.startsWith('UPDATE ') ||
+            upperQuery.startsWith('DELETE FROM') ||
+            upperQuery.startsWith('CREATE RECORD') ||
+            upperQuery.startsWith('CREATE LIST')) {
+            return 'DML';
+        }
+
         var hasSelect = upperQuery.includes('SELECT');
         var hasCall = upperQuery.match(/\bCALL\s+\w+/);
-        
+
         if (hasSelect && hasCall) {
             return 'MIXED';
         } else if (hasCall) {

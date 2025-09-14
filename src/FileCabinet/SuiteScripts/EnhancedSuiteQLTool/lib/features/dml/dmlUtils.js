@@ -18,22 +18,34 @@ define(['N/record', 'N/search', 'N/log'], function(record, search, log) {
      * @returns {Object} Record type information
      */
     function determineRecordType(tableName) {
-        // Custom record types
-        if (tableName.startsWith('customrecord_')) {
+        var lowerTableName = tableName.toLowerCase();
+
+        log.debug({
+            title: 'determineRecordType',
+            details: 'Original: "' + tableName + '", Lowercase: "' + lowerTableName + '"'
+        });
+
+        // Custom record types (case-insensitive)
+        if (lowerTableName.startsWith('customrecord_')) {
             return {
-                type: tableName,
+                type: lowerTableName,  // Use lowercase for consistency
                 isCustomRecord: true,
                 isCustomList: false
             };
         }
 
-        // Custom lists
-        if (tableName.startsWith('customlist_')) {
-            return {
-                type: tableName,
+        // Custom lists (case-insensitive)
+        if (lowerTableName.startsWith('customlist_')) {
+            var result = {
+                type: lowerTableName,  // Use lowercase for consistency
                 isCustomRecord: false,
                 isCustomList: true
             };
+            log.debug({
+                title: 'determineRecordType - Custom List Detected',
+                details: 'Returning: ' + JSON.stringify(result)
+            });
+            return result;
         }
 
         // Standard NetSuite records - map common table names to record types
@@ -97,8 +109,16 @@ define(['N/record', 'N/search', 'N/log'], function(record, search, log) {
         }
 
         // Default to treating as custom record if not found
+        // But don't add prefix if table name already has a valid NetSuite prefix
+        var finalType;
+        if (lowerTableName.startsWith('customrecord_') || lowerTableName.startsWith('customlist_')) {
+            finalType = lowerTableName;  // Use as-is if already has valid prefix
+        } else {
+            finalType = 'customrecord_' + lowerTableName;  // Add prefix for unknown tables
+        }
+
         return {
-            type: 'customrecord_' + tableName,
+            type: finalType,
             isCustomRecord: true,
             isCustomList: false
         };

@@ -436,7 +436,7 @@ define([
                         dom: '<"top"lf>rt<"bottom"ip><"clear">'
                     });
                 } catch (e) {
-                    console.warn('DataTables initialization failed:', e);
+                    // Silently handle DataTables initialization errors
                 }
             }
         `;

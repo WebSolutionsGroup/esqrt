@@ -80,8 +80,8 @@ define([
                 initCodeMirror();
 
                 // Sidebar and history
-                try { initializeSidebarSections(); } catch(e) { console.warn('initializeSidebarSections failed:', e); }
-                try { initializeQueryHistory(); } catch(e) { console.warn('initializeQueryHistory failed:', e); }
+                try { initializeSidebarSections(); } catch(e) { /* Silently handle initialization errors */ }
+                try { initializeQueryHistory(); } catch(e) { /* Silently handle initialization errors */ }
 
                 // Layout and handlers
                 try { initializeResponsiveLayout(); } catch(e) { console.warn('initializeResponsiveLayout failed:', e); }
@@ -163,7 +163,7 @@ define([
                     initializeResponsiveLayout();
                     // console.log('Responsive layout initialized');
                 } catch(e) {
-                    console.error('Error initializing responsive layout:', e);
+                    // Silently handle layout initialization errors
                 }
 
                 // Initialize resizable layout

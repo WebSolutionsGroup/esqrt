@@ -31,6 +31,8 @@ define([
      * @returns {void} - Writes response to context
      */
     function queryExecute(context, requestPayload) {
+        var beginTime = new Date().getTime(); // Define beginTime at the top for all error handlers
+
         try {
             var responsePayload;
             var moreRecords = true;
@@ -142,7 +144,18 @@ define([
 
             // Check for DML operations
             try {
+                nsModules.logger.debug('Checking for DML operations', {
+                    query: nestedSQL.substring(0, 100) + '...',
+                    isDMLQuery: dmlProcessor.isDMLQuery(nestedSQL)
+                });
+
                 var dmlResult = dmlProcessor.processQuery(nestedSQL);
+
+                nsModules.logger.debug('DML processing result', {
+                    wasDML: dmlResult.wasDML,
+                    success: dmlResult.success,
+                    error: dmlResult.error
+                });
 
                 if (dmlResult.wasDML) {
                     if (!dmlResult.success) {
@@ -164,12 +177,28 @@ define([
                     // Save query to history if enabled
                     if (constants.CONFIG.QUERY_HISTORY_ENABLED) {
                         try {
+                            // Calculate record count from DML result
+                            var recordCount = 1; // Default
+                            if (dmlResult.result) {
+                                if (dmlResult.result.recordsCreated) {
+                                    recordCount = dmlResult.result.recordsCreated;
+                                } else if (dmlResult.result.recordsUpdated) {
+                                    recordCount = dmlResult.result.recordsUpdated;
+                                } else if (dmlResult.result.recordsDeleted) {
+                                    recordCount = dmlResult.result.recordsDeleted;
+                                } else if (dmlResult.result.valuesAdded) {
+                                    recordCount = dmlResult.result.valuesAdded;
+                                } else if (dmlResult.result.recordIds && Array.isArray(dmlResult.result.recordIds)) {
+                                    recordCount = dmlResult.result.recordIds.length;
+                                }
+                            }
+
                             var historyData = {
                                 queryContent: nestedSQL,
                                 executionTime: elapsedTime,
-                                recordCount: 1, // DML operations typically affect one entity
+                                recordCount: recordCount,
                                 success: true,
-                                resultFormat: 'dml',
+                                resultFormat: 'table',  // Use 'table' format like synthetic operations
                                 sessionId: null
                             };
                             nsModules.logger.debug('Attempting to save DML query history', historyData);
@@ -191,23 +220,64 @@ define([
             } catch (dmlError) {
                 nsModules.logger.error('DML processing error', dmlError);
 
+                // Check if this is a DML query for error handling
+                var isDMLQueryCheck = dmlProcessor.isDMLQuery(nestedSQL);
+                nsModules.logger.debug('DML error handling check', {
+                    isDMLQuery: isDMLQueryCheck,
+                    query: nestedSQL.substring(0, 100) + '...',
+                    errorMessage: dmlError.message
+                });
+
                 // If this looks like a DML query, show the error
-                if (dmlProcessor.isDMLQuery(nestedSQL)) {
+                if (isDMLQueryCheck) {
+                    var dmlElapsedTime = (new Date().getTime() - beginTime);
+
+                    // Save failed DML query to history (matching regular query pattern)
+                    if (constants.CONFIG.QUERY_HISTORY_ENABLED) {
+                        try {
+                            var failedDmlHistoryData = {
+                                queryContent: nestedSQL,
+                                executionTime: dmlElapsedTime,
+                                recordCount: 0,
+                                success: false,
+                                errorMessage: dmlError.message || dmlError.toString(),
+                                resultFormat: 'table',  // Use 'table' format like synthetic operations
+                                sessionId: null
+                            };
+                            nsModules.logger.debug('Attempting to save failed DML query history', failedDmlHistoryData);
+                            var failedDmlHistoryRecordId = queryHistoryRecord.addQueryToHistory(failedDmlHistoryData);
+                            nsModules.logger.debug('Failed DML query history saved successfully', { recordId: failedDmlHistoryRecordId });
+                        } catch(dmlHistoryErr) {
+                            nsModules.logger.error('Failed DML Query History Save failed', {
+                                error: dmlHistoryErr.toString(),
+                                message: dmlHistoryErr.message,
+                                name: dmlHistoryErr.name,
+                                historyData: failedDmlHistoryData
+                            });
+                        }
+                    }
+
                     responsePayload = {
                         'error': 'DML processing failed: ' + dmlError.message,
                         'details': dmlError.stack || dmlError.toString(),
-                        'elapsedTime': 0
+                        'elapsedTime': dmlElapsedTime
                     };
                     context.response.write(JSON.stringify(responsePayload, null, 2));
                     return;
                 }
 
                 // Fall through to normal query processing for non-DML queries
+                nsModules.logger.debug('Falling through to standard SuiteQL processing', {
+                    query: nestedSQL.substring(0, 100) + '...',
+                    reason: 'DML processing failed but not identified as DML query'
+                });
             }
 
-            let beginTime = new Date().getTime();
-            
             // Execute query with or without pagination
+            nsModules.logger.debug('Executing standard SuiteQL query', {
+                query: nestedSQL.substring(0, 100) + '...',
+                paginationEnabled: requestPayload.paginationEnabled
+            });
             if (requestPayload.paginationEnabled) {
                 records = executePaginatedQuery(nestedSQL, queryParams, paginatedRowBegin, paginatedRowEnd);
             } else {

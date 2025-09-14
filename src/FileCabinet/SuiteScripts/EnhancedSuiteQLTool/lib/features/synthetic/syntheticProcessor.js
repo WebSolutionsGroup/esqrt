@@ -457,6 +457,7 @@ define([
     return {
         processQuery: processQuery,
         getAvailableFunctions: getAvailableFunctions,
-        validateQuery: validateQuery
+        validateQuery: validateQuery,
+        removeFunctionCallsFromQuery: removeFunctionCallsFromQuery
     };
 });

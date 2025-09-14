@@ -11,9 +11,8 @@
 define([
     'N/log',
     './dmlParser',
-    './dmlExecutionEngine',
-    '../../netsuite/queryHistoryRecord'
-], function(log, dmlParser, dmlExecutionEngine, queryHistoryRecord) {
+    './dmlExecutionEngine'
+], function(log, dmlParser, dmlExecutionEngine) {
     'use strict';
 
     /**
@@ -88,8 +87,8 @@ define([
                 analysis.parsedStatement
             );
 
-            // Log query to history
-            logQueryToHistory(query, executionResult, startTime);
+            // Note: Query history logging is handled by the main query engine
+            // to ensure uniform handling across all query types
 
             // Return final result
             return {
@@ -132,37 +131,11 @@ define([
         };
     }
 
-    /**
-     * Log query execution to history
-     * 
-     * @param {string} query - Original query
-     * @param {Object} executionResult - Execution result
-     * @param {number} startTime - Processing start time
-     */
-    function logQueryToHistory(query, executionResult, startTime) {
-        try {
-            // Use the NetSuite query history record module to log the query
-            queryHistoryRecord.addQueryToHistory({
-                queryContent: query,
-                executionTime: Date.now() - startTime,
-                recordCount: executionResult.result && executionResult.result.recordCount ? executionResult.result.recordCount : 1,
-                success: executionResult.success,
-                errorMessage: executionResult.error || null
-                // Omit resultFormat to avoid custom list value issues
-            });
 
-        } catch (historyError) {
-            log.error({
-                title: 'Error logging DML query to history',
-                details: historyError.message
-            });
-            // Don't fail the main operation due to history logging issues
-        }
-    }
 
     /**
      * Check if query contains DML operations
-     * 
+     *
      * @param {string} query - Query to check
      * @returns {boolean} True if query contains DML operations
      */
@@ -172,10 +145,13 @@ define([
         }
 
         var trimmedQuery = query.trim().toUpperCase();
-        
+
         // Check for supported DML patterns
-        return trimmedQuery.startsWith('CREATE RECORD') || 
-               trimmedQuery.startsWith('CREATE LIST');
+        return trimmedQuery.startsWith('CREATE RECORD') ||
+               trimmedQuery.startsWith('CREATE LIST') ||
+               trimmedQuery.startsWith('INSERT INTO') ||
+               trimmedQuery.startsWith('UPDATE ') ||
+               trimmedQuery.startsWith('DELETE FROM');
     }
 
     /**
@@ -226,7 +202,16 @@ define([
                 '    name = \'John Doe\',\n' +
                 '    department = \'Engineering\',\n' +
                 '    hire_date = \'2024-01-15\',\n' +
-                '    active = true;'
+                '    active = true;',
+
+                '-- Multiple values for custom lists\n' +
+                'INSERT INTO customlist_categories (name) VALUES (\'Category 1\'), (\'Category 2\'), (\'Category 3\');',
+
+                '-- Multiple records\n' +
+                'INSERT INTO customer (companyname, email) VALUES\n' +
+                '    (\'Company A\', \'a@company.com\'),\n' +
+                '    (\'Company B\', \'b@company.com\'),\n' +
+                '    (\'Company C\', \'c@company.com\');'
             ],
             UPDATE: [
                 'UPDATE customer SET companyname = \'New Company Name\' WHERE id = 123;',

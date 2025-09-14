@@ -18,6 +18,16 @@ define([
 ], function(log, error, createRecord, createList, insertRecord, updateRecord, deleteRecord) {
     'use strict';
 
+    // Debug: Check if modules loaded correctly
+    log.debug({
+        title: 'DML Execution Engine Module Loading',
+        details: 'createRecord: ' + (createRecord ? 'OK' : 'MISSING') +
+                ', createList: ' + (createList ? 'OK' : 'MISSING') +
+                ', insertRecord: ' + (insertRecord ? 'OK' : 'MISSING') +
+                ', updateRecord: ' + (updateRecord ? 'OK' : 'MISSING') +
+                ', deleteRecord: ' + (deleteRecord ? 'OK' : 'MISSING')
+    });
+
     /**
      * DML execution result structure
      * @typedef {Object} DMLExecutionResult
@@ -45,8 +55,13 @@ define([
         });
 
         try {
+            log.debug({
+                title: 'Executing DML Operation',
+                details: 'Type: ' + dmlType + ', Parsed Statement: ' + JSON.stringify(parsedStatement)
+            });
+
             var result;
-            
+
             switch (dmlType) {
                 case 'CREATE_RECORD':
                     result = createRecord.execute(parsedStatement);
@@ -348,6 +363,9 @@ define([
         validateDMLOperation: validateDMLOperation,
         validateCreateRecordStatement: validateCreateRecordStatement,
         validateCreateListStatement: validateCreateListStatement,
+        validateInsertStatement: validateInsertStatement,
+        validateUpdateStatement: validateUpdateStatement,
+        validateDeleteStatement: validateDeleteStatement,
         getSupportedOperations: getSupportedOperations,
         isOperationSupported: isOperationSupported
     };

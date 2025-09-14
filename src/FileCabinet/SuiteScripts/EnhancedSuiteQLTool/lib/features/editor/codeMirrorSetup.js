@@ -28,14 +28,12 @@ define([
             function initCodeMirror() {
                 // Check if CodeMirror is available
                 if (typeof CodeMirror === 'undefined') {
-                    console.error('CodeMirror library not loaded! Retrying in 500ms...');
                     setTimeout(initCodeMirror, 500);
                     return;
                 }
 
                 var textarea = document.getElementById('` + constants.ELEMENT_IDS.QUERY_TEXTAREA + `');
                 if (!textarea) {
-                    console.error('Query textarea not found!');
                     return;
                 }
 
@@ -124,7 +122,6 @@ define([
                     // console.log('CodeMirror initialized successfully');
 
                 } catch(error) {
-                    console.error('Error initializing CodeMirror:', error);
                     return;
                 }
 

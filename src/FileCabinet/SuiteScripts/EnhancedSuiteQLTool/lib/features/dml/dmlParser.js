@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-define(['N/log'], function(log) {
+define(['N/log', 'N/error'], function(log, error) {
     'use strict';
 
     /**
@@ -579,7 +579,14 @@ define(['N/log'], function(log) {
 
         // Basic INSERT INTO pattern: INSERT INTO table_name (columns) VALUES (values)
         // Also support: INSERT INTO table_name SET field1=value1, field2=value2
-        var insertMatch = query.match(/^\s*INSERT\s+INTO\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*(.*)/i);
+        // Updated regex to be more flexible with table names and capture everything after
+        var insertMatch = query.match(/^\s*INSERT\s+INTO\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+(.*)$/is);
+
+        log.debug({
+            title: 'parseInsertStatement regex test',
+            details: 'Query: "' + query + '", Match: ' + (insertMatch ? 'YES' : 'NO') +
+                    (insertMatch ? ', Table: "' + insertMatch[1] + '", Remainder: "' + insertMatch[2] + '"' : '')
+        });
         if (!insertMatch) {
             throw error.create({
                 name: 'INVALID_INSERT_SYNTAX',
@@ -590,12 +597,43 @@ define(['N/log'], function(log) {
         var tableName = insertMatch[1];
         var remainder = insertMatch[2].trim();
 
+        // Check for COMMIT or PREVIEW keywords (similar to UPDATE/DELETE logic)
+        // Use multiline flag to handle newlines in VALUES statements
+        var isPreview = true; // Default to preview mode for safety
+        var commitMatch = remainder.match(/^(.*?)\s+COMMIT\s*;?\s*$/is);
+        var previewMatch = remainder.match(/^(.*?)\s+PREVIEW\s*;?\s*$/is);
+
+        if (commitMatch) {
+            isPreview = false; // COMMIT means actually insert
+            remainder = commitMatch[1].trim();
+
+            log.debug({
+                title: 'INSERT COMMIT mode detected',
+                details: 'Will actually insert records (COMMIT specified)'
+            });
+        } else if (previewMatch) {
+            isPreview = true; // Explicit PREVIEW
+            remainder = previewMatch[1].trim();
+
+            log.debug({
+                title: 'INSERT PREVIEW mode detected (explicit)',
+                details: 'Will show records that would be inserted without actually inserting them'
+            });
+        } else {
+            // No keyword specified - default to PREVIEW for safety
+            log.debug({
+                title: 'INSERT PREVIEW mode (default)',
+                details: 'No COMMIT specified - defaulting to PREVIEW mode for safety. Add COMMIT to actually insert records.'
+            });
+        }
+
         var result = {
             operation: 'INSERT',
             tableName: tableName,
             recordType: null, // Will be determined based on table name
             fields: {},
-            values: []
+            values: [],
+            isPreview: isPreview
         };
 
         // Determine if it's VALUES syntax or SET syntax
@@ -623,7 +661,8 @@ define(['N/log'], function(log) {
         });
 
         // UPDATE table_name SET field1=value1, field2=value2 WHERE condition
-        var updateMatch = query.match(/^\s*UPDATE\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+SET\s+(.*)/i);
+        // Use $ anchor and s flag to capture everything including newlines
+        var updateMatch = query.match(/^\s*UPDATE\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+SET\s+(.*)$/is);
         if (!updateMatch) {
             throw error.create({
                 name: 'INVALID_UPDATE_SYNTAX',
@@ -634,24 +673,70 @@ define(['N/log'], function(log) {
         var tableName = updateMatch[1];
         var remainder = updateMatch[2].trim();
 
+        // Check for COMMIT or PREVIEW keywords (similar to DELETE logic)
+        var isPreview = true; // Default to preview mode for safety
+        var commitMatch = remainder.match(/^(.*?)\s+COMMIT\s*;?\s*$/is);
+        var previewMatch = remainder.match(/^(.*?)\s+PREVIEW\s*;?\s*$/is);
+
+        if (commitMatch) {
+            isPreview = false; // COMMIT means actually update
+            remainder = commitMatch[1].trim();
+
+            log.debug({
+                title: 'UPDATE COMMIT mode detected',
+                details: 'Will actually update records (COMMIT specified)'
+            });
+        } else if (previewMatch) {
+            isPreview = true; // Explicit PREVIEW
+            remainder = previewMatch[1].trim();
+
+            log.debug({
+                title: 'UPDATE PREVIEW mode detected (explicit)',
+                details: 'Will show records that would be updated without actually updating them'
+            });
+        } else {
+            // No keyword specified - default to PREVIEW for safety
+            log.debug({
+                title: 'UPDATE PREVIEW mode (default)',
+                details: 'No COMMIT specified - defaulting to PREVIEW mode for safety. Add COMMIT to actually update records.'
+            });
+        }
+
         // Split SET clause and WHERE clause
-        var whereMatch = remainder.match(/^(.*?)\s+WHERE\s+(.*)$/i);
+        // Use a more specific approach to find WHERE clause
+        var whereIndex = remainder.search(/\s+WHERE\s+/i);
         var setClause, whereClause;
 
-        if (whereMatch) {
-            setClause = whereMatch[1].trim();
-            whereClause = whereMatch[2].trim();
+        if (whereIndex !== -1) {
+            setClause = remainder.substring(0, whereIndex).trim();
+            whereClause = remainder.substring(whereIndex + remainder.match(/\s+WHERE\s+/i)[0].length).trim();
+
+            // Remove trailing semicolon from WHERE clause if present
+            if (whereClause.endsWith(';')) {
+                whereClause = whereClause.slice(0, -1).trim();
+            }
         } else {
             setClause = remainder;
             whereClause = null;
+
+            // Remove trailing semicolon from SET clause if present (when no WHERE clause)
+            if (setClause.endsWith(';')) {
+                setClause = setClause.slice(0, -1).trim();
+            }
         }
+
+        log.debug({
+            title: 'UPDATE clause extraction',
+            details: 'Remainder: "' + remainder + '", SET: "' + setClause + '", WHERE: "' + whereClause + '"'
+        });
 
         return {
             operation: 'UPDATE',
             tableName: tableName,
             recordType: null, // Will be determined based on table name
             setFields: parseSetClause(setClause),
-            whereCondition: whereClause ? parseWhereClause(whereClause) : null
+            whereCondition: whereClause ? parseWhereClause(whereClause) : null,
+            isPreview: isPreview
         };
     }
 
@@ -679,11 +764,45 @@ define(['N/log'], function(log) {
         var tableName = deleteMatch[1];
         var remainder = deleteMatch[2].trim();
 
+        // Check for COMMIT or PREVIEW keywords at the end
+        var isPreview = true; // Default to PREVIEW mode for safety
+        var commitMatch = remainder.match(/^(.*?)\s+COMMIT\s*;?\s*$/is);
+        var previewMatch = remainder.match(/^(.*?)\s+PREVIEW\s*;?\s*$/is);
+
+        if (commitMatch) {
+            isPreview = false; // COMMIT means actually delete
+            remainder = commitMatch[1].trim();
+
+            log.debug({
+                title: 'DELETE COMMIT mode detected',
+                details: 'Will actually delete records (COMMIT specified)'
+            });
+        } else if (previewMatch) {
+            isPreview = true; // Explicit PREVIEW
+            remainder = previewMatch[1].trim();
+
+            log.debug({
+                title: 'DELETE PREVIEW mode detected (explicit)',
+                details: 'Will show records that would be deleted without actually deleting them'
+            });
+        } else {
+            // No keyword specified - default to PREVIEW for safety
+            log.debug({
+                title: 'DELETE PREVIEW mode (default)',
+                details: 'No COMMIT specified - defaulting to PREVIEW mode for safety. Add COMMIT to actually delete records.'
+            });
+        }
+
         var whereClause = null;
         if (remainder) {
             var whereMatch = remainder.match(/^\s*WHERE\s+(.*)$/i);
             if (whereMatch) {
                 whereClause = whereMatch[1].trim();
+
+                // Remove trailing semicolon if present
+                if (whereClause.endsWith(';')) {
+                    whereClause = whereClause.slice(0, -1).trim();
+                }
             } else {
                 throw error.create({
                     name: 'INVALID_DELETE_SYNTAX',
@@ -701,7 +820,8 @@ define(['N/log'], function(log) {
             operation: 'DELETE',
             tableName: tableName,
             recordType: null, // Will be determined based on table name
-            whereCondition: parseWhereClause(whereClause)
+            whereCondition: parseWhereClause(whereClause),
+            isPreview: isPreview
         };
     }
 
@@ -727,39 +847,169 @@ define(['N/log'], function(log) {
      * @returns {Object} Updated result object
      */
     function parseInsertValuesSyntax(result, remainder) {
-        // Pattern: (field1, field2) VALUES (value1, value2)
-        var valuesMatch = remainder.match(/^\s*\(\s*([^)]+)\s*\)\s+VALUES\s+\(\s*([^)]+)\s*\)/i);
+        log.debug({
+            title: 'parseInsertValuesSyntax debug',
+            details: 'Remainder: "' + remainder + '"'
+        });
+
+        // Enhanced pattern to support multiple VALUES with multi-line support
+        // Pattern: (field1, field2) VALUES (val1, val2), (val3, val4)
+        // Now supports newlines between VALUES and the actual values
+        var valuesMatch = remainder.match(/^\s*\(\s*([^)]+)\s*\)\s+VALUES\s*[\r\n]*\s*(.+)/is);
+
+        log.debug({
+            title: 'parseInsertValuesSyntax regex test',
+            details: 'Pattern: /^\\s*\\(\\s*([^)]+)\\s*\\)\\s+VALUES\\s+(.+)/i, Match: ' + (valuesMatch ? 'YES' : 'NO') +
+                    (valuesMatch ? ', Fields: "' + valuesMatch[1] + '", Values: "' + valuesMatch[2] + '"' : '')
+        });
+
         if (!valuesMatch) {
             throw error.create({
                 name: 'INVALID_INSERT_VALUES_SYNTAX',
-                message: 'Invalid INSERT VALUES syntax. Expected: (field1, field2) VALUES (value1, value2)'
+                message: 'Invalid INSERT VALUES syntax. Expected: (field1, field2) VALUES (value1, value2) or (field1) VALUES (value1), (value2), (value3). Got: "' + remainder + '"'
             });
         }
 
         var fieldsStr = valuesMatch[1];
-        var valuesStr = valuesMatch[2];
+        var valuesSection = valuesMatch[2].trim();
+
+        // Remove COMMIT/PREVIEW keywords from the values section if present
+        // This handles cases like: VALUES ('val1'), ('val2') COMMIT;
+        var commitInValuesMatch = valuesSection.match(/^(.*?)\s+COMMIT\s*;?\s*$/i);
+        var previewInValuesMatch = valuesSection.match(/^(.*?)\s+PREVIEW\s*;?\s*$/i);
+
+        if (commitInValuesMatch) {
+            valuesSection = commitInValuesMatch[1].trim();
+            log.debug({
+                title: 'COMMIT keyword found in VALUES section',
+                details: 'Cleaned values section: "' + valuesSection + '"'
+            });
+        } else if (previewInValuesMatch) {
+            valuesSection = previewInValuesMatch[1].trim();
+            log.debug({
+                title: 'PREVIEW keyword found in VALUES section',
+                details: 'Cleaned values section: "' + valuesSection + '"'
+            });
+        }
+
+        // Remove trailing semicolon if present
+        if (valuesSection.endsWith(';')) {
+            valuesSection = valuesSection.slice(0, -1).trim();
+        }
 
         // Parse field names
         var fieldNames = fieldsStr.split(',').map(function(field) {
             return field.trim();
         });
 
-        // Parse values
-        var values = parseValuesList(valuesStr);
+        // Parse multiple VALUES tuples: (val1, val2), (val3, val4), etc.
+        var valuesTuples = parseMultipleValuesTuples(valuesSection);
 
-        if (fieldNames.length !== values.length) {
-            throw error.create({
-                name: 'FIELD_VALUE_MISMATCH',
-                message: 'Number of fields (' + fieldNames.length + ') does not match number of values (' + values.length + ')'
-            });
+        // Validate each tuple has the correct number of values
+        for (var i = 0; i < valuesTuples.length; i++) {
+            if (fieldNames.length !== valuesTuples[i].length) {
+                throw error.create({
+                    name: 'FIELD_VALUE_MISMATCH',
+                    message: 'Number of fields (' + fieldNames.length + ') does not match number of values (' + valuesTuples[i].length + ') in VALUES tuple ' + (i + 1)
+                });
+            }
         }
 
-        // Combine fields and values
-        for (var i = 0; i < fieldNames.length; i++) {
-            result.fields[fieldNames[i]] = values[i];
+        // If single tuple, use fields format for backward compatibility
+        if (valuesTuples.length === 1) {
+            for (var j = 0; j < fieldNames.length; j++) {
+                result.fields[fieldNames[j]] = valuesTuples[0][j];
+            }
+        } else {
+            // Multiple tuples - store as array for batch processing
+            result.multipleValues = [];
+            for (var k = 0; k < valuesTuples.length; k++) {
+                var valueObj = {};
+                for (var l = 0; l < fieldNames.length; l++) {
+                    valueObj[fieldNames[l]] = valuesTuples[k][l];
+                }
+                result.multipleValues.push(valueObj);
+            }
         }
 
         return result;
+    }
+
+    /**
+     * Parse multiple VALUES tuples: (val1, val2), (val3, val4), etc.
+     *
+     * @param {string} valuesSection - VALUES section to parse
+     * @returns {Array} Array of value arrays
+     */
+    function parseMultipleValuesTuples(valuesSection) {
+        var tuples = [];
+        var currentPos = 0;
+
+        while (currentPos < valuesSection.length) {
+            // Skip whitespace and commas
+            while (currentPos < valuesSection.length && /[\s,]/.test(valuesSection[currentPos])) {
+                currentPos++;
+            }
+
+            if (currentPos >= valuesSection.length) break;
+
+            // Expect opening parenthesis
+            if (valuesSection[currentPos] !== '(') {
+                throw error.create({
+                    name: 'INVALID_VALUES_SYNTAX',
+                    message: 'Expected opening parenthesis in VALUES clause at position ' + currentPos
+                });
+            }
+
+            // Find matching closing parenthesis (quote-aware)
+            var parenCount = 1;
+            var tupleStart = currentPos + 1;
+            var inQuotes = false;
+            var quoteChar = '';
+            currentPos++;
+
+            while (currentPos < valuesSection.length && parenCount > 0) {
+                var char = valuesSection[currentPos];
+
+                if (!inQuotes && (char === '"' || char === "'")) {
+                    // Starting a quoted string
+                    inQuotes = true;
+                    quoteChar = char;
+                } else if (inQuotes && char === quoteChar) {
+                    // Check for escaped quote (doubled quotes)
+                    if (currentPos + 1 < valuesSection.length && valuesSection[currentPos + 1] === quoteChar) {
+                        // Escaped quote - skip both characters
+                        currentPos++;
+                    } else {
+                        // End of quoted string
+                        inQuotes = false;
+                        quoteChar = '';
+                    }
+                } else if (!inQuotes) {
+                    // Only count parentheses when not inside quotes
+                    if (char === '(') {
+                        parenCount++;
+                    } else if (char === ')') {
+                        parenCount--;
+                    }
+                }
+                currentPos++;
+            }
+
+            if (parenCount > 0) {
+                throw error.create({
+                    name: 'INVALID_VALUES_SYNTAX',
+                    message: 'Unmatched parenthesis in VALUES clause'
+                });
+            }
+
+            // Extract and parse the tuple content
+            var tupleContent = valuesSection.substring(tupleStart, currentPos - 1);
+            var values = parseValuesList(tupleContent);
+            tuples.push(values);
+        }
+
+        return tuples;
     }
 
     /**
@@ -769,11 +1019,32 @@ define(['N/log'], function(log) {
      * @returns {Object} Object with field-value pairs
      */
     function parseSetClause(setClause) {
+        log.debug({
+            title: 'parseSetClause debug',
+            details: 'SET clause: "' + setClause + '"'
+        });
+
         var fields = {};
         var assignments = setClause.split(',');
 
+        log.debug({
+            title: 'parseSetClause assignments',
+            details: 'Assignments: ' + JSON.stringify(assignments)
+        });
+
         for (var i = 0; i < assignments.length; i++) {
             var assignment = assignments[i].trim();
+
+            // Skip empty assignments (can happen with trailing commas)
+            if (!assignment) {
+                continue;
+            }
+
+            log.debug({
+                title: 'parseSetClause assignment ' + i,
+                details: 'Assignment: "' + assignment + '"'
+            });
+
             var equalIndex = assignment.indexOf('=');
 
             if (equalIndex === -1) {
@@ -793,17 +1064,80 @@ define(['N/log'], function(log) {
     }
 
     /**
-     * Parse WHERE clause
+     * Parse WHERE clause - supports compound conditions with AND/OR
      *
      * @param {string} whereClause - WHERE clause to parse
-     * @returns {Object} Parsed WHERE condition
+     * @returns {Object} Parsed WHERE condition tree
      */
     function parseWhereClause(whereClause) {
-        // Simple implementation for now - can be enhanced later
-        // Support basic patterns: field = value, field IN (values), etc.
+        if (!whereClause || !whereClause.trim()) {
+            return null;
+        }
+
+        var trimmed = whereClause.trim();
+
+        // Try to parse as compound condition first
+        var compoundCondition = parseCompoundCondition(trimmed);
+        if (compoundCondition) {
+            return compoundCondition;
+        }
+
+        // Fall back to simple condition parsing
+        return parseSimpleCondition(trimmed);
+    }
+
+    /**
+     * Parse compound WHERE conditions with AND/OR operators
+     *
+     * @param {string} whereClause - WHERE clause to parse
+     * @returns {Object|null} Parsed compound condition or null if not compound
+     */
+    function parseCompoundCondition(whereClause) {
+        // First, check if this contains AND/OR operators outside of parentheses and quotes
+        var tokens = tokenizeWhereClause(whereClause);
+        var hasAndOr = tokens.some(function(token) {
+            return token.type === 'OPERATOR' && (token.value === 'AND' || token.value === 'OR');
+        });
+
+        if (!hasAndOr) {
+            return null; // Not a compound condition
+        }
+
+        // Build condition tree from tokens
+        return buildConditionTree(tokens);
+    }
+
+    /**
+     * Parse simple (single) WHERE condition
+     *
+     * @param {string} condition - Single condition to parse
+     * @returns {Object} Parsed simple condition
+     */
+    function parseSimpleCondition(condition) {
+        var trimmed = condition.trim();
+
+        // Remove outer parentheses if present
+        if (trimmed.startsWith('(') && trimmed.endsWith(')')) {
+            var inner = trimmed.slice(1, -1).trim();
+            // Make sure these are actually outer parentheses, not part of a function call
+            if (isBalancedParentheses(inner)) {
+                return parseSimpleCondition(inner);
+            }
+        }
+
+        // Check for BETWEEN clause
+        var betweenMatch = trimmed.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s+BETWEEN\s+(.+)\s+AND\s+(.+)$/i);
+        if (betweenMatch) {
+            return {
+                type: 'BETWEEN',
+                field: betweenMatch[1],
+                value1: parseValue(betweenMatch[2].trim()),
+                value2: parseValue(betweenMatch[3].trim())
+            };
+        }
 
         // Check for IN clause
-        var inMatch = whereClause.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s+IN\s+\(\s*([^)]+)\s*\)$/i);
+        var inMatch = trimmed.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s+IN\s+\(\s*([^)]+)\s*\)$/i);
         if (inMatch) {
             return {
                 type: 'IN',
@@ -812,21 +1146,211 @@ define(['N/log'], function(log) {
             };
         }
 
-        // Check for equality
-        var equalMatch = whereClause.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)$/);
-        if (equalMatch) {
+        // Check for IS NULL / IS NOT NULL
+        var nullMatch = trimmed.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s+IS\s+(NOT\s+)?NULL$/i);
+        if (nullMatch) {
             return {
-                type: 'EQUALS',
-                field: equalMatch[1],
-                value: parseValue(equalMatch[2])
+                type: nullMatch[2] ? 'IS_NOT_NULL' : 'IS_NULL',
+                field: nullMatch[1]
             };
         }
 
-        // For now, store as raw condition for complex cases
+        // Check for comparison operators (>=, <=, >, <, =, !=, <>)
+        var comparisonMatch = trimmed.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*(>=|<=|>|<|=|!=|<>)\s*(.+)$/i);
+        if (comparisonMatch) {
+            return {
+                type: 'COMPARISON',
+                field: comparisonMatch[1],
+                operator: comparisonMatch[2],
+                value: parseValue(comparisonMatch[3].trim())
+            };
+        }
+
+        // If no pattern matches, store as raw condition
         return {
             type: 'RAW',
-            condition: whereClause
+            condition: trimmed
         };
+    }
+
+    /**
+     * Tokenize WHERE clause into logical components
+     *
+     * @param {string} whereClause - WHERE clause to tokenize
+     * @returns {Array} Array of tokens
+     */
+    function tokenizeWhereClause(whereClause) {
+        var tokens = [];
+        var current = '';
+        var inQuotes = false;
+        var quoteChar = '';
+        var parenDepth = 0;
+        var i = 0;
+
+        while (i < whereClause.length) {
+            var char = whereClause[i];
+            var nextChars = whereClause.substring(i, i + 4).toUpperCase();
+
+            // Handle quotes
+            if (!inQuotes && (char === "'" || char === '"')) {
+                inQuotes = true;
+                quoteChar = char;
+                current += char;
+            } else if (inQuotes && char === quoteChar) {
+                // Check for escaped quotes
+                if (i + 1 < whereClause.length && whereClause[i + 1] === quoteChar) {
+                    current += char + char;
+                    i += 2;
+                    continue;
+                } else {
+                    inQuotes = false;
+                    quoteChar = '';
+                    current += char;
+                }
+            } else if (inQuotes) {
+                current += char;
+            } else if (char === '(') {
+                parenDepth++;
+                current += char;
+            } else if (char === ')') {
+                parenDepth--;
+                current += char;
+            } else if (parenDepth === 0 && (nextChars.startsWith('AND ') || nextChars.startsWith('OR '))) {
+                // Found AND/OR at top level
+                if (current.trim()) {
+                    tokens.push({type: 'CONDITION', value: current.trim()});
+                    current = '';
+                }
+
+                var operator = nextChars.startsWith('AND ') ? 'AND' : 'OR';
+                tokens.push({type: 'OPERATOR', value: operator});
+                i += operator.length;
+                continue;
+            } else {
+                current += char;
+            }
+
+            i++;
+        }
+
+        // Add final token
+        if (current.trim()) {
+            tokens.push({type: 'CONDITION', value: current.trim()});
+        }
+
+        return tokens;
+    }
+
+    /**
+     * Build condition tree from tokens
+     *
+     * @param {Array} tokens - Array of tokens
+     * @returns {Object} Condition tree
+     */
+    function buildConditionTree(tokens) {
+        if (tokens.length === 1) {
+            return parseSimpleCondition(tokens[0].value);
+        }
+
+        // Handle operator precedence: AND has higher precedence than OR
+        // First, group by OR operators (lowest precedence)
+        var orGroups = [];
+        var currentGroup = [];
+
+        for (var i = 0; i < tokens.length; i++) {
+            var token = tokens[i];
+            if (token.type === 'OPERATOR' && token.value === 'OR') {
+                if (currentGroup.length > 0) {
+                    orGroups.push(currentGroup);
+                    currentGroup = [];
+                }
+            } else if (token.type === 'CONDITION' || (token.type === 'OPERATOR' && token.value === 'AND')) {
+                currentGroup.push(token);
+            }
+        }
+
+        if (currentGroup.length > 0) {
+            orGroups.push(currentGroup);
+        }
+
+        if (orGroups.length === 1) {
+            // No OR operators, just handle AND operators
+            return buildAndConditionTree(orGroups[0]);
+        } else {
+            // Multiple OR groups
+            var orConditions = orGroups.map(function(group) {
+                return buildAndConditionTree(group);
+            });
+
+            return {
+                type: 'COMPOUND',
+                operator: 'OR',
+                conditions: orConditions
+            };
+        }
+    }
+
+    /**
+     * Build AND condition tree from tokens
+     *
+     * @param {Array} tokens - Array of tokens (should only contain conditions and AND operators)
+     * @returns {Object} AND condition tree
+     */
+    function buildAndConditionTree(tokens) {
+        var conditions = [];
+
+        for (var i = 0; i < tokens.length; i++) {
+            var token = tokens[i];
+            if (token.type === 'CONDITION') {
+                conditions.push(parseSimpleCondition(token.value));
+            }
+            // Skip AND operators
+        }
+
+        if (conditions.length === 1) {
+            return conditions[0];
+        } else {
+            return {
+                type: 'COMPOUND',
+                operator: 'AND',
+                conditions: conditions
+            };
+        }
+    }
+
+    /**
+     * Check if parentheses are balanced in a string
+     *
+     * @param {string} str - String to check
+     * @returns {boolean} True if balanced
+     */
+    function isBalancedParentheses(str) {
+        var depth = 0;
+        var inQuotes = false;
+        var quoteChar = '';
+
+        for (var i = 0; i < str.length; i++) {
+            var char = str[i];
+
+            if (!inQuotes && (char === "'" || char === '"')) {
+                inQuotes = true;
+                quoteChar = char;
+            } else if (inQuotes && char === quoteChar) {
+                inQuotes = false;
+                quoteChar = '';
+            } else if (!inQuotes) {
+                if (char === '(') {
+                    depth++;
+                } else if (char === ')') {
+                    depth--;
+                    if (depth < 0) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return depth === 0;
     }
 
     /**
@@ -874,10 +1398,43 @@ define(['N/log'], function(log) {
      */
     function parseValuesList(valuesStr) {
         var values = [];
-        var parts = valuesStr.split(',');
+        var currentValue = '';
+        var inQuotes = false;
+        var quoteChar = '';
 
-        for (var i = 0; i < parts.length; i++) {
-            values.push(parseValue(parts[i]));
+        for (var i = 0; i < valuesStr.length; i++) {
+            var char = valuesStr[i];
+
+            if (!inQuotes && (char === '"' || char === "'")) {
+                // Starting a quoted string
+                inQuotes = true;
+                quoteChar = char;
+                currentValue += char;
+            } else if (inQuotes && char === quoteChar) {
+                // Check for escaped quote (doubled quotes)
+                if (i + 1 < valuesStr.length && valuesStr[i + 1] === quoteChar) {
+                    // Escaped quote - add both characters and skip next
+                    currentValue += char + char;
+                    i++; // Skip the next quote
+                } else {
+                    // End of quoted string
+                    inQuotes = false;
+                    quoteChar = '';
+                    currentValue += char;
+                }
+            } else if (!inQuotes && char === ',') {
+                // Found a comma outside of quotes - end current value
+                values.push(parseValue(currentValue));
+                currentValue = '';
+            } else {
+                // Regular character
+                currentValue += char;
+            }
+        }
+
+        // Add the last value
+        if (currentValue.trim()) {
+            values.push(parseValue(currentValue));
         }
 
         return values;
