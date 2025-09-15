@@ -85,6 +85,8 @@ define([
                     --codeoss-border: #e5e5e5;
                     --codeoss-accent: #007acc;
                     --codeoss-accent-hover: #005a9e;
+                    --codeoss-accent-bg: #e3f2fd;
+                    --codeoss-background-hover: #f0f0f0;
                     --codeoss-success: #16825d;
                     --codeoss-warning: #bf8803;
                     --codeoss-error: #d73a49;
@@ -110,6 +112,8 @@ define([
                     --codeoss-border: #3e3e42;
                     --codeoss-accent: #007acc;
                     --codeoss-accent-hover: #1177bb;
+                    --codeoss-accent-bg: #1e3a5f;
+                    --codeoss-background-hover: #2a2d2e;
                     --codeoss-success: #4ec9b0;
                     --codeoss-warning: #ffcc02;
                     --codeoss-error: #f44747;

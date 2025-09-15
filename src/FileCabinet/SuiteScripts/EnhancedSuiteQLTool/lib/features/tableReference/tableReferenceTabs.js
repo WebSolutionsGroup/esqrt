@@ -13,9 +13,7 @@
  * @version 2025.1
  */
 
-define([
-    '../../core/constants'
-], function(constants) {
+define([], function() {
     
     /**
      * Generate JavaScript for Table Reference tabs functionality
@@ -30,6 +28,9 @@ define([
              * Open a new table reference tab
              */
             function openTableReferenceTab(tableId, tableName) {
+                // Update table selection highlighting
+                updateTableSelection(tableId);
+
                 // Check if tab already exists in the main query tabs
                 const existingQueryTab = queryTabs.find(tab => tab.isTableReference && tab.tableId === tableId);
                 if (existingQueryTab) {
@@ -58,6 +59,26 @@ define([
 
                 // Load table data
                 loadTableReferenceData(tabId);
+            }
+
+            /**
+             * Update table selection highlighting in the Table Explorer
+             */
+            function updateTableSelection(selectedTableId) {
+                // Remove previous selection
+                const previousSelected = document.querySelectorAll('.table-explorer-item.selected');
+                previousSelected.forEach(item => {
+                    item.classList.remove('selected');
+                });
+
+                // Find and highlight the selected table
+                const tableItems = document.querySelectorAll('.table-explorer-item');
+                tableItems.forEach(item => {
+                    const onclick = item.getAttribute('onclick');
+                    if (onclick && onclick.includes("'" + selectedTableId + "'")) {
+                        item.classList.add('selected');
+                    }
+                });
             }
             
 
@@ -247,6 +268,7 @@ define([
             // Make functions available globally
             window.openTableReferenceTab = openTableReferenceTab;
             window.switchTableReferenceSubTab = switchTableReferenceSubTab;
+            window.updateTableSelection = updateTableSelection;
         `;
     }
     

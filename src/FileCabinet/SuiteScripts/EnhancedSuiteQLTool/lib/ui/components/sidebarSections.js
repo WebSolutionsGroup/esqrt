@@ -77,13 +77,15 @@ define([
                         // Initialize table explorer data loading and analyze families
                         setTimeout(() => {
                             if (window.loadTableExplorerData) {
-                                // Load basic record types first
+                                // Load basic record types first (this will fetch all record types if not cached)
                                 window.loadTableExplorerData('system').then(() => {
                                     // Pre-analyze family counts for both system and custom
                                     console.log('Pre-analyzing family counts for faster category expansion');
                                     if (window.preAnalyzeFamilyCounts) {
                                         window.preAnalyzeFamilyCounts();
                                     }
+                                }).catch(error => {
+                                    console.error('Failed to load table explorer data:', error);
                                 });
                             }
                         }, 100);
@@ -214,9 +216,11 @@ define([
             }
 
             function loadTableCategoryData(categoryName) {
-                // This will be implemented in the table reference data module
+                // Load table category data with proper Promise handling
                 if (window.loadTableExplorerData) {
-                    window.loadTableExplorerData(categoryName);
+                    window.loadTableExplorerData(categoryName).catch(error => {
+                        console.error('Failed to load table category data for', categoryName, ':', error);
+                    });
                 }
             }
 

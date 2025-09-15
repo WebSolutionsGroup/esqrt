@@ -96,13 +96,14 @@ define([
                     const origin = isSystemRecord(table) ? 'System' : 'Custom';
                     const family = getRecordFamily(table);
 
+                    const displayName = getTableDisplayName(table);
+                    const tooltip = getTableTooltip(table);
                     html += \`
                         <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_ITEM}"
                              onclick="openTableReferenceTab('\${table.id}', '\${table.label}')"
-                             title="Click to view \${table.label} details"
+                             title="\${tooltip}"
                              style="padding: 6px 16px; cursor: pointer; border-radius: 3px; font-size: 11px; line-height: 1.3; border-bottom: 1px solid var(--codeoss-border-light);">
-                            <div style="font-weight: 500; color: var(--codeoss-text-primary);">\${table.label}</div>
-                            <div style="color: var(--codeoss-text-secondary); font-size: 10px;">\${table.id}</div>
+                            <div style="font-weight: 500; color: var(--codeoss-text-primary);">\${displayName}</div>
                             <div style="color: var(--codeoss-text-tertiary); font-size: 9px; margin-top: 2px;">\${origin} • \${family}</div>
                         </div>
                     \`;
@@ -113,16 +114,18 @@ define([
 
             /**
              * Load table explorer data for a specific category
+             * Returns a Promise that resolves when data is loaded
              */
             function loadTableExplorerData(categoryName) {
                 if (!tableReferenceCache.recordTypes) {
                     // First time loading - fetch all record types
-                    fetchAllRecordTypes().then(() => {
+                    return fetchAllRecordTypes().then(() => {
                         populateTableCategory(categoryName);
                     });
                 } else {
                     // Data already cached - just populate the category
                     populateTableCategory(categoryName);
+                    return Promise.resolve();
                 }
             }
             
@@ -264,6 +267,30 @@ define([
                 }
 
                 return false;
+            }
+
+            /**
+             * Helper function to get the display name for a table based on configuration
+             */
+            function getTableDisplayName(table) {
+                if (constants.CONFIG.UI.TABLE_EXPLORER.DISPLAY_MODE === 'LABEL') {
+                    return table.label || table.id;
+                } else {
+                    return table.id;
+                }
+            }
+
+            /**
+             * Helper function to get the tooltip text for a table (shows the alternate info)
+             */
+            function getTableTooltip(table) {
+                if (constants.CONFIG.UI.TABLE_EXPLORER.DISPLAY_MODE === 'LABEL') {
+                    // If showing label, tooltip shows ID
+                    return 'ID: ' + table.id;
+                } else {
+                    // If showing ID, tooltip shows label
+                    return table.label ? ('Label: ' + table.label) : ('ID: ' + table.id);
+                }
             }
 
             /**
@@ -416,21 +443,48 @@ define([
                     batchFetchOverviews(recordIds).then(() => {
                         // Now group by record family with overview data available
                         const familyCounts = {};
+                        const familyMembership = {}; // Track which records belong to which families
+
                         allFilteredTables.forEach(table => {
                             const family = getRecordFamily(table);
                             familyCounts[family] = (familyCounts[family] || 0) + 1;
+
+                            // Store family membership for later use
+                            if (!familyMembership[family]) {
+                                familyMembership[family] = [];
+                            }
+                            familyMembership[family].push(table.id);
                         });
 
+                        // Cache the family membership for this category
+                        tableReferenceCache.familyMembership = tableReferenceCache.familyMembership || {};
+                        tableReferenceCache.familyMembership[categoryName] = familyMembership;
+
                         console.log('Family counts for', categoryName, ':', familyCounts);
+                        console.log('Family membership cached for', categoryName);
                         resolve(familyCounts);
                     }).catch(error => {
                         console.error('Error fetching overview data for family counts:', error);
                         // Fallback to basic classification without overview data
                         const familyCounts = {};
+                        const familyMembership = {};
+
                         allFilteredTables.forEach(table => {
                             const family = getRecordFamily(table);
                             familyCounts[family] = (familyCounts[family] || 0) + 1;
+
+                            // Store family membership for later use
+                            if (!familyMembership[family]) {
+                                familyMembership[family] = [];
+                            }
+                            familyMembership[family].push(table.id);
                         });
+
+                        // Cache the family membership for this category
+                        tableReferenceCache.familyMembership = tableReferenceCache.familyMembership || {};
+                        tableReferenceCache.familyMembership[categoryName] = familyMembership;
+
+                        console.log('Fallback family counts for', categoryName, ':', familyCounts);
                         resolve(familyCounts);
                     });
                 });
@@ -478,12 +532,9 @@ define([
                              style="padding: 6px 8px; background: var(--codeoss-background-secondary); border-bottom: 1px solid var(--codeoss-border); font-weight: 600; font-size: 10px; color: var(--codeoss-text-primary); text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; display: flex; align-items: center;">
                             <span class="family-toggle-icon">▶</span>
                             \${family} (\${count})
-                            <span style="margin-left: auto; font-size: 9px; color: var(--codeoss-text-secondary); opacity: 0.7;">Click to load</span>
                         </div>
                         <div class="table-family-content collapsed" id="family-\${categoryName}-\${family}" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
-                            <div style="padding: 12px; text-align: center; color: var(--codeoss-text-secondary); font-size: 10px;">
-                                Click header to load \${count} records
-                            </div>
+                            <!-- Content will be loaded when family is expanded -->
                         </div>
                     \`;
                 });
@@ -516,16 +567,32 @@ define([
 
                 // Get all records for this category and family (only once)
                 if (familyPagination.allRecords.length === 0) {
-                    if (categoryName === 'system') {
+                    // Try to use cached family membership first
+                    const familyMembership = tableReferenceCache.familyMembership &&
+                                           tableReferenceCache.familyMembership[categoryName] &&
+                                           tableReferenceCache.familyMembership[categoryName][familyName];
+
+                    if (familyMembership && familyMembership.length > 0) {
+                        // Use cached family membership
+                        console.log('Using cached family membership for', familyName, ':', familyMembership.length, 'records');
                         familyPagination.allRecords = tableReferenceCache.recordTypes.filter(table =>
-                            isSystemRecord(table) && getRecordFamily(table) === familyName
+                            familyMembership.includes(table.id)
                         );
-                    } else if (categoryName === 'custom') {
-                        familyPagination.allRecords = tableReferenceCache.recordTypes.filter(table =>
-                            isCustomRecord(table) && getRecordFamily(table) === familyName
-                        );
+                    } else {
+                        // Fallback to dynamic filtering
+                        console.log('No cached family membership found, using dynamic filtering for', familyName);
+                        if (categoryName === 'system') {
+                            familyPagination.allRecords = tableReferenceCache.recordTypes.filter(table =>
+                                isSystemRecord(table) && getRecordFamily(table) === familyName
+                            );
+                        } else if (categoryName === 'custom') {
+                            familyPagination.allRecords = tableReferenceCache.recordTypes.filter(table =>
+                                isCustomRecord(table) && getRecordFamily(table) === familyName
+                            );
+                        }
                     }
                     familyPagination.total = familyPagination.allRecords.length;
+                    console.log('Family', familyName, 'has', familyPagination.total, 'total records');
                 }
 
                 const familyContainer = document.getElementById(\`family-\${categoryName}-\${familyName}\`);
@@ -554,11 +621,17 @@ define([
                     familyContainer.classList.remove('collapsed');
                     familyContainer.style.maxHeight = '50px';
 
-                    // Update header to show loading
+                    // Update header to show loading - ensure icon is preserved
                     const icon = familyHeader.querySelector('.family-toggle-icon');
-                    const loadText = familyHeader.querySelector('span:last-child');
-                    if (icon) icon.textContent = '▼';
-                    if (loadText) loadText.textContent = 'Loading...';
+                    if (icon) {
+                        icon.textContent = '▼';
+                    } else {
+                        // Fallback: recreate the icon if it's missing
+                        const newIcon = document.createElement('span');
+                        newIcon.className = 'family-toggle-icon';
+                        newIcon.textContent = '▼';
+                        familyHeader.insertBefore(newIcon, familyHeader.firstChild);
+                    }
                 } else {
                     // Update existing load more button
                     const loadMoreBtn = familyContainer.querySelector('.family-load-more-button');
@@ -572,17 +645,10 @@ define([
                 // Fetch overview data for this batch
                 const recordIds = recordsToLoad.map(table => table.id);
                 batchFetchOverviews(recordIds).then(() => {
-                    // Re-filter with overview data (some records might change families)
+                    // Since we're using cached family membership, we don't need to re-filter
+                    // The records were already correctly assigned to this family during count generation
                     let finalTables = recordsToLoad;
-                    if (categoryName === 'system') {
-                        finalTables = recordsToLoad.filter(table =>
-                            isSystemRecord(table) && getRecordFamily(table) === familyName
-                        );
-                    } else if (categoryName === 'custom') {
-                        finalTables = recordsToLoad.filter(table =>
-                            isCustomRecord(table) && getRecordFamily(table) === familyName
-                        );
-                    }
+                    console.log('Using', finalTables.length, 'records for family', familyName, '(no re-filtering needed)');
 
                     // Update loaded count
                     familyPagination.loaded = endIndex;
@@ -593,9 +659,6 @@ define([
 
                     // Update header (only on initial load)
                     if (!loadMore) {
-                        const loadText = familyHeader.querySelector('span:last-child');
-                        if (loadText) loadText.textContent = '';
-
                         // Make the family collapsible now
                         familyHeader.onclick = function() { toggleFamilyGroup(this); };
                     }
@@ -609,8 +672,8 @@ define([
 
                     if (!loadMore) {
                         familyContainer.innerHTML = '<div style="padding: 12px; text-align: center; color: var(--codeoss-text-error);">Error loading records</div>';
-                        const loadText = familyHeader.querySelector('span:last-child');
-                        if (loadText) loadText.textContent = 'Error - click to retry';
+                        // Don't modify the header text on error - just leave the icon as is
+                        console.log('Error loading family details, but preserving header icon');
                     }
                 });
             }
@@ -621,16 +684,19 @@ define([
             function renderFamilyContent(container, tables, familyKey, appendMode = false) {
                 const familyPagination = tableReferenceCache.familyPagination[familyKey];
 
+                console.log('Rendering family content for', familyKey, '- tables:', tables.length, 'appendMode:', appendMode);
+
                 // Generate HTML for tables
                 let tablesHtml = '';
                 tables.forEach(table => {
+                    const displayName = getTableDisplayName(table);
+                    const tooltip = getTableTooltip(table);
                     tablesHtml += \`
                         <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_ITEM}"
                              onclick="openTableReferenceTab('\${table.id}', '\${table.label}')"
-                             title="Click to view \${table.label} details"
+                             title="\${tooltip}"
                              style="padding: 4px 16px; cursor: pointer; border-radius: 3px; font-size: 11px; line-height: 1.3;">
-                            <div style="font-weight: 500; color: var(--codeoss-text-primary);">\${table.label}</div>
-                            <div style="color: var(--codeoss-text-secondary); font-size: 10px;">\${table.id}</div>
+                            <div style="font-weight: 500; color: var(--codeoss-text-primary);">\${displayName}</div>
                         </div>
                     \`;
                 });
@@ -666,7 +732,9 @@ define([
                 }
 
                 // Update container height
-                container.style.maxHeight = container.scrollHeight + 'px';
+                const newHeight = container.scrollHeight + 'px';
+                console.log('Updating family container height to:', newHeight, 'for', familyKey);
+                container.style.maxHeight = newHeight;
             }
 
             /**
@@ -909,13 +977,14 @@ define([
                                 // Create HTML for new tables
                                 let newTablesHtml = '';
                                 familyTables.forEach(table => {
+                                    const displayName = getTableDisplayName(table);
+                                    const tooltip = getTableTooltip(table);
                                     newTablesHtml += \`
                                         <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_ITEM}"
                                              onclick="openTableReferenceTab('\${table.id}', '\${table.label}')"
-                                             title="Click to view \${table.label} details"
+                                             title="\${tooltip}"
                                              style="padding: 4px 16px; cursor: pointer; border-radius: 3px; font-size: 11px; line-height: 1.3;">
-                                            <div style="font-weight: 500; color: var(--codeoss-text-primary);">\${table.label}</div>
-                                            <div style="color: var(--codeoss-text-secondary); font-size: 10px;">\${table.id}</div>
+                                            <div style="font-weight: 500; color: var(--codeoss-text-primary);">\${displayName}</div>
                                         </div>
                                     \`;
                                 });
@@ -942,13 +1011,14 @@ define([
                             \`;
 
                             familyTables.forEach(table => {
+                                const displayName = getTableDisplayName(table);
+                                const tooltip = getTableTooltip(table);
                                 html += \`
                                     <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_ITEM}"
                                          onclick="openTableReferenceTab('\${table.id}', '\${table.label}')"
-                                         title="Click to view \${table.label} details"
+                                         title="\${tooltip}"
                                          style="padding: 4px 16px; cursor: pointer; border-radius: 3px; font-size: 11px; line-height: 1.3;">
-                                        <div style="font-weight: 500; color: var(--codeoss-text-primary);">\${table.label}</div>
-                                        <div style="color: var(--codeoss-text-secondary); font-size: 10px;">\${table.id}</div>
+                                        <div style="font-weight: 500; color: var(--codeoss-text-primary);">\${displayName}</div>
                                     </div>
                                 \`;
                             });
@@ -978,13 +1048,14 @@ define([
 
                         // Family tables
                         familyTables.forEach(table => {
+                            const displayName = getTableDisplayName(table);
+                            const tooltip = getTableTooltip(table);
                             html += \`
                                 <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_ITEM}"
                                      onclick="openTableReferenceTab('\${table.id}', '\${table.label}')"
-                                     title="Click to view \${table.label} details"
+                                     title="\${tooltip}"
                                      style="padding: 4px 16px; cursor: pointer; border-radius: 3px; font-size: 11px; line-height: 1.3;">
-                                    <div style="font-weight: 500; color: var(--codeoss-text-primary);">\${table.label}</div>
-                                    <div style="color: var(--codeoss-text-secondary); font-size: 10px;">\${table.id}</div>
+                                    <div style="font-weight: 500; color: var(--codeoss-text-primary);">\${displayName}</div>
                                 </div>
                             \`;
                         });
@@ -1166,7 +1237,15 @@ define([
              */
             function toggleFamilyGroup(headerElement) {
                 const content = headerElement.nextElementSibling;
-                const icon = headerElement.querySelector('.family-toggle-icon');
+                let icon = headerElement.querySelector('.family-toggle-icon');
+
+                // Ensure icon exists
+                if (!icon) {
+                    icon = document.createElement('span');
+                    icon.className = 'family-toggle-icon';
+                    icon.textContent = '▶';
+                    headerElement.insertBefore(icon, headerElement.firstChild);
+                }
 
                 if (content && content.classList.contains('table-family-content')) {
                     const isCollapsed = content.classList.contains('collapsed');
@@ -1191,6 +1270,14 @@ define([
              */
             function preAnalyzeFamilyCounts() {
                 console.log('Pre-analyzing family counts for faster category expansion');
+
+                // Check if record types are available
+                if (!tableReferenceCache.recordTypes) {
+                    console.warn('Cannot pre-analyze family counts: record types not loaded yet');
+                    return;
+                }
+
+                console.log('Record types available, starting family analysis for', tableReferenceCache.recordTypes.length, 'records');
 
                 // Pre-analyze system families
                 generateFamilyCounts('system').then(systemCounts => {

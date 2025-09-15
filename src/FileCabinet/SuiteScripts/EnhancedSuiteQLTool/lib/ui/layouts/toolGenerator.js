@@ -862,6 +862,46 @@ define([
                     overflow: hidden;
                 }
 
+                /* Table Explorer Item Styling */
+                .table-explorer-item {
+                    transition: background-color 0.2s ease;
+                    user-select: none;
+                }
+
+                .table-explorer-item:hover {
+                    background-color: var(--codeoss-background-hover) !important;
+                }
+
+                .table-explorer-item.selected {
+                    background-color: var(--codeoss-accent-bg) !important;
+                    border-left: 3px solid var(--codeoss-accent) !important;
+                    padding-left: 13px !important; /* Adjust for border */
+                }
+
+                /* Enhanced tooltips for table items */
+                .table-explorer-item[title] {
+                    position: relative;
+                }
+
+                .table-explorer-item[title]:hover::after {
+                    content: attr(title);
+                    position: absolute;
+                    left: 100%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    margin-left: 8px;
+                    padding: 4px 8px;
+                    background: var(--codeoss-bg-tertiary);
+                    color: var(--codeoss-text-primary);
+                    border: 1px solid var(--codeoss-border);
+                    border-radius: 3px;
+                    font-size: 10px;
+                    white-space: nowrap;
+                    z-index: 1000;
+                    pointer-events: none;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+
                 .table-family-content.collapsed {
                     max-height: 0 !important;
                 }

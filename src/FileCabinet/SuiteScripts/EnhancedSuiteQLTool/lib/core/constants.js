@@ -49,6 +49,10 @@ define([], function() {
                 MIN_HEIGHT: 150,
                 DEFAULT_FONT_SIZE: 14
             },
+            TABLE_EXPLORER: {
+                // Display preference: 'ID' or 'LABEL'
+                DISPLAY_MODE: 'ID'  // Default to showing table ID instead of label
+            },
             QUERY_HISTORY: {
                 MAX_ITEMS: 10,
                 PREVIEW_LENGTH: 60
