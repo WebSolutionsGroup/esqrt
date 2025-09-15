@@ -27,7 +27,8 @@ define([
             // Track section states (only one expanded at a time - accordion behavior)
             var sidebarSectionStates = {
                 queryHistory: false,
-                savedQueries: true  // Default to saved queries expanded
+                savedQueries: true,  // Default to saved queries expanded
+                tableExplorer: false
             };
 
             function toggleSidebarSection(sectionName) {
@@ -70,6 +71,23 @@ define([
                     icon.textContent = '▼';
                     section.classList.add('expanded');
                     sidebarSectionStates[sectionName] = true;
+
+                    // Special handling for Table Explorer - load data when first expanded
+                    if (sectionName === 'tableExplorer') {
+                        // Initialize table explorer data loading and analyze families
+                        setTimeout(() => {
+                            if (window.loadTableExplorerData) {
+                                // Load basic record types first
+                                window.loadTableExplorerData('system').then(() => {
+                                    // Pre-analyze family counts for both system and custom
+                                    console.log('Pre-analyzing family counts for faster category expansion');
+                                    if (window.preAnalyzeFamilyCounts) {
+                                        window.preAnalyzeFamilyCounts();
+                                    }
+                                });
+                            }
+                        }, 100);
+                    }
                 }
 
                 // Save state to localStorage
@@ -155,16 +173,129 @@ define([
             }
         `;
     }
-    
+
+    /**
+     * Generate the Table Explorer specific JavaScript functions
+     *
+     * @returns {string} JavaScript code for Table Explorer functionality
+     */
+    function getTableExplorerJS() {
+        return `
+            // Table Explorer category states
+            var tableExplorerCategoryStates = {
+                functions: false,
+                procedures: false,
+                system: false,  // Start collapsed
+                custom: false
+            };
+
+            function toggleTableCategory(categoryName) {
+                const content = document.getElementById(categoryName + 'Content');
+                const icon = document.getElementById(categoryName + 'Icon');
+
+                if (!content || !icon) return;
+
+                const isExpanded = tableExplorerCategoryStates[categoryName];
+
+                if (isExpanded) {
+                    // Collapse category
+                    content.classList.add('collapsed');
+                    icon.textContent = '▶';
+                    tableExplorerCategoryStates[categoryName] = false;
+                } else {
+                    // Expand category
+                    content.classList.remove('collapsed');
+                    icon.textContent = '▼';
+                    tableExplorerCategoryStates[categoryName] = true;
+
+                    // Load data if not already loaded
+                    loadTableCategoryData(categoryName);
+                }
+            }
+
+            function loadTableCategoryData(categoryName) {
+                // This will be implemented in the table reference data module
+                if (window.loadTableExplorerData) {
+                    window.loadTableExplorerData(categoryName);
+                }
+            }
+
+            function filterTableExplorer() {
+                const searchInput = document.getElementById('tableExplorerSearch');
+                const searchTerm = searchInput ? searchInput.value.trim() : '';
+
+                if (!searchTerm) {
+                    // Clear search results and show normal categories
+                    const searchResults = document.getElementById('searchResultsContent');
+                    if (searchResults) {
+                        searchResults.style.display = 'none';
+                    }
+
+                    // Show normal categories
+                    const categories = ['functions', 'procedures', 'system', 'custom'];
+                    categories.forEach(categoryName => {
+                        const categoryElement = document.querySelector(\`[onclick="toggleTableCategory('\${categoryName}')"]\`);
+                        if (categoryElement) {
+                            categoryElement.closest('.table-explorer-category').style.display = '';
+                        }
+                    });
+                    return;
+                }
+
+                // Hide normal categories during search
+                const categories = ['functions', 'procedures', 'system', 'custom'];
+                categories.forEach(categoryName => {
+                    const categoryElement = document.querySelector(\`[onclick="toggleTableCategory('\${categoryName}')"]\`);
+                    if (categoryElement) {
+                        categoryElement.closest('.table-explorer-category').style.display = 'none';
+                    }
+                });
+
+                // Show search results
+                let searchResults = document.getElementById('searchResultsContent');
+                if (!searchResults) {
+                    // Create search results container
+                    const tableExplorerContent = document.getElementById('tableExplorerContent');
+                    const searchHtml = \`
+                        <div id="searchResultsContent" style="display: none;">
+                            <div style="padding: 12px; text-align: center; color: var(--codeoss-text-secondary);">
+                                Searching...
+                            </div>
+                        </div>
+                    \`;
+                    tableExplorerContent.insertAdjacentHTML('afterbegin', searchHtml);
+                    searchResults = document.getElementById('searchResultsContent');
+                }
+
+                searchResults.style.display = '';
+                searchResults.innerHTML = '<div style="padding: 12px; text-align: center; color: var(--codeoss-text-secondary);">Searching...</div>';
+
+                // Perform search
+                if (window.searchAllRecords && window.renderSearchResults) {
+                    const results = window.searchAllRecords(searchTerm);
+                    window.renderSearchResults(searchResults, results, searchTerm);
+                }
+            }
+
+            function openTableReference(tableId, tableName) {
+                // This will open a new tab with table reference information
+                if (window.openTableReferenceTab) {
+                    window.openTableReferenceTab(tableId, tableName);
+                }
+            }
+        `;
+    }
+
     /**
      * Get all sidebar sections JavaScript functions
-     * 
+     *
      * @returns {string} Complete JavaScript code for sidebar sections functionality
      */
     function getAllSidebarSectionsJS() {
         return getSidebarSectionToggleJS() + '\n' +
                getInitializeSidebarSectionsJS() + '\n' +
-               getSidebarSectionUtilitiesJS();
+               getSidebarSectionUtilitiesJS() + '\n' +
+               getTableExplorerJS();
     }
     
     /**
@@ -174,6 +305,7 @@ define([
         getSidebarSectionToggleJS: getSidebarSectionToggleJS,
         getInitializeSidebarSectionsJS: getInitializeSidebarSectionsJS,
         getSidebarSectionUtilitiesJS: getSidebarSectionUtilitiesJS,
+        getTableExplorerJS: getTableExplorerJS,
         getAllSidebarSectionsJS: getAllSidebarSectionsJS
     };
     

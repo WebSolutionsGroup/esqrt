@@ -30,7 +30,7 @@ define([], function() {
         QUERY_FOLDER_ID: null,
         
         // Version information
-        VERSION: 'v1.2.0',
+        VERSION: 'v1.3.0',
         
         // UI Constants
         UI: {
@@ -170,7 +170,19 @@ FROM
         CODEOSS_BTN: 'codeoss-btn',
         CODEOSS_BTN_SECONDARY: 'codeoss-btn-secondary',
         CODEOSS_TABLE: 'codeoss-table',
-        QUERY_HISTORY_ITEM: 'query-history-item'
+        QUERY_HISTORY_ITEM: 'query-history-item',
+
+        // Table Reference CSS Classes
+        TABLE_EXPLORER_SECTION: 'table-explorer-section',
+        TABLE_EXPLORER_SEARCH: 'table-explorer-search',
+        TABLE_EXPLORER_TREE: 'table-explorer-tree',
+        TABLE_EXPLORER_ITEM: 'table-explorer-item',
+        TABLE_EXPLORER_CATEGORY: 'table-explorer-category',
+        TABLE_REFERENCE_TAB: 'table-reference-tab',
+        TABLE_REFERENCE_CONTENT: 'table-reference-content',
+        TABLE_INFO_GRID: 'table-info-grid',
+        TABLE_FIELD_LIST: 'table-field-list',
+        TABLE_JOIN_LIST: 'table-join-list'
     };
     
     /**
@@ -201,7 +213,20 @@ FROM
         RETURN_TOTALS: 'returnTotals',
         ENABLE_VIEWS: 'enableViews',
         NULL_FORMAT_DIV: 'nullFormatDiv',
-        TEMPLATE: 'template'
+        TEMPLATE: 'template',
+
+        // Table Reference Element IDs
+        TABLE_EXPLORER_SEARCH: 'tableExplorerSearch',
+        TABLE_EXPLORER_CONTENT: 'tableExplorerContent',
+        TABLE_REFERENCE_TABS: 'tableReferenceTabs',
+        TABLE_OVERVIEW_CONTENT: 'tableOverviewContent',
+        TABLE_FIELDS_CONTENT: 'tableFieldsContent',
+        TABLE_JOINS_CONTENT: 'tableJoinsContent',
+        TABLE_PREVIEW_CONTENT: 'tablePreviewContent',
+        TABLE_FUNCTIONS_LIST: 'tableFunctionsList',
+        TABLE_PROCEDURES_LIST: 'tableProceduresList',
+        TABLE_SYSTEM_LIST: 'tableSystemList',
+        TABLE_CUSTOM_LIST: 'tableCustomList'
     };
     
     /**
@@ -238,7 +263,12 @@ FROM
         QUERY_HISTORY_LIST: 'queryHistoryList',
         QUERY_HISTORY_DELETE: 'queryHistoryDelete',
         QUERY_HISTORY_CLEAR: 'queryHistoryClear',
-        QUERY_HISTORY_TEST: 'queryHistoryTest'
+        QUERY_HISTORY_TEST: 'queryHistoryTest',
+
+        // Table Reference Request Functions
+        TABLE_TYPES_GET: 'tableTypesGet',
+        TABLE_DETAIL_GET: 'tableDetailGet',
+        TABLE_PREVIEW_GET: 'tablePreviewGet'
     };
     
     /**
