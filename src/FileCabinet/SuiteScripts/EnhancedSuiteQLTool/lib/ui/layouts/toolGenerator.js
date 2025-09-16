@@ -309,10 +309,49 @@ define([
                     width: 4px;
                     background-color: var(--codeoss-border);
                     cursor: col-resize;
+                    position: absolute;
+                    right: -2px; /* Center the resizer on the border */
+                    top: 0;
+                    bottom: 0;
+                    z-index: 10;
+                    transition: all 0.2s ease;
+                    opacity: 0.6;
                 }
 
                 .codeoss-sidebar-resizer:hover {
                     background-color: var(--codeoss-accent);
+                    width: 6px; /* Make it slightly wider on hover for better visibility */
+                    right: -3px;
+                    opacity: 1;
+                }
+
+                .codeoss-sidebar-resizer:active {
+                    background-color: var(--codeoss-accent);
+                    opacity: 1;
+                }
+
+                /* Add a subtle visual indicator for the resizer */
+                .codeoss-sidebar-resizer::before {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 2px;
+                    height: 20px;
+                    background: repeating-linear-gradient(
+                        to bottom,
+                        transparent 0px,
+                        transparent 2px,
+                        var(--codeoss-text-tertiary) 2px,
+                        var(--codeoss-text-tertiary) 4px
+                    );
+                    opacity: 0.5;
+                    pointer-events: none;
+                }
+
+                .codeoss-sidebar-resizer:hover::before {
+                    opacity: 0.8;
                 }
 
                 /* CodeMirror Code - OSS styling */
@@ -921,6 +960,21 @@ define([
                     font-style: italic;
                     color: var(--codeoss-text-secondary);
                     padding: 12px;
+                }
+
+                /* Table Reference Sub-tab Styles */
+                .table-reference-subtab {
+                    transition: all 0.2s ease;
+                }
+
+                .table-reference-subtab:hover {
+                    background-color: var(--codeoss-background-hover) !important;
+                }
+
+                .table-reference-subtab.active {
+                    border-bottom-color: var(--codeoss-accent) !important;
+                    color: var(--codeoss-accent) !important;
+                    font-weight: 600;
                 }
             </style>
         `;

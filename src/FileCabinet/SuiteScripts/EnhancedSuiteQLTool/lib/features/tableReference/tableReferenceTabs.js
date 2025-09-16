@@ -32,7 +32,7 @@ define([], function() {
                 updateTableSelection(tableId);
 
                 // Check if tab already exists in the main query tabs
-                const existingQueryTab = queryTabs.find(tab => tab.isTableReference && tab.tableId === tableId);
+                const existingQueryTab = queryTabs.find(tab => tab.isTableDetails && tab.tableId === tableId);
                 if (existingQueryTab) {
                     switchToTab(existingQueryTab.id);
                     return;
@@ -43,12 +43,17 @@ define([], function() {
 
                 // Create a special query tab for table reference
                 const newTab = createTab(tabId, tableName, '');
-                newTab.isTableReference = true;
+                newTab.isTableDetails = true;  // Use isTableDetails to integrate with existing tab system
+                newTab.isHtmlContent = true;   // Required for the switchToTab logic
+                newTab.isTableReference = true;  // Keep this for our own identification
                 newTab.tableId = tableId;
                 newTab.tableName = tableName;
                 newTab.activeSubTab = 'overview';
                 newTab.tableData = null;
                 newTab.loading = false;
+                newTab.selectedFields = []; // Initialize with no fields selected
+
+
 
                 // Add to main query tabs
                 queryTabs.push(newTab);
@@ -94,22 +99,28 @@ define([], function() {
 
                 tab.loading = true;
 
+                // Show loading state
+                renderTableReferenceContent(tab);
+
                 // Use the table reference data module to fetch details
                 if (window.fetchTableDetail) {
                     window.fetchTableDetail(tab.tableId)
                         .then(data => {
                             tab.tableData = data;
                             tab.loading = false;
+                            renderTableReferenceContent(tab);
+
+                            // Ensure sub-tab content is rendered after data is loaded
                             if (tab.isActive) {
-                                renderTableReferenceContent(tab);
+                                setTimeout(() => {
+                                    renderTableReferenceSubTab(tab);
+                                }, 20);
                             }
                         })
                         .catch(error => {
                             console.error('Error loading table data:', error);
                             tab.loading = false;
-                            if (tab.isActive) {
-                                renderTableReferenceError(tab, error);
-                            }
+                            renderTableReferenceError(tab, error);
                         });
                 }
             }
@@ -118,12 +129,8 @@ define([], function() {
              * Render table reference content
              */
             function renderTableReferenceContent(tab) {
-                // Get the main content area (we'll replace the editor/results area)
-                const editorArea = document.querySelector('.codeoss-editor-area');
-                if (!editorArea) return;
-                
                 if (tab.loading) {
-                    editorArea.innerHTML = \`
+                    tab.content = \`
                         <div class="table-reference-loading" style="padding: 40px; text-align: center; color: var(--codeoss-text-secondary);">
                             <div style="font-size: 16px; margin-bottom: 10px;">Loading table information...</div>
                             <div style="font-size: 14px;">\${tab.tableName} (\${tab.tableId})</div>
@@ -131,17 +138,17 @@ define([], function() {
                     \`;
                     return;
                 }
-                
+
                 if (!tab.tableData) {
                     renderTableReferenceError(tab, new Error('No data available'));
                     return;
                 }
-                
-                // Render the table reference interface
-                editorArea.innerHTML = \`
+
+                // Generate the table reference interface HTML and store it in tab.content
+                tab.content = \`
                     <div class="table-reference-container" style="height: 100%; display: flex; flex-direction: column;">
                         <!-- Table Reference Header -->
-                        <div class="table-reference-header" style="padding: 16px; border-bottom: 1px solid var(--codeoss-border); background: var(--codeoss-bg-secondary);">
+                        <div class="table-reference-header" style="padding: 16px; border-bottom: 1px solid var(--codeoss-border); background: var(--codeoss-background-secondary);">
                             <h2 style="margin: 0; color: var(--codeoss-text-primary); font-size: 18px; font-weight: 600;">
                                 \${tab.tableData.label || tab.tableName}
                             </h2>
@@ -149,56 +156,91 @@ define([], function() {
                                 \${tab.tableId}
                             </div>
                         </div>
-                        
+
                         <!-- Table Reference Sub-tabs -->
-                        <div class="table-reference-subtabs" style="display: flex; border-bottom: 1px solid var(--codeoss-border); background: var(--codeoss-bg-primary);">
-                            <button class="table-reference-subtab \${tab.activeSubTab === 'overview' ? 'active' : ''}" 
-                                    onclick="switchTableReferenceSubTab('\${tab.id}', 'overview')"
+                        <div class="table-reference-subtabs" style="display: flex; border-bottom: 1px solid var(--codeoss-border); background: var(--codeoss-background-primary);">
+                            <button type="button" class="table-reference-subtab \${tab.activeSubTab === 'overview' ? 'active' : ''}"
+                                    data-tab-id="\${tab.id}" data-subtab="overview"
                                     style="padding: 12px 20px; border: none; background: none; color: var(--codeoss-text-primary); cursor: pointer; border-bottom: 2px solid transparent;">
                                 OVERVIEW
                             </button>
-                            <button class="table-reference-subtab \${tab.activeSubTab === 'fields' ? 'active' : ''}" 
-                                    onclick="switchTableReferenceSubTab('\${tab.id}', 'fields')"
+                            <button type="button" class="table-reference-subtab \${tab.activeSubTab === 'fields' ? 'active' : ''}"
+                                    data-tab-id="\${tab.id}" data-subtab="fields"
                                     style="padding: 12px 20px; border: none; background: none; color: var(--codeoss-text-primary); cursor: pointer; border-bottom: 2px solid transparent;">
                                 FIELDS
                             </button>
-                            <button class="table-reference-subtab \${tab.activeSubTab === 'joins' ? 'active' : ''}" 
-                                    onclick="switchTableReferenceSubTab('\${tab.id}', 'joins')"
+                            <button type="button" class="table-reference-subtab \${tab.activeSubTab === 'joins' ? 'active' : ''}"
+                                    data-tab-id="\${tab.id}" data-subtab="joins"
                                     style="padding: 12px 20px; border: none; background: none; color: var(--codeoss-text-primary); cursor: pointer; border-bottom: 2px solid transparent;">
                                 JOINS
                             </button>
-                            <button class="table-reference-subtab \${tab.activeSubTab === 'preview' ? 'active' : ''}" 
-                                    onclick="switchTableReferenceSubTab('\${tab.id}', 'preview')"
+                            <button type="button" class="table-reference-subtab \${tab.activeSubTab === 'preview' ? 'active' : ''}"
+                                    data-tab-id="\${tab.id}" data-subtab="preview"
                                     style="padding: 12px 20px; border: none; background: none; color: var(--codeoss-text-primary); cursor: pointer; border-bottom: 2px solid transparent;">
                                 PREVIEW
                             </button>
                         </div>
-                        
+
                         <!-- Table Reference Content -->
                         <div class="table-reference-content" style="flex: 1; overflow: auto; padding: 16px;">
-                            <div id="tableReferenceSubTabContent">
+                            <div id="tableReferenceSubTabContent_\${tab.id}">
                                 <!-- Sub-tab content will be rendered here -->
                             </div>
                         </div>
                     </div>
                 \`;
-                
-                // Add CSS for active sub-tab
-                const style = document.createElement('style');
-                style.textContent = \`
-                    .table-reference-subtab.active {
-                        border-bottom-color: var(--codeoss-accent) !important;
-                        color: var(--codeoss-accent) !important;
-                        font-weight: 600;
+
+                // Add CSS for active sub-tab (only once)
+                if (!document.getElementById('table-reference-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'table-reference-styles';
+                    style.textContent = \`
+                        .table-reference-subtab.active {
+                            border-bottom-color: var(--codeoss-accent) !important;
+                            color: var(--codeoss-accent) !important;
+                            font-weight: 600;
+                        }
+                        .table-reference-subtab:hover {
+                            background: var(--codeoss-background-hover);
+                        }
+                    \`;
+                    document.head.appendChild(style);
+                }
+
+                // If this tab is currently active, update the display
+                if (tab.isActive) {
+                    const tableDetailsContainer = document.getElementById('table-details-container');
+                    if (tableDetailsContainer) {
+                        tableDetailsContainer.innerHTML = tab.content;
+                        tableDetailsContainer.style.display = 'block';
+
+                        // Hide normal query interface
+                        const editorContainer = document.querySelector('.codeoss-editor-container');
+                        const resultsContainer = document.querySelector('.codeoss-results-container');
+                        const resizer = document.getElementById('editorResizer');
+
+                        if (editorContainer) editorContainer.style.display = 'none';
+                        if (resultsContainer) resultsContainer.style.display = 'none';
+                        if (resizer) resizer.style.display = 'none';
+
+                        // Render the active sub-tab content with a slight delay to ensure DOM is ready
+                        setTimeout(() => {
+                            renderTableReferenceSubTab(tab);
+
+                            // Add event listeners for sub-tab buttons
+                            const subTabButtons = document.querySelectorAll('.table-reference-subtab[data-tab-id="' + tab.id + '"]');
+                            subTabButtons.forEach(button => {
+                                button.addEventListener('click', function(event) {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                    const tabId = this.getAttribute('data-tab-id');
+                                    const subTabName = this.getAttribute('data-subtab');
+                                    switchTableReferenceSubTab(tabId, subTabName);
+                                });
+                            });
+                        }, 10);
                     }
-                    .table-reference-subtab:hover {
-                        background: var(--codeoss-hover-bg);
-                    }
-                \`;
-                document.head.appendChild(style);
-                
-                // Render the active sub-tab content
-                renderTableReferenceSubTab(tab);
+                }
             }
             
             /**
@@ -209,16 +251,36 @@ define([], function() {
                 if (!tab) return;
 
                 tab.activeSubTab = subTabName;
-                renderTableReferenceContent(tab);
+
+                // Update the sub-tab buttons to show the active state
+                const subTabButtons = document.querySelectorAll('.table-reference-subtab');
+                subTabButtons.forEach(button => {
+                    button.classList.remove('active');
+                    if (button.textContent.trim() === subTabName.toUpperCase()) {
+                        button.classList.add('active');
+                    }
+                });
+
+                // Render just the sub-tab content without regenerating the entire interface
+                renderTableReferenceSubTab(tab);
             }
             
             /**
              * Render table reference sub-tab content
              */
             function renderTableReferenceSubTab(tab) {
-                const contentElement = document.getElementById('tableReferenceSubTabContent');
-                if (!contentElement || !tab.tableData) return;
-                
+                const contentElement = document.getElementById('tableReferenceSubTabContent_' + tab.id);
+                if (!contentElement) {
+                    console.warn('Sub-tab content element not found for tab:', tab.id);
+                    return;
+                }
+                if (!tab.tableData) {
+                    console.warn('No table data available for tab:', tab.id);
+                    return;
+                }
+
+                console.log('Rendering sub-tab:', tab.activeSubTab, 'for tab:', tab.id);
+
                 switch (tab.activeSubTab) {
                     case 'overview':
                         renderOverviewTab(contentElement, tab.tableData);
@@ -239,19 +301,37 @@ define([], function() {
              * Render table reference error
              */
             function renderTableReferenceError(tab, error) {
-                const editorArea = document.querySelector('.codeoss-editor-area');
-                if (!editorArea) return;
-                
-                editorArea.innerHTML = \`
-                    <div class="table-reference-error" style="padding: 40px; text-align: center; color: var(--codeoss-text-danger);">
+                console.error('Table reference error:', error);
+
+                tab.content = \`
+                    <div class="table-reference-error" style="padding: 40px; text-align: center; color: var(--codeoss-text-error);">
                         <div style="font-size: 16px; margin-bottom: 10px;">Error loading table information</div>
-                        <div style="font-size: 14px; margin-bottom: 20px;">\${error.message}</div>
-                        <button onclick="loadTableReferenceData('\${tab.id}')" 
-                                style="padding: 8px 16px; background: var(--codeoss-btn-bg); color: var(--codeoss-btn-text); border: 1px solid var(--codeoss-border); border-radius: 3px; cursor: pointer;">
+                        <div style="font-size: 14px; color: var(--codeoss-text-secondary);">\${tab.tableName} (\${tab.tableId})</div>
+                        <div style="font-size: 12px; color: var(--codeoss-text-tertiary); margin-top: 10px;">\${error.message || 'Unknown error'}</div>
+                        <button onclick="loadTableReferenceData('\${tab.id}')"
+                                style="padding: 8px 16px; background: var(--codeoss-button-bg); color: var(--codeoss-button-text); border: 1px solid var(--codeoss-border); border-radius: 3px; cursor: pointer; margin-top: 20px;">
                             Retry
                         </button>
                     </div>
                 \`;
+
+                // If this tab is currently active, update the display
+                if (tab.isActive) {
+                    const tableDetailsContainer = document.getElementById('table-details-container');
+                    if (tableDetailsContainer) {
+                        tableDetailsContainer.innerHTML = tab.content;
+                        tableDetailsContainer.style.display = 'block';
+
+                        // Hide normal query interface
+                        const editorContainer = document.querySelector('.codeoss-editor-container');
+                        const resultsContainer = document.querySelector('.codeoss-results-container');
+                        const resizer = document.getElementById('editorResizer');
+
+                        if (editorContainer) editorContainer.style.display = 'none';
+                        if (resultsContainer) resultsContainer.style.display = 'none';
+                        if (resizer) resizer.style.display = 'none';
+                    }
+                }
             }
             
             /**
@@ -267,6 +347,8 @@ define([], function() {
             
             // Make functions available globally
             window.openTableReferenceTab = openTableReferenceTab;
+            window.renderTableReferenceContent = renderTableReferenceContent;
+            window.renderTableReferenceSubTab = renderTableReferenceSubTab;
             window.switchTableReferenceSubTab = switchTableReferenceSubTab;
             window.updateTableSelection = updateTableSelection;
         `;

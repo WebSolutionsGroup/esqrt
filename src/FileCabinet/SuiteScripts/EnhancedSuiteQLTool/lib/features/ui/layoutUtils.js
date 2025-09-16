@@ -30,6 +30,15 @@ define([
                 const sidebar = document.querySelector('.${constants.CSS_CLASSES.CODEOSS_SIDEBAR}');
                 const editorResizer = document.getElementById('editorResizer');
 
+                // Restore saved sidebar width
+                const savedSidebarWidth = localStorage.getItem('esqrt_sidebar_width');
+                if (savedSidebarWidth && sidebar) {
+                    const width = parseInt(savedSidebarWidth);
+                    if (width >= ${constants.CONFIG.UI.SIDEBAR.MIN_WIDTH} && width <= ${constants.CONFIG.UI.SIDEBAR.MAX_WIDTH}) {
+                        sidebar.style.width = width + 'px';
+                    }
+                }
+
                 // console.log('Initializing resizers...', {
                 //     editorContainer: editorContainer,
                 //     resultsContainer: resultsContainer,
@@ -63,14 +72,35 @@ define([
                 if (sidebar) {
                     const sidebarResizer = sidebar.querySelector('.codeoss-sidebar-resizer');
                     if (sidebarResizer) {
+                        console.log('Sidebar resizer found and initializing...');
+
                         sidebarResizer.addEventListener('mousedown', function(e) {
+                            console.log('Sidebar resizer mousedown triggered');
                             isSidebarResizing = true;
                             startX = e.clientX;
                             startSidebarWidth = sidebar.offsetWidth;
                             document.body.style.cursor = 'col-resize';
+                            sidebarResizer.style.backgroundColor = 'var(--codeoss-accent)';
                             e.preventDefault();
                         });
+
+                        // Add hover effects for better discoverability
+                        sidebarResizer.addEventListener('mouseenter', function() {
+                            sidebarResizer.style.backgroundColor = 'var(--codeoss-accent)';
+                            sidebarResizer.style.opacity = '0.7';
+                        });
+
+                        sidebarResizer.addEventListener('mouseleave', function() {
+                            if (!isSidebarResizing) {
+                                sidebarResizer.style.backgroundColor = 'var(--codeoss-border)';
+                                sidebarResizer.style.opacity = '1';
+                            }
+                        });
+                    } else {
+                        console.warn('Sidebar resizer element not found');
                     }
+                } else {
+                    console.warn('Sidebar element not found');
                 }
                 
                 // Mouse move handler
@@ -104,9 +134,27 @@ define([
                     if (isResizing || isSidebarResizing) {
                         document.body.style.cursor = '';
                         editorResizer.style.backgroundColor = '';
+
+                        // Reset sidebar resizer styles and save width
+                        if (sidebar && isSidebarResizing) {
+                            const sidebarResizer = sidebar.querySelector('.codeoss-sidebar-resizer');
+                            if (sidebarResizer) {
+                                sidebarResizer.style.backgroundColor = 'var(--codeoss-border)';
+                                sidebarResizer.style.opacity = '1';
+                            }
+
+                            // Save the current sidebar width to localStorage
+                            try {
+                                localStorage.setItem('esqrt_sidebar_width', sidebar.offsetWidth.toString());
+                                console.log('Sidebar width saved:', sidebar.offsetWidth + 'px');
+                            } catch (e) {
+                                console.warn('Failed to save sidebar width:', e);
+                            }
+                        }
+
                         isResizing = false;
                         isSidebarResizing = false;
-                        // console.log('Resizing ended');
+                        console.log('Resizing ended');
                     }
                 });
             }

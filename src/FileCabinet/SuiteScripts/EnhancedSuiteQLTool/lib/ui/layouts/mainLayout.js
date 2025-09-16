@@ -157,6 +157,11 @@ define([
                         <!-- Query Tabs -->
                         ${queryTabs.getQueryTabsHTML()}
 
+                        <!-- Table Details Container (for table reference tabs) -->
+                        <div id="table-details-container" style="display: none; flex: 1; height: 100%; overflow: auto;">
+                            <!-- Table reference content will be rendered here -->
+                        </div>
+
                         <!-- Query Editor Container -->
                         <div class="${constants.CSS_CLASSES.CODEOSS_EDITOR}">
                             <div class="${constants.CSS_CLASSES.CODEOSS_TOOLBAR}">

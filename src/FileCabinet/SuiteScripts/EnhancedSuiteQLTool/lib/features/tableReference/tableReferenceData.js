@@ -99,7 +99,7 @@ define([
                     const displayName = getTableDisplayName(table);
                     const tooltip = getTableTooltip(table);
                     html += \`
-                        <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_ITEM}"
+                        <div class="table-explorer-item"
                              onclick="openTableReferenceTab('\${table.id}', '\${table.label}')"
                              title="\${tooltip}"
                              style="padding: 6px 16px; cursor: pointer; border-radius: 3px; font-size: 11px; line-height: 1.3; border-bottom: 1px solid var(--codeoss-border-light);">
@@ -273,7 +273,7 @@ define([
              * Helper function to get the display name for a table based on configuration
              */
             function getTableDisplayName(table) {
-                if (constants.CONFIG.UI.TABLE_EXPLORER.DISPLAY_MODE === 'LABEL') {
+                if ('${constants.CONFIG.UI.TABLE_EXPLORER.DISPLAY_MODE}' === 'LABEL') {
                     return table.label || table.id;
                 } else {
                     return table.id;
@@ -284,7 +284,7 @@ define([
              * Helper function to get the tooltip text for a table (shows the alternate info)
              */
             function getTableTooltip(table) {
-                if (constants.CONFIG.UI.TABLE_EXPLORER.DISPLAY_MODE === 'LABEL') {
+                if ('${constants.CONFIG.UI.TABLE_EXPLORER.DISPLAY_MODE}' === 'LABEL') {
                     // If showing label, tooltip shows ID
                     return 'ID: ' + table.id;
                 } else {
@@ -692,7 +692,7 @@ define([
                     const displayName = getTableDisplayName(table);
                     const tooltip = getTableTooltip(table);
                     tablesHtml += \`
-                        <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_ITEM}"
+                        <div class="table-explorer-item"
                              onclick="openTableReferenceTab('\${table.id}', '\${table.label}')"
                              title="\${tooltip}"
                              style="padding: 4px 16px; cursor: pointer; border-radius: 3px; font-size: 11px; line-height: 1.3;">
@@ -980,7 +980,7 @@ define([
                                     const displayName = getTableDisplayName(table);
                                     const tooltip = getTableTooltip(table);
                                     newTablesHtml += \`
-                                        <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_ITEM}"
+                                        <div class="table-explorer-item"
                                              onclick="openTableReferenceTab('\${table.id}', '\${table.label}')"
                                              title="\${tooltip}"
                                              style="padding: 4px 16px; cursor: pointer; border-radius: 3px; font-size: 11px; line-height: 1.3;">
@@ -1014,7 +1014,7 @@ define([
                                 const displayName = getTableDisplayName(table);
                                 const tooltip = getTableTooltip(table);
                                 html += \`
-                                    <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_ITEM}"
+                                    <div class="table-explorer-item"
                                          onclick="openTableReferenceTab('\${table.id}', '\${table.label}')"
                                          title="\${tooltip}"
                                          style="padding: 4px 16px; cursor: pointer; border-radius: 3px; font-size: 11px; line-height: 1.3;">
@@ -1051,7 +1051,7 @@ define([
                             const displayName = getTableDisplayName(table);
                             const tooltip = getTableTooltip(table);
                             html += \`
-                                <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_ITEM}"
+                                <div class="table-explorer-item"
                                      onclick="openTableReferenceTab('\${table.id}', '\${table.label}')"
                                      title="\${tooltip}"
                                      style="padding: 4px 16px; cursor: pointer; border-radius: 3px; font-size: 11px; line-height: 1.3;">

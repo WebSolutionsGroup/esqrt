@@ -176,22 +176,31 @@ define([
                             resizer.style.display = 'none';
                         }
 
-                        // Create or get the table details container that takes full space
-                        let tableDetailsContainer = document.getElementById('table-details-container');
-                        if (!tableDetailsContainer) {
-                            tableDetailsContainer = document.createElement('div');
-                            tableDetailsContainer.id = 'table-details-container';
-                            tableDetailsContainer.style.cssText = 'flex: 1; height: 100%; overflow: auto; background: var(--codeoss-bg);';
+                        // Get the table details container (now part of the main layout)
+                        const tableDetailsContainer = document.getElementById('table-details-container');
+                        if (tableDetailsContainer) {
+                            // For table reference tabs, ensure data is loaded and content is rendered
+                            if (activeTab.isTableReference) {
+                                if (activeTab.tableData && window.renderTableReferenceContent) {
+                                    // Data exists, regenerate content to ensure freshness
+                                    window.renderTableReferenceContent(activeTab);
+                                } else if (window.loadTableReferenceData) {
+                                    // No data, reload it
+                                    window.loadTableReferenceData(activeTab.id);
+                                } else {
+                                    // Fallback to existing content
+                                    tableDetailsContainer.innerHTML = activeTab.content;
+                                }
+                            } else {
+                                tableDetailsContainer.innerHTML = activeTab.content;
+                            }
+                            tableDetailsContainer.style.display = 'block';
 
-                            // Insert into the editor area (parent of editor container)
-                            const editorArea = document.querySelector('.codeoss-editor-area');
-                            if (editorArea) {
-                                editorArea.appendChild(tableDetailsContainer);
+                            // Update table selection highlighting in sidebar
+                            if (activeTab.tableId) {
+                                updateTableSelectionHighlight(activeTab.tableId);
                             }
                         }
-
-                        tableDetailsContainer.innerHTML = activeTab.content;
-                        tableDetailsContainer.style.display = 'block';
                     } else {
                         // Show normal query UI for regular SQL tabs
                         const editorContainer = document.querySelector('.codeoss-editor-container');
@@ -211,6 +220,12 @@ define([
                         if (tableDetailsContainer) {
                             tableDetailsContainer.style.display = 'none';
                         }
+
+                        // Clear table selection highlighting when switching to non-table tabs
+                        const existingHighlights = document.querySelectorAll('.table-explorer-item.selected');
+                        existingHighlights.forEach(item => {
+                            item.classList.remove('selected');
+                        });
 
                         if (codeEditor && typeof codeEditor.setValue === 'function') {
                             codeEditor.setValue(activeTab.content);
@@ -268,6 +283,26 @@ define([
                     tab.isDirty = isDirty;
                     renderQueryTabs();
                 }
+            }
+
+            /**
+             * Update table selection highlighting in the sidebar
+             */
+            function updateTableSelectionHighlight(tableId) {
+                // Remove existing highlights
+                const existingHighlights = document.querySelectorAll('.table-explorer-item.selected');
+                existingHighlights.forEach(item => {
+                    item.classList.remove('selected');
+                });
+
+                // Add highlight to the current table (look for tableId in onclick attribute)
+                const tableItems = document.querySelectorAll('.table-explorer-item');
+                tableItems.forEach(item => {
+                    const onclick = item.getAttribute('onclick');
+                    if (onclick && onclick.includes("'" + tableId + "'")) {
+                        item.classList.add('selected');
+                    }
+                });
             }
 
             // Results management functions for tabs

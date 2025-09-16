@@ -65,8 +65,27 @@ define([
      * @returns {void}
      */
     function handlePostRequest(context) {
-        var requestPayload = JSON.parse(context.request.body);
-        
+        var requestPayload;
+        try {
+            requestPayload = JSON.parse(context.request.body);
+        } catch (e) {
+            log.error('JSON Parse Error', {
+                error: e.message,
+                body: context.request.body,
+                bodyType: typeof context.request.body,
+                bodyLength: context.request.body ? context.request.body.length : 'null'
+            });
+            context.response.setHeader('Content-Type', 'application/json');
+            context.response.write(JSON.stringify({
+                error: {
+                    name: 'JSONParseError',
+                    message: 'Invalid JSON in request body: ' + e.message,
+                    receivedBody: context.request.body ? context.request.body.substring(0, 100) : 'null'
+                }
+            }));
+            return;
+        }
+
         context.response.setHeader('Content-Type', 'application/json');
         
         switch (requestPayload['function']) {
