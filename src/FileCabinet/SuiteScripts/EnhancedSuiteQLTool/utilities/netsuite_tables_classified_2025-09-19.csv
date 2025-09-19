@@ -1,0 +1,1880 @@
+Table ID,Table Label,Data Type,Category,Confidence,Record Family,Is Custom
+CUSTOMLIST1872,[eb] VBD Approval Status,Customizations,Custom Lists,high,CUSTOMLIST,No
+LotNumberedAssemblyItem,[Missing Label:com.netledger.app.platform.records.assemblyitem.LotNumberedAssemblyItem],List Data,Items,high,ITEM,No
+SerializedAssemblyItem,[Missing Label:com.netledger.app.platform.records.assemblyitem.SerializedAssemblyItem],List Data,Items,high,ITEM,No
+BankImportHistory,[Missing Label:com.netledger.app.platform.records.bankimporthistory.BankImportHistory],Transaction Data,Bank,high,OTHER,No
+Cookie,[Missing Label:com.netledger.app.platform.records.commerce.analytics.Cookie],Customizations,Custom Objects,medium,OTHER,No
+LotNumberedInventoryItem,[Missing Label:com.netledger.app.platform.records.inventoryitem.LotNumberedInventoryItem],List Data,Items,high,ITEM,No
+SerializedInventoryItem,[Missing Label:com.netledger.app.platform.records.inventoryitem.SerializedInventoryItem],List Data,Items,high,ITEM,No
+LiabilityPayment,[Missing Label:com.netledger.app.platform.records.liabilitypayments.LiabilityPayment],List Data,Payment Instruments,medium,TRANSACTION,No
+ManufacturingTransactionArtBase,[Missing Label:com.netledger.app.platform.records.manufacturing.ManufacturingTransactionArtBase],Transaction Data,Manufacturing,high,OTHER,No
+OidcSetup,[Missing Label:com.netledger.app.platform.records.oidc.OidcSetup],Setup Data,Company,high,OTHER,No
+RevRecAmortizationSchedule,[Missing Label:com.netledger.app.platform.records.revrecschedulecommon.RevRecAmortizationSchedule],Customizations,Custom Objects,medium,OTHER,No
+RevRecAmortizationTemplate,[Missing Label:com.netledger.app.platform.records.revrecschedulecommon.RevRecAmortizationTemplate],Customizations,Custom Objects,medium,OTHER,No
+JournalTransactions,[Missing Label:com.netledger.app.platform.records.sales.JournalTransactions],Transaction Data,Sales,medium,OTHER,No
+RecentTransactionsWithoutJournal,[Missing Label:com.netledger.app.platform.records.sales.RecentTransactionsWithoutJournal],Transaction Data,Sales,medium,OTHER,No
+EventResponseType,[Missing Label:com.netledger.app.platform.records.system.EventResponseType],List Data,Activities,high,OTHER,No
+productFeedType,[Missing Label:com.netledger.app.platform.records.system.ProductFeedType],List Data,Items,high,OTHER,No
+revenueElementLineType,[Missing Label:com.netledger.app.platform.records.system.RevenueElementLineType],Customizations,Custom Objects,medium,OTHER,No
+TimeBreakdownEntry,[Missing Label:com.netledger.app.platform.records.timebreakdownentry.TimeBreakdownEntry],Transaction Data,Employees,high,OTHER,No
+DeprecatedCustTranType,[Missing Label:com.netledger.app.platform.records.transaction.DeprecatedCustTranType],Transaction Data,Bank,medium,TRANSACTION,No
+WebApplicationDeployment,[Missing Label:com.netledger.app.platform.records.website.siteentrypoint.WebApplicationDeployment],Transaction Data,Purchases,high,OTHER,No
+YearToDateAdjustment,[Missing Label:com.netledger.app.platform.records.yeartodateadjustment.YearToDateAdjustment],Transaction Data,Bank,medium,TRANSACTION,No
+category1099misc,1099-MISC Category,Setup Data,Marketing,high,OTHER,No
+ThreeDSTranStatus,3D Secure Transaction Status,List Data,Employees,high,OTHER,No
+ThreeDSTranStatusReason,3D Secure Transaction Status Reason,List Data,Employees,high,OTHER,No
+ThreeDSVersion,3D Secure Version,List Data,Employees,high,OTHER,No
+OAuthToken,Access Token,List Data,Payment Instruments,high,OTHER,No
+Account,Account,Setup Data,Accounting,high,OTHER,No
+CUSTOMRECORD_NS_IBE_ACCOUNT_CONFIG,Account Configuration,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_NS_IBE_ACCNT_CONFIG_TYPES,Account Configuration Types,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_NS_IBE_ACCOUNT_ENVIRONMENT,Account Environment,Setup Data,Accounting,high,CUSTOM,Yes
+accountingBook,Accounting Book,Setup Data,Accounting,high,OTHER,No
+AccountingContext,Accounting Context,Setup Data,Accounting,high,OTHER,No
+TransactionAccountingLineType,Accounting Line Type,Setup Data,Accounting,high,OTHER,No
+accountingPeriod,Accounting Period,Setup Data,Accounting,high,OTHER,No
+AccountPeriodActivity,Account Period Activity,Setup Data,Accounting,high,OTHER,No
+AutomatedClearingHouseAccountType,Account Type,Setup Data,Accounting,high,OTHER,No
+accountType,Account Type,Setup Data,Accounting,high,OTHER,No
+CUSTOMLIST_2663_ACCT_TYPE,Account Type,Setup Data,Accounting,high,CUSTOMLIST,No
+timeOffAccrualFrequency,Accrual Frequency,List Data,Employees,high,OTHER,No
+timeOffAccrualType,Accrual Type,List Data,Employees,high,OTHER,No
+CUSTOMLIST_ACH_EP_MIGRATION_RECORDTYPE,ACH EP Migration Recordtype,Customizations,Custom Lists,high,CUSTOMLIST,No
+ActionType,Action,Customizations,Custom Objects,medium,OTHER,No
+Action,Action,System Data,Workflow,high,OTHER,No
+invalidDescriptiveUrlAction,Action for Unrecognized URLs,Customizations,Scripts,high,OTHER,No
+CUSTOMRECORD_NS_PS_MFG_ACTION_ITEMS,Action Items,List Data,Items,high,CUSTOM,Yes
+Activity,Activity,List Data,Activities,high,EVENT,No
+CUSTOMLIST_EB_ITEM_ADDITIVES,Additive,List Data,Items,high,CUSTOMLIST,No
+Address,Address,System Data,Other System,low,OTHER,No
+transactionBillingAddressbook,Address Book,Transaction Data,Payables,high,OTHER,No
+AddressBook,Address Book,System Data,Other System,low,OTHER,No
+transactionAddressbook,Address Book,System Data,Workflow,high,OTHER,No
+transactionShippingAddressbook,Address Book,Transaction Data,Order Management,high,OTHER,No
+transactionPayeeAddressbook,Address Book,System Data,Workflow,high,OTHER,No
+transactionReturnAddressbook,Address Book,Transaction Data,Customers,medium,OTHER,No
+addressType,Address Type,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMLIST_EB_ADJUSTMENT_REASONS_COMM,Adjustment Reasons,Transaction Data,Sales,high,CUSTOMLIST,No
+CUSTOMLIST_EB_ADJUSTMENT_TYPES,Adjustment Types,Transaction Data,Inventory,medium,CUSTOMLIST,No
+AdmissibilityPackageType,Admissibility Package Type,Customizations,Custom Objects,medium,OTHER,No
+AdvIntercompanyJournalEntry,Advanced Intercompany Journal,Setup Data,Company,high,TRANSACTION,No
+AdvancedNumberingLog,Advanced Numbering Log,System Data,Audit,high,OTHER,No
+AdvancedNumberingSequence,Advanced Numbering Rule,Setup Data,Sales,high,OTHER,No
+AdvancedNumberingRuleSet,Advanced Numbering Rule Set,Setup Data,Sales,high,OTHER,No
+AdvancedNumberingCounter,Advanced Numbering Sequence,Transaction Data,Inventory,medium,OTHER,No
+AdvancedPdfTemplate,Advanced PDF/HTML Template,System Data,Other System,low,OTHER,No
+CUSTOMLIST_ITEM360_ALERT_CATEGORY,Alert Category,Setup Data,Marketing,high,CUSTOMLIST,No
+RecSysAlgorithm,Algorithm,System Data,Other System,low,OTHER,No
+alignment,Alignment,System Data,Other System,low,OTHER,No
+AllocationMethod,Allocation_Method,Setup Data,Locations,high,OTHER,No
+allocationSchedule,Allocation Schedule,Setup Data,Locations,high,OTHER,No
+GeneralAllocationSchedule,Allocation Schedule,Setup Data,Locations,high,OTHER,No
+resourceAllocationType,Allocation Type,Setup Data,Locations,high,OTHER,No
+CUSTOMRECORD_10782_CNTRYFMTS_BY_EDITION,Allowed Country Formats By Edition,Transaction Data,Inventory,medium,CUSTOM,Yes
+AllParserPlugin,All Parser Plug-in,System Data,Other System,low,OTHER,No
+AmortizationSchedule,Amortization Schedule,System Data,Other System,low,OTHER,No
+AmortizationTemplate,Amortization Template,System Data,Other System,low,OTHER,No
+AnnualRecurringRevenue,Annual Recurring Revenue,System Data,Other System,low,OTHER,No
+CUSTOMLIST_BF_API_TYPES,API Types,Customizations,Custom Lists,high,CUSTOMLIST,No
+scriptVersion,API Version,Customizations,Scripts,high,OTHER,No
+TransactionAppliedRulesLog,Applied Rules,Setup Data,Sales,high,OTHER,No
+applyDiscountTo,Apply Discount To,Transaction Data,Inventory,medium,OTHER,No
+CUSTOMRECORD_SAS_APPROVAL_HISTORY,Approval History,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_2663_APPROVAL_LEVEL,Approval Level,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_SAS_APPROVALMATRIX,Approval Matrix,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_SAS_APPROVALMATRIX_APPTYPE,Approval Matrix Approval Type,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_SAS_APPROVAL_PREFERENCES,Approval Preference,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_2663_APPROVAL_ROUTING,Approval Routing,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_SAS_APPROVALRULE,Approval Rule,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_SAS_EMAIL_TEMPLATES,Approval Rule Email Templates,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_SAS_SS_EXP_APPRULE,Approval Rule Saved Search Exceptions,Setup Data,Sales,high,CUSTOM,Yes
+ApprovalStatus,Approval Status,System Data,Workflow,high,OTHER,No
+timeLineApprovalStatus,Approval Status,Transaction Data,Employees,medium,OTHER,No
+CUSTOMLIST_2663_APPROVAL_TYPE,Approval Type,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_ATLAS_APPR_BY_CREATOR,Approved by Creator,Customizations,Custom Lists,high,CUSTOMLIST,No
+AreaOfFocus,Area of Focus,System Data,Other System,low,OTHER,No
+asChargedProjectRevenueRule,As Charged Project Revenue Rule,Setup Data,Sales,high,OTHER,No
+assemblyItem,Assembly/Bill of Materials,List Data,Items,high,ITEM,No
+assemblyBuild,Assembly Build,List Data,Items,high,TRANSACTION,No
+assemblyUnbuild,Assembly Unbuild,List Data,Items,high,TRANSACTION,No
+ATPMethodType,ATP Method,Customizations,Custom Objects,medium,OTHER,No
+UsrDsAuditLog,Audit Trail,System Data,Audit,high,OTHER,No
+UsrAuditLog,Audit Trail,System Data,Audit,high,OTHER,No
+AutomatedClearingHouse,Automated Clearing House,System Data,Other System,low,OTHER,No
+locAssignConf,Automatic Location Assignment Configuration,Setup Data,Company,high,OTHER,No
+locAssignRule,Automatic Location Assignment Rule,Setup Data,Locations,high,OTHER,No
+CUSTOMRECORD_AVAADDVALFLAG,AVAADDRESSVALFLAG,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVAADDRESSVALIDATIONBATCH,AVAADDRESSVALIDATIONBATCH,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVAADDVALIDATIONBATCHRECORD,AVAADDVALIDATIONBATCHRECORDS,List Data,Employees,high,CUSTOM,Yes
+CUSTOMRECORD_AVACERTCAPTUREBATCH,AVACERTCAPTUREBATCH,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVACERTEMAIL,AVACERTEMAIL,List Data,Communications,high,CUSTOM,Yes
+CUSTOMRECORD_AVACONFIG,AVACONFIG,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_AVACOORDINATES,AVACOORDINATES,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVACUSTOMEREXEMPTMAPPING,AVACUSTOMEREXEMPTMAPPING,List Data,Relationships,high,CUSTOM,Yes
+CUSTOMRECORD_AVACUSTOMERSTOCERTCAPTURE,AVACUSTOMERSTOCERTCAPTURE,List Data,Relationships,high,CUSTOM,Yes
+CUSTOMRECORD_AVADELETEOLDRECORD,AVADELETEOLDRECORDBATCH,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVAENTITYUSECODES,AVAENTITYUSECODES,List Data,Relationships,high,CUSTOM,Yes
+CUSTOMRECORD_AVAENTITYUSEMAPPING,AVAENTITYUSEMAPPING,List Data,Relationships,high,CUSTOM,Yes
+CUSTOMRECORD_AVAIMSBATCH,AVAIMSBATCH,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVAIMSDETAILS,AVAIMSDETAILS,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVAITEMMAPPING,AVAITEMMAPPING,List Data,Items,high,CUSTOM,Yes
+CUSTOMLIST_AVA_SEZ_PARAMETER,Avalara SEZ Parameter,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_STATUSLIST,Avalara Status List,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_EWASTE_TIRETYPE,Avalara Tire Type List,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_TRANSPORTLIST,Avalara Transport List,Transaction Data,Purchases,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_UNITOFMEASURE,Avalara UOM (RentalLeasing),Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_EWASTE_UOM_VOLTAGE,Avalara UOM Voltage (E-Waste),Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_MULTITAXTYPE_PARAM,Ava Multi Tax Type,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_AVARECALCULATEBATCH,AVARECALCULATEBATCH,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVARECONCILEBATCH,AVARECONCILEBATCH,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVARECONCILEBATCHRECORDS,AVARECONCILEBATCHRECORDS,List Data,Employees,high,CUSTOM,Yes
+CUSTOMRECORD_AVASHIPPINGCODES,AVASHIPPINGCODES,Transaction Data,Order Management,high,CUSTOM,Yes
+CUSTOMRECORD_AVASHIPPINGITEMCODES,AVASHIPPINGITEMCODES,List Data,Items,high,CUSTOM,Yes
+CUSTOMRECORD_AVASUBSIDIARIES,AVASUBSIDIARIES,Setup Data,Subsidiaries,high,CUSTOM,Yes
+CUSTOMRECORD_AVATAXHEADERDETAILS,AVATAXHEADERDETAILS,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVATRANSACTIONLOGS,AVATRANSACTIONLOGS,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVATWOWAYIMSBATCH,AVATWOWAYIMSBATCH,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AVATWOWAYIMSDETAILS,AVATWOWAYIMSDETAILS,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_AVA_EWASTE_UOM_CONTAINERSIZ,Ava UOM Container Size (EWst),Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_EWASTE_UOM_NETWEIGHT,Ava UOM Net Weight (E-Waste),Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_EWASTE_UOM_PACKSIZE,Ava UOM Pack Size (E-Waste),Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_EWASTE_UOM_RIMDIAMETER,Ava UOM Rim Diameter (E-Waste),Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_EWASTE_UOM_SCREENSIZE,Ava UOM Screen Size (E-waste),Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_AVA_EWASTE_UOM_TREADWIDTH,Ava UOM Tread Width (E-Waste),Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_AVAUSETAXHEADERDETAILS,AVAUSETAXHEADERDETAILS,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_VATADDRESSES,AVAVATADDRESSES,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_VENDORVATADDRESSES,AVAVENDORVATADDRESSES,List Data,Relationships,high,CUSTOM,Yes
+BalancedBySegmentsStatus,Balanced by Segments,System Data,Other System,low,OTHER,No
+balancingJournal,Balancing Journal,Transaction Data,Bank,medium,TRANSACTION,No
+BalancingSegmentsPreference,Balancing Segments Elimination Value Preference,Setup Data,Company,high,OTHER,No
+CUSTOMLIST_2663_BANK_ACCT_TYPE,Bank Account Type,Setup Data,Accounting,high,CUSTOMLIST,No
+bankConnectivityPlugin,Bank Connectivity Plug-in,Transaction Data,Bank,high,OTHER,No
+CUSTOMRECORD_2663_ENTITY_BANK_DETAILS,Bank Details,List Data,Relationships,high,CUSTOM,Yes
+CUSTOMLIST_2663_BANK_FEE_CODE,Bank Fee Code,Transaction Data,Bank,high,CUSTOMLIST,No
+CUSTOMRECORD_BF_AUDITTRAIL,Bank Feeds Audit Trail,Transaction Data,Bank,high,CUSTOM,Yes
+bankStatementParserPlugin,Bank Statement Parser Plug-in,Transaction Data,Bank,high,OTHER,No
+CUSTOMRECORD_2663_BATCH_DETAILS,Batch Details,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_2663_BATCH_TRANSACTION_INFO,Batch Transaction Information,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_AVA_BOTTLETAX_BEVCONTMAT,Beverage Container Material,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_BF_SE_CUSTOMER_ID,BF SE Customer ID,List Data,Relationships,high,CUSTOM,Yes
+CUSTOMRECORD_BF_SE_EXCLUDED_ACCOUNTS,BF SE Excluded Accounts,Setup Data,Accounting,high,CUSTOM,Yes
+CUSTOMRECORD_BF_SE_NEXT_TRANSACTION_ID,BF SE Next Transaction ID,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_BF_YDL_ACCEPT,BF Yodlee Terms Acceptance,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_BG_PROCESSLOGMSGTYPE,BG Log Message Type,List Data,Communications,high,CUSTOMLIST,No
+CUSTOMLIST_BG_PROCESSACTIVITY,BG Process Activity Type,List Data,Activities,high,CUSTOMLIST,No
+CUSTOMRECORD_BG_PROCINSTANCE,BG Process Instance,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_BG_PROCLOG,BG Process Log,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_BG_PROCESSSTATUS,BG Process Status,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_BG_QUEUEINSTANCE,BG Queue Instance,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_BG_SUMMARYRECORD,BG Summary Records,Customizations,Custom Records,high,CUSTOM,Yes
+vendorBill,Bill,List Data,Relationships,high,TRANSACTION,No
+VendorCredit,Bill Credit,List Data,Relationships,high,TRANSACTION,No
+CUSTOMRECORD_2663_BILL_EFT_DETAILS,Bill EFT Details,Transaction Data,Payables,high,CUSTOM,Yes
+CUSTOMRECORD_2663_BILL_EFT_PAYMENT,Bill EFT Payment Information,List Data,Payment Instruments,medium,CUSTOM,Yes
+BillInboundShipment,Bill Inbound Shipment,Transaction Data,Payables,high,OTHER,No
+billingAccount,Billing Account,Setup Data,Accounting,high,OTHER,No
+BillingAccountBillCycle,Billing Account Billing Schedule,Setup Data,Accounting,high,OTHER,No
+BillingClass,Billing Class,Setup Data,Classifications,high,OTHER,No
+Chargebillingmodetype,Billing Mode,Transaction Data,Payables,high,OTHER,No
+BillRun,Billing Operations,Transaction Data,Payables,high,OTHER,No
+BillRunSchedule,Billing Operation Schedules,Transaction Data,Payables,high,OTHER,No
+BillingRateCard,Billing Rate Card,List Data,Payment Instruments,medium,OTHER,No
+billingSchedule,Billing Schedule,Transaction Data,Payables,high,OTHER,No
+BillingScheduleType,Billing Schedule Type,Transaction Data,Payables,high,OTHER,No
+CUSTOMLIST_2663_BILLING_TYPE,Billing Type,Transaction Data,Payables,high,CUSTOMLIST,No
+CUSTOMRECORD_PACKSHIP_3RD_PARTY_TYPES,Billing Type (2),Transaction Data,Payables,high,CUSTOM,Yes
+billOfDistribution,Bill Of Distribution,Transaction Data,Payables,high,OTHER,No
+bom,Bill of Materials,Transaction Data,Payables,high,OTHER,No
+bomRevision,Bill of Materials Revision,Transaction Data,Payables,high,OTHER,No
+BomRevisionComponent,Bill of Materials Revision Component,Transaction Data,Purchases,high,OTHER,No
+BillVarianceStatus,Bill Variance Status,Transaction Data,Payables,high,OTHER,No
+bin,Bin,Transaction Data,Inventory,medium,OTHER,No
+binWorksheet,Bin Put-Away Worksheet,Transaction Data,Bank,medium,TRANSACTION,No
+binTransfer,Bin Transfer,Transaction Data,Bank,high,TRANSACTION,No
+binType,Bin Type,Transaction Data,Inventory,medium,OTHER,No
+BlanketPurchaseOrder,Blanket Purchase Order,Transaction Data,Bank,medium,TRANSACTION,No
+Bonus,Bonus,System Data,Other System,low,OTHER,No
+BonusType,Bonus Type,Customizations,Custom Objects,medium,OTHER,No
+commerceSearchBoost,Boost,System Data,Other System,low,OTHER,No
+commerceSearchBoostType,Boost Type,Customizations,Custom Objects,medium,OTHER,No
+budgets,Budget,Setup Data,Accounting,high,OTHER,No
+budgetcategory,Budget Category,Setup Data,Accounting,high,OTHER,No
+CUSTOMRECORD_MEYER_CUSTOMBUDGET,Budget Custom,Setup Data,Accounting,high,CUSTOM,Yes
+budgetExchangeRate,Budget Exchange Rate,Setup Data,Accounting,high,OTHER,No
+budgetimport,Budget Import,Setup Data,Accounting,high,OTHER,No
+budgetLegacy,Budget Legacy,Setup Data,Accounting,high,OTHER,No
+CUSTOMRECORD_NS_REQ_BUG_RESOLUT_STATUSES,Bug Resolution Statuses,Transaction Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_NS_REQ_BUG_SEVERITIES,Bug Severities,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_IBE_BUG_STATUSES,Bug Statuses,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_EB_ITEM_BUILDERS,Builder,List Data,Items,high,CUSTOMLIST,No
+BulkProcessingResultType,Bulk Processing Result Type,Customizations,Custom Objects,medium,OTHER,No
+BulkProcessingStatus,Bulk Processing Status,System Data,Other System,low,OTHER,No
+BulkProcSubmission,Bulk Processing Submission,System Data,Other System,low,OTHER,No
+BulkProcessingType,Bulk Processing Type,Customizations,Custom Objects,medium,OTHER,No
+bundleInstallationScript,Bundle Installation Script,Customizations,Scripts,high,OTHER,No
+bundleInstallationScriptDeployment,Bundle Installation Script Deployment,Customizations,Scripts,high,OTHER,No
+BusinessEventHandlerFeedDetailType,Business Event Handler Feed Detail Type,List Data,Activities,high,OTHER,No
+BusinessEventHandler,Business Events Handler,List Data,Activities,high,OTHER,No
+BusinessEventHandlerFeedStatus,Business Events Handler Feed Status,List Data,Activities,high,OTHER,No
+BusinessEventsProcessingHistory,Business Events Processing,List Data,Activities,high,OTHER,No
+BusinessEventType,Business Event Type,List Data,Activities,high,OTHER,No
+buyingReason,Buying Reason,Transaction Data,Sales,high,OTHER,No
+buyingTimeFrame,Buying Time Frame,Transaction Data,Employees,medium,OTHER,No
+overallQuantityPricingType,Calculate Quantity Discounts,Transaction Data,Inventory,medium,OTHER,No
+CalculateDiscountType,Calculate Quantity Discounts,Transaction Data,Inventory,medium,OTHER,No
+GenericCampaign,Campaign,List Data,Activities,medium,EVENT,No
+SearchCampaign,Campaign,List Data,Activities,medium,EVENT,No
+CampaignAnalytic,Campaign Analytics,System Data,Other System,low,OTHER,No
+CampaignAudience,Campaign Audience,Setup Data,Marketing,high,OTHER,No
+CampaignCategory,Campaign Category,Setup Data,Marketing,high,OTHER,No
+CampaignChannel,Campaign Channel,Setup Data,Marketing,high,OTHER,No
+CampaignEmailAddress,Campaign Email Address,List Data,Communications,high,OTHER,No
+CampaignTemplate,Campaign Email Template,List Data,Communications,high,OTHER,No
+CampaignEvent,Campaign Event,List Data,Activities,high,OTHER,No
+GenericCampaignEvent,Campaign Event,List Data,Activities,high,OTHER,No
+CampaignEventType,Campaign event type,List Data,Activities,high,OTHER,No
+CampaignFamily,Campaign Family,Setup Data,Marketing,high,OTHER,No
+CampaignOffer,Campaign Offer,Setup Data,Marketing,high,OTHER,No
+CampaignResponse,Campaign Response,Transaction Data,Purchases,high,OTHER,No
+CampaignSearchEngine,Campaign Search Engine,Setup Data,Marketing,high,OTHER,No
+CampaignSubscription,Campaign Subscription,Customizations,Scripts,high,OTHER,No
+CampaignVertical,Campaign Vertical,Setup Data,Marketing,high,OTHER,No
+paymentCardBrand,Card Brand,List Data,Payment Instruments,high,OTHER,No
+cardholderAuthentication,Cardholder Authentication,List Data,Payment Instruments,medium,OTHER,No
+CardholderAuthenticationEvent,Cardholder Authentication Event,List Data,Activities,high,OTHER,No
+CardholderAuthenticationStatus,Cardholder Authentication Status,List Data,Payment Instruments,medium,OTHER,No
+CUSTOMRECORD_PAYMENT_TERMS,Carrier Payment Terms,List Data,Payment Instruments,medium,CUSTOM,Yes
+CUSTOMLIST_CARRIER_SERVICE_LIST,Carrier Services,List Data,Items,high,CUSTOMLIST,No
+CartSortOrder,Cart Sort Order,Transaction Data,Sales,high,OTHER,No
+supportCase,Case,List Data,Activities,medium,EVENT,No
+supportCaseIssue,Case Issue,Transaction Data,Purchases,high,OTHER,No
+supportCaseOrigin,Case Origin,Transaction Data,Purchases,high,OTHER,No
+supportCasePriority,Case Priority,Transaction Data,Purchases,high,OTHER,No
+caseProfile,Case Profile,System Data,Other System,low,OTHER,No
+supportCaseStatus,Case Status,Transaction Data,Purchases,high,OTHER,No
+supportTerritory,Case Territory,Setup Data,Sales,high,OTHER,No
+supportCaseType,Case Type,Transaction Data,Purchases,high,OTHER,No
+cashRefund,Cash Refund,List Data,Employees,high,TRANSACTION,No
+CashSale,Cash Sale,Transaction Data,Bank,medium,TRANSACTION,No
+SiteCategoryType,Category Name,Setup Data,Marketing,high,OTHER,No
+CUSTOMRECORD_CELIGO_BATCH_DATA_FLOW,Celigo Batch Data Flow,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELLIGO_BATCH_DATA_FLOW_LIB,Celigo Batch Data Flow Library,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_BACTH_DATA_FLOW_TYPE,Celigo Batch Data Flow Type,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_CELIGO_BACTH_DATA_FLOW_VERS,Celigo Batch Data Flow Version,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_CLOSURES,Celigo Closures,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_CONNECTION,Celigo Connection,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_CONNECTION_TYPE,Celigo Connection Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_CUSTOM_LOGIC_BS,Celigo Custom Logic - BS,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_DATA_TRANS,Celigo Data Transports,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_DEBUG_ENABLEMENT,Celigo Debugging Enablement,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_ENUM_CONT,Celigo Enum Container,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_ENVIRONMENT,Celigo Environment,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_RT2_ENVIRONMENT,Celigo Environment 2,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_EXPORT_LOOKUP,Celigo Export Lookup,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_EXTERNAL_DATA_TYPES,Celigo External Data Types,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_CELIGO_FIELD_TYPES,Celigo Field Types,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_RAKUTEN_REC_REPORT,Celigo Flow Response Log,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_GLOBAL_CACHE,Celigo Global Cache,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_GLOBAL_PARAMS,Celigo Global Parameters,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_IMPORT_LOOKUP,Celigo Import Lookup,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_SDK_INCLUDED_FILES,Celigo Included Files - Integr,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_INTEGRATION,Celigo Integration,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_LOGGER,Celigo Integration Log,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_INTEGRATION_USECASE,Celigo Integration Use Case,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_INTEGRATOR_UI,Celigo Integrator UI,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_INTERNAL_DATA_TYPES,Celigo Internal Data Types,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_JOB_BATCH,Celigo Job Batch,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_JOB_BATCH_STATUS,Celigo Job Batch Status,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_JOB_EXPORT,Celigo Job Export,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_JOB_EXPORT_STATUS,Celigo Job Export Status,Transaction Data,Purchases,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_JOB_IMPORT,Celigo Job Import,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_JOB_IMPORT_STATUS,Celigo Job Import Status,Transaction Data,Purchases,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_JOB_REALTIME,Celigo Job Realtime,Transaction Data,Employees,medium,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_LOCK,Celigo Lock,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_LOG_LEVEL,Celigo Log Levels,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_OBJECT_MAP,Celigo Object Mapping,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_PAAS_RECORD_TYPES,Celigo PaaS Object Types,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_PAAS_PARENT_REC_TYPE,Celigo PaaS Parent Record Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_PAAS_REC_SEARCH_META,Celigo PaaS Record Search Meta,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_PAAS_UI_COMPONENT,Celigo PaaS UI Component,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_PAAS_UI_ELEMENT,Celigo PaaS UI Element,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_PAAS_UI_ELEMENT_TYPE,Celigo Paas UI Element Type,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_MESSAGE_QUEUE,Celigo Queued Message,List Data,Communications,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_RT2_MESSAGE_QUEUE,Celigo Queued Message 2,List Data,Communications,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_REALTIME_EXPORT,Celigo Realtime Export (v1),Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_RT_EXPORT_FLOW,Celigo Realtime Export Flow,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_RT2_EXPORT_FLOW,Celigo Realtime Export Flow 2.0,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_RT_IMPORT_FLOW,Celigo Realtime Import Flow,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_RT_EXPORT_FLOW_LIB,Celigo RT Export Flow Lib,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_RT_IMPORT_FLOW_LIB,Celigo RT Import Flow Lib,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_PAAS_SEARCH_META_TYP,Celigo Search Meta Type,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_SOBJECT_METADATA,Celigo SObject Metadata,Transaction Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_SUPPORTED_FIELD,Celigo Supported Field Type,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_SUPPORTED_LIST,Celigo Supported List Type,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_SUPPORTED_OBJECT,Celigo Supported Object Type,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_TF_TEST,Celigo Test,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_TF_BUNDLETRIGGERLIST,Celigo Test Bundle Trigger,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_TF_LIB,Celigo Test Library,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_TF_PRODUCT_LIST,Celigo Test Product List,List Data,Items,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_TF_RESULT,Celigo Test Result,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_TF_TESTTYPE,Celigo Test Type,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_CELIGO_TF_TRACKED,Celigo TF Test Trace,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_CELIGO_UE_EVENT_TYPES,Celigo UE Event Types,List Data,Activities,high,CUSTOMLIST,No
+CUSTOMLIST_CELIGO_UE_EXCTX,Celigo UE Execution Context,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_CELIGO_RT2_UE_EXCTX,Celigo UE Execution Context 2,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_CELIGO_UE_EXEC_TYPES,Celigo UE Execution Types,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_CELIGO_RT2_UE_EXEC_TYPES,Celigo UE Execution Types 2,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_UNIQUE_TEST_REC,Celigo Unique Test,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_CELIGO_USER_EVENT_SCRIPTS,Celigo User Event Script,Setup Data,Users,high,CUSTOM,Yes
+CenterType,Center Type,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMLIST_ATLAS_CERTIFCATION_TYPE,Certification Type,Customizations,Custom Lists,high,CUSTOMLIST,No
+ChallengeWindowSize,Challenge window size,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_NS_ONE_CHANGE_LOG,Change Log,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_NS_ONE_CHANGE_LOG_TYPE_LIST,Change Log Change Type,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_CHANGE_ORDER_STATUS,Change Order Status,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_NS_IBE_REQ_CHANNEL_OR_AREA,Channel/Area,Setup Data,Marketing,high,CUSTOM,Yes
+charge,Charge,System Data,Other System,low,OTHER,No
+ChargePeriodSegment,Charge Period Segment,Setup Data,Accounting,high,OTHER,No
+ChargeRule,Charge Rule,Setup Data,Sales,high,OTHER,No
+ChargeRuleType,Charge Rule Type,Setup Data,Sales,high,OTHER,No
+ChargeRun,Charge Run Status,System Data,Other System,low,OTHER,No
+Chargestagetype,Charge Stage,Customizations,Custom Objects,medium,OTHER,No
+chargeType,Charge Type,Customizations,Custom Objects,medium,OTHER,No
+Chargeuse,Charge Use,System Data,Other System,low,OTHER,No
+check,Check,Transaction Data,Bank,high,TRANSACTION,No
+classification,Class,Setup Data,Classifications,high,OTHER,No
+classSegmentMapping,Class Mapping,Setup Data,Classifications,high,OTHER,No
+CUSTOMRECORD_8299_CLIENT_AUDIT_TRAIL,Client Audit Trail,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_8299_CAT_TYPE,Client Audit Trail Type,Customizations,Custom Lists,high,CUSTOMLIST,No
+clientScript,Client Script,Customizations,Scripts,high,OTHER,No
+clientScriptDeployment,Client Script Deployment,Customizations,Scripts,high,OTHER,No
+cmscontent,CMS Content,System Data,Other System,low,OTHER,No
+cmscontenttype,CMS Content Type,Customizations,Custom Objects,medium,OTHER,No
+cmscontenttypesitemapping,CMS Content Type Site Mapping,List Data,Items,high,OTHER,No
+cmspage,CMS Page,System Data,Other System,low,OTHER,No
+cmspagetype,CMS Page Type,Customizations,Custom Objects,medium,OTHER,No
+ColorSet,Color Set,System Data,Other System,low,OTHER,No
+CommerceCatalog,Commerce Catalog,System Data,Audit,high,OTHER,No
+CommerceCategory,Commerce Category,Setup Data,Marketing,high,OTHER,No
+CommerceSearchActivityData,Commerce Search Activity Data,List Data,Activities,high,OTHER,No
+commission,Commission,Transaction Data,Bank,medium,TRANSACTION,No
+CommissionableItem,Commissionable Item,List Data,Items,high,OTHER,No
+CUSTOMRECORD_EB_COMMISSION_ADJUST_LINES,Commission Adjustment Lines,Transaction Data,Inventory,medium,CUSTOM,Yes
+CUSTOMRECORD_MEYER_COMMISSION_FLOOR,Commission Floor,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_ATLAS_CPR_COMMISSIONLOG,Commission Log,Customizations,Custom Records,high,CUSTOM,Yes
+CommissionOverview,Commission Overview,System Data,Other System,low,OTHER,No
+CommissionPaymentType,Commission Payment Type,List Data,Payment Instruments,medium,OTHER,No
+commissionPlan,Commission Plan,System Data,Other System,low,OTHER,No
+commissionSchedule,Commission Schedule,System Data,Other System,low,OTHER,No
+CUSTOMLIST_ATLAS_CPR_COMMSTAT,Commission Statuses,Customizations,Custom Lists,high,CUSTOMLIST,No
+Commissn,COMMISSN,System Data,Other System,low,OTHER,No
+InvtCommit,Commit Criteria,System Data,Other System,low,OTHER,No
+Company,Company,Setup Data,Company,high,OTHER,No
+CUSTOMRECORD_2663_BANK_DETAILS,Company Bank Details,Setup Data,Company,high,CUSTOM,Yes
+CompanyContactRelationship,Company-Contact Relationship,Setup Data,Company,high,OTHER,No
+CompanyPreference,Company Preference,Setup Data,Company,high,OTHER,No
+CompanySubsidiaryRelationship,Company-Subsidiary Relationship,Setup Data,Company,high,SETUP,No
+companyTaxVariationOption,Company Tax Variation Option,Setup Data,Company,high,OTHER,No
+Competitor,Competitor,System Data,Other System,low,OTHER,No
+ComponentArea,Component Area,Transaction Data,Purchases,high,OTHER,No
+ComponentAreaMonthSnapshotRecord,Component Area Monthly Snapshot,Transaction Data,Purchases,high,OTHER,No
+CUSTOMLIST_EB_ITEM_CONCENTRATIONS,Concentrations,List Data,Items,high,CUSTOMLIST,No
+ConnectLoginAudit,Connect Login Audit,System Data,Audit,high,OTHER,No
+ConsolidatedRateType,Consolidated Exchange Rate,Setup Data,Accounting,high,OTHER,No
+consolidatedExchangeRate,Consolidated Exchange Rate,Setup Data,Accounting,high,OTHER,No
+consolidatedRateAdjustorPlugin,Consolidated Rate Adjustor Plugin,Transaction Data,Sales,high,OTHER,No
+Contact,Contact,List Data,Employees,medium,ENTITY,No
+ContactCategory,Contact Category,Setup Data,Marketing,high,ENTITY,No
+ContactRole,Contact Role,Setup Data,Users,high,ENTITY,No
+ContactSubsidiaryRelationship,Contact-Subsidiary Relationship,Setup Data,Subsidiaries,high,ENTITY,No
+RetirementPlanContributionType,Contribution Type,Customizations,Custom Objects,medium,OTHER,No
+controlTowerSourceType,Control Tower Source Type,Transaction Data,Sales,high,OTHER,No
+CUSTOMLIST_SCM_LC_COST_ALLOC_METHOD,Cost Allocation Method,Setup Data,Locations,high,CUSTOMLIST,No
+CostCategoryType,Cost Category,Setup Data,Marketing,high,OTHER,No
+costCategory,Cost Category,Setup Data,Marketing,high,OTHER,No
+CostEstimateType,Cost Estimate Type,Customizations,Custom Objects,medium,OTHER,No
+CostingMethodType,Costing Method,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMRECORD_SC_COUNT_CONFIGURATION,Count Configuration,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_SC_CR_SCHEDULED_DATA,Count Review Data,Transaction Data,Inventory,medium,CUSTOM,Yes
+Country,Country,Transaction Data,Inventory,medium,OTHER,No
+euMossCountry,Country of Consumption,Transaction Data,Inventory,medium,OTHER,No
+CUSTOMLIST_SC_COUNT_TYPES,Count Types,Transaction Data,Inventory,medium,CUSTOMLIST,No
+couponCode,Coupon Code,Transaction Data,Purchases,high,OTHER,No
+CUSTOMLIST_CELIGO_INTGR_CREATED_WITHIN,Created Within,Customizations,Custom Lists,high,CUSTOMLIST,No
+creditCards,Credit Cards,List Data,Payment Instruments,medium,OTHER,No
+creditCardCharge,Credit Card Transaction,List Data,Payment Instruments,medium,OTHER,No
+creditCardRefund,Credit Card Transaction,List Data,Payment Instruments,medium,OTHER,No
+Creditholdoverridetype,Credit Hold,Transaction Data,Bank,medium,OTHER,No
+creditMemo,Credit Memo,Transaction Data,Bank,medium,OTHER,No
+CUSTOMLIST_DC_CREDIT_MEMO_TYPE,Credit Memo Type,Transaction Data,Bank,medium,CUSTOMLIST,No
+RecSysCrmConversion,CRM Conversion,System Data,Other System,low,OTHER,No
+CrmField,CRM Field,Customizations,Custom Objects,medium,OTHER,No
+CrmRecordType,CrmRecordType,Customizations,Custom Objects,medium,OTHER,No
+CrossChargeJournal,Cross Charge Journal,Transaction Data,Financial,high,OTHER,No
+CrosschargeRequest,Cross Charge Request,System Data,Other System,low,OTHER,No
+currency,Currency,Setup Data,Accounting,high,ACCOUNTING,No
+currencyRate,Currency Exchange Rate,Setup Data,Accounting,high,ACCOUNTING,No
+CurrencyRateType,Currency Exchange Rate Type,Setup Data,Accounting,high,ACCOUNTING,No
+FxReval,Currency Revaluation,Setup Data,Accounting,high,OTHER,No
+CurrencySymbol,Currency Symbol,Setup Data,Accounting,high,ACCOUNTING,No
+Custom,Custom,Customizations,Custom Objects,medium,OTHER,No
+CustomAndBuiltInSegment,Custom And Built-In Segment,Customizations,Custom Objects,medium,OTHER,No
+CenterLink,Custom Center Link,Customizations,Custom Objects,medium,OTHER,No
+Customer,Customer,List Data,Employees,medium,ENTITY,No
+customerProject,Customer/Project,List Data,Employees,medium,ENTITY,No
+customerCategory,Customer Category,Setup Data,Marketing,high,ENTITY,No
+CustomerCharge,Customer Charge,List Data,Employees,medium,ENTITY,No
+customerDeposit,Customer Deposit,List Data,Employees,medium,ENTITY,No
+customerMessage,Customer Message,List Data,Communications,high,ENTITY,No
+CUSTOMRECORD_SCM_CUSTOMERPARTNUMBER,Customer Part Number,List Data,Relationships,high,CUSTOM,Yes
+customerPayment,Customer Payment,List Data,Payment Instruments,medium,TRANSACTION,No
+customerPaymentAuthorization,Customer Payment Authorization,List Data,Payment Instruments,medium,TRANSACTION,No
+customerRefund,Customer Refund,List Data,Employees,medium,ENTITY,No
+CustomerSegment,Customer Segment,List Data,Employees,medium,ENTITY,No
+EntityStage,Customer stage,List Data,Relationships,high,OTHER,No
+customerStatus,Customer Status,List Data,Employees,medium,ENTITY,No
+CustomerSubsidiaryRelationship,Customer-Subsidiary Relationship,Setup Data,Subsidiaries,high,ENTITY,No
+CUSTOMRECORD_RAW_CUSTOMER_TEAM,Customer Team,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_RAW_TEAM_MEMBER_TYPE,Customer Team Member Type,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_SHIPC_CUSTOMER_THIRDPARTY,Customer Third Party Account,Setup Data,Accounting,high,CUSTOM,Yes
+CUSTOMLIST_ATLAS_CUST_TYPE,Customer Type,List Data,Relationships,high,CUSTOMLIST,No
+CustomField2,Custom Field,Customizations,Custom Objects,high,OTHER,No
+CustomField4,Custom Field,Customizations,Custom Objects,high,OTHER,No
+RevRecFieldMappingCustomField,Custom Field,Customizations,Custom Objects,high,OTHER,No
+CustomField,Custom Field Definition,Customizations,Custom Objects,high,OTHER,No
+glLinesAuditLog,Custom GL Lines Audit Log,Customizations,Custom Objects,medium,OTHER,No
+glLinesPluginRevision,Custom GL Lines Plug-in Revisions,Customizations,Custom Objects,medium,OTHER,No
+customGlPlugin,Custom GL Plugin,Customizations,Custom Objects,medium,OTHER,No
+CustomList,Custom List Definition,Customizations,Custom Lists,high,OTHER,No
+plugInTypeImpl,Custom Plug-in Implementation,Customizations,Custom Objects,medium,OTHER,No
+plugInType,Custom Plug-In Type,Customizations,Custom Objects,medium,OTHER,No
+ratableEventType,Custom Recognition Event Type,List Data,Activities,high,OTHER,No
+CustomRecordActionScript,Custom Record Action Script,Customizations,Custom Records,high,CUSTOM,Yes
+RecordActionScriptDeployment,Custom Record Action Script Deployment,Customizations,Scripts,high,OTHER,No
+CustomRecordType,Custom Record Definition,Customizations,Custom Records,high,CUSTOM,Yes
+CustomSegment,Custom Segment Definition,Customizations,Custom Objects,medium,OTHER,No
+CustomSegmentField,Custom Segment Field,Customizations,Custom Objects,high,OTHER,No
+sublist,Custom Sublist Definition,Customizations,Custom Objects,high,OTHER,No
+SUBTAB,Custom Subtab,Customizations,Custom Objects,medium,OTHER,No
+CustomTransactionType,Custom Transaction Definition,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMLIST77,Cutover Activity,List Data,Activities,high,OTHER,No
+CUSTOMRECORD_DT_TILE,Dashboard Tile,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_DT_TILE_ALERTOPS,Dashboard Tile Alert Operators,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_DT_TILE_TRANSFLDS,Dashboard Tile Trans Fields,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_DT_TRANSLATIONS,Dashboard Tile Translations,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_DT_TILE_TYPE,Dashboard Tile Types,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMLIST_DT_WRAPPING,Dashboard Wrapping,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_NS_MIGRATION_TRACKER,Data Migration Tracker,Customizations,Custom Records,high,CUSTOM,Yes
+datasetBuilderPlugin,Dataset Builder Plug-in,System Data,Other System,low,OTHER,No
+DayOfWeek,Day of Week,System Data,Other System,low,OTHER,No
+CUSTOMLIST_2663_DAY_OF_WEEK,Day of Week,Customizations,Custom Lists,high,CUSTOMLIST,No
+EventDowim,Day Of Week in Month,List Data,Activities,high,OTHER,No
+CUSTOMRECORD_DC_DEDUCTION_TYPE,Deduction and Chargeback Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_DC_LANDING_PAGE,Deduction Landing Page,Customizations,Custom Lists,high,CUSTOMLIST,No
+CUSTOMRECORD_DC_DM_DEDUCTION_MANAGEMENT,Deduction Management,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_DC_PREF,Deduction Management Setup,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_DC_DM_TASK,Deduction Management Task,List Data,Activities,high,CUSTOM,Yes
+CUSTOMRECORD_DC_DM_TASK_DETAIL,Deduction Management Task Detail,List Data,Activities,high,CUSTOM,Yes
+CUSTOMLIST_DC_DEDUCT_TYPE,Deduction Type,Customizations,Custom Lists,high,OTHER,No
+alignOrHide,Default Chart Type,Customizations,Custom Objects,medium,OTHER,No
+DeletedRecord,Deleted Record,Customizations,Custom Objects,medium,OTHER,No
+DeletedRecordInConnect,Deleted Record In Connect,Customizations,Custom Objects,medium,OTHER,No
+DeletedTransaction,Deleted Transaction,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMLIST_DELIVERY_TERMS,Delivery Terms,Customizations,Custom Lists,high,OTHER,No
+ItemDemandSource,Demand Source,List Data,Items,high,ITEM,No
+department,Department,Setup Data,Company,medium,SETUP,No
+CUSTOMRECORD_SAS_DEPARTMENT_APPROVER,Department Approver,Setup Data,Company,medium,SETUP,Yes
+deptSegmentMapping,Department Mapping,Setup Data,Departments,high,OTHER,No
+CUSTOMRECORD_NS_IBE_ACT_CONF_DEPLY_TYPE,Deployment Type,Customizations,Custom Records,high,CUSTOM,Yes
+deposit,Deposit,Transaction Data,Bank,high,OTHER,No
+depositApplication,Deposit Application,Transaction Data,Bank,high,OTHER,No
+descriptionItem,Description Item,List Data,Items,high,ITEM,No
+Device,Device,System Data,Other System,low,OTHER,No
+DeviceId,Device ID,System Data,Other System,low,OTHER,No
+DeviceStatusType,Device Status,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMRECORD_8391_DD_FORMAT_SPCFC_TYPES,Direct Debit File Format Specific Types,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_2663_DIRECT_DEBIT_TYPE,Direct Debit Type,Customizations,Custom Lists,high,OTHER,No
+DirectInvoicePaymentSetup,Direct Invoice Payment Setup,Setup Data,Company,high,TRANSACTION,No
+NoteDirectionType,Direction,List Data,Communications,high,OTHER,No
+discountItem,Discount Item,List Data,Items,high,ITEM,No
+promocodediscounttype,Discount Type,Transaction Data,Inventory,medium,OTHER,No
+distributionCategory,Distribution Category,Setup Data,Marketing,high,OTHER,No
+distributionNetwork,Distribution Network,Transaction Data,Manufacturing,medium,OTHER,No
+CUSTOMLIST_DC_DM_TASK_STATUS,DM Task Status,List Data,Activities,high,OTHER,No
+CUSTOMRECORD_DAD_FILE,DnD File,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_DAD_FILE_HTML,DnD File Html,Customizations,Custom Records,high,CUSTOM,Yes
+MediaItemFolder,Document Folder,List Data,Items,high,ITEM,No
+domain,Domain,System Data,Other System,low,OTHER,No
+domainHomePageType,Domain Home Page Media Type,Customizations,Custom Objects,medium,OTHER,No
+domainHomePageSelect,Domain Home Page Select,System Data,Other System,low,OTHER,No
+downloadItem,Download Item,List Data,Items,high,ITEM,No
+CUSTOMRECORD_SAS_DRAFT_APPROVAL,Draft Approval,Customizations,Custom Records,high,CUSTOM,Yes
+DriversLicense,Driver's License,System Data,Other System,low,OTHER,No
+CUSTOMLIST_DT_TRANSLATABLE_FLDS,DT Translatable Fields,Customizations,Custom Lists,high,OTHER,No
+dual,dual,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_DUNNING_BULK_BATCH,Dunning Bulk Update Batch,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_3805_BULK_UPDATE_STATUS,Dunning Bulk Update Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_3805_DUNNING_CONFIG,Dunning Configuration,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUN_CRM_EMAIL_TEMPLATE,Dunning Email Template,List Data,Communications,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_EVAL_RESULT,Dunning Evaluation Result,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_EVAL_STATEMENT,Dunning Evaluation Statement,Transaction Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_HOLIDAYS,Dunning Holidays,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_L10N_JOB,Dunning Job,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_DL_JOB_QUEUE,Dunning Job Queue,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_LEVEL,Dunning Level,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_EVAL_RULE,Dunning Level Rule,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DER_AMOUNT,Dunning Level Rule Amount,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_STATUS,Dunning Pause Reason,Transaction Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_SUBSTATUS,Dunning Pause Reason Detail,Transaction Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_PROCEDURE,Dunning Procedure,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_PROC_PRIORITY,Dunning Procedure Priority,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_3805_QUEUE_REQUEST,Dunning Queue Request,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_RECIPIENT,Dunning Recipient,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_DUNNING_ROLES_LIST,Dunning Roles,Setup Data,Users,high,OTHER,No
+CUSTOMLIST_DL_GD_SCHEDULE_WEEK_MOD_DAY,Dunning Schedule Days,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_DL_GD_SUMMARY,Dunning Setup Summary,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_TEMPLATE,Dunning Template,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_3805_DUNNING_TEMPLATE_DOC,Dunning Template Document,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_EB_EEF_CONFIGURATION,EB : EEF - Configuration,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_EB_NS_RECORD_COUNT,EB : UTIL : Instance Record Counts,Transaction Data,Inventory,medium,CUSTOM,Yes
+CUSTOMLIST_SCM_ECO_ACTION,ECO Action,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_SCM_ECN_IMPLEMENT_ECO_LOG,ECO Implementation Log,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_SCM_ECN_IMPLEMENT_STATUS,ECO Implementation Status,Customizations,Custom Lists,high,OTHER,No
+ThreeDSECommerceIndicator,E-Commerce Indicator (ECI),List Data,Employees,high,OTHER,No
+CUSTOMLIST_ED_CONFIG_LIST,ED Configurable Field List,Setup Data,Company,high,OTHER,No
+edition,Edition,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_ED_PREFERENCE,ED Preferences,Setup Data,Company,high,CUSTOM,Yes
+Education,Education,System Data,Other System,low,OTHER,No
+CUSTOMLIST_EB_EEF_OPERATION_TYPE,EEF : Operation Type,Customizations,Custom Lists,high,OTHER,No
+EffectivityBasedOnType,Effectivity Based On,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMLIST_2663_PROCESS_STATUS,EFT Processing Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_15906_EP_LOGS,Electronic Payments Logs,List Data,Payment Instruments,medium,CUSTOM,Yes
+CUSTOMRECORD_EP_PREFERENCE,Electronic Payments Preference,Setup Data,Company,high,CUSTOM,Yes
+RecSysEligibility,Eligibility,System Data,Other System,low,OTHER,No
+InterCompanyEliminations,Eliminate Intercompany Transactions,Setup Data,Company,high,OTHER,No
+CUSTOMRECORD_SAS_APPROVAL_LOGS,Email Approval Log,List Data,Communications,high,CUSTOM,Yes
+emailCapturePlugin,Email Capture Plugin,List Data,Communications,high,OTHER,No
+EmailPreferenceType,Email Preference Type,Setup Data,Company,high,OTHER,No
+EmailTemplate,Email Template,List Data,Communications,high,OTHER,No
+employee,Employee,List Data,Employees,high,ENTITY,No
+EmployeeChangeReason,Employee Change Reason,List Data,Employees,high,ENTITY,No
+EmployeeChangeRequest,Employee Change Request,List Data,Employees,high,ENTITY,No
+EmployeeChangeRequestType,Employee Change Request Type,List Data,Employees,high,ENTITY,No
+CUSTOMRECORD_MEYER_EMP_COMM_ADJUSTMENTS,Employee Commission Adjustments,List Data,Employees,high,CUSTOM,Yes
+EmployeeList,Employee Directory,List Data,Employees,high,ENTITY,No
+EmployeeExpenseSourceType,Employee Expense Source Type,List Data,Employees,high,ENTITY,No
+EmployeeFilingStatus,Employee Filing Status,List Data,Employees,high,ENTITY,No
+EmployeePayrollItem,Employee Payroll Item,List Data,Employees,high,ENTITY,No
+EmployeeStatus,Employee Status,List Data,Employees,high,ENTITY,No
+payrollBatchPayees,Employees to Pay,List Data,Employees,high,OTHER,No
+EmployeeSubsidiaryRelationship,Employee-Subsidiary Relationship,Setup Data,Subsidiaries,high,ENTITY,No
+EmployeeTaxInfo,Employee Tax Information,List Data,Employees,high,ENTITY,No
+EmployeeType,Employee Type,List Data,Employees,high,ENTITY,No
+EmployeeTypeCategory,Employee Type Category,Setup Data,Marketing,high,ENTITY,No
+EmployeeStatusCategory,Employment Status Category,Setup Data,Marketing,high,ENTITY,No
+CUSTOMRECORD_EVD_ENABLEVALIDATIONS,Enable Validations/Default Discount,Transaction Data,Inventory,medium,CUSTOM,Yes
+CUSTOMRECORD_ENCRYPTION_DETAILS,Encryption Details,Customizations,Custom Records,high,CUSTOM,Yes
+EndToEndTime,End To End Time,Transaction Data,Employees,medium,OTHER,No
+CUSTOMRECORD_NS_IBE_PROJECT,Engagement,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_NS_IBE_ENGAGEMENT_TYPES,Engagement Types,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_SCM_ECN_ENGR_CHANGE_ORDER,Engineering Change Order,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_SCM_ECO_DETAIL,Engineering Change Order Detail,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_SCM_ECN_ECO_TYPE,Engineering Change Order Type,Customizations,Custom Records,high,CUSTOM,Yes
+entity,Entity,List Data,Relationships,high,OTHER,No
+entityAccountMapping,Entity Account Mapping,Setup Data,Accounting,high,ACCOUNTING,No
+CUSTOMLIST_2663_ENTITY_BANK_TYPE,Entity Bank Detail Type,List Data,Relationships,high,OTHER,No
+EntityCategory,Entity Category,Setup Data,Marketing,high,OTHER,No
+EntityListType,Entity List Type,List Data,Relationships,high,OTHER,No
+EntityStatus,Entity Status,List Data,Relationships,high,OTHER,No
+EntityStatusHistory,Entity Status History,List Data,Relationships,high,OTHER,No
+EntitySubsidiaryRelationship,Entity-Subsidiary Relationship,Setup Data,Company,medium,SETUP,No
+EntityType,Entity Type,List Data,Relationships,high,OTHER,No
+Entryformtemplate,Entry Form,System Data,Other System,low,OTHER,No
+CUSTOMLIST_NS_IBE_ENVIRONMENT_TYPES,Environment types,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_EP_COMPANY_INFORMATION,EP Company Information,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_2663_DUMMY_LIST,EP Dummy List,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_2663_EXECUTION_LOG,EP Execution Log,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_15906_EP_LOG_TYPE,EP Log Type,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_2663_OUTPUT_FILE_ENCODING,EP Output File Encoding,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_2663_EP_PROCESS,EP Process,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_2663_QUEUE_SETTINGS,EP Queue Settings,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_EP_PROC_RESULTS,EP Thread Processing Results,List Data,Employees,high,CUSTOM,Yes
+payrollBatchError,Error,List Data,Employees,high,OTHER,No
+escalationTerritory,Escalation Assignment,Setup Data,Sales,high,OTHER,No
+estimate,Estimate,System Data,Other System,low,OTHER,No
+Ethnicity,Ethnicity,System Data,Other System,low,OTHER,No
+CalendarEvent,Event,List Data,Activities,high,OTHER,No
+BaseEvent,Event,List Data,Activities,high,OTHER,No
+EventPriority,Event Priority,List Data,Activities,high,OTHER,No
+EventResponse,Event Response,List Data,Activities,high,OTHER,No
+EventType,Event Type,List Data,Activities,high,OTHER,No
+FulfillmentExceptionType,Exception Type,Transaction Data,Order Management,high,OTHER,No
+executionContext,Execution Context,System Data,Other System,low,OTHER,No
+UsrExecutionLog,Execution Log,System Data,Audit,high,OTHER,No
+expenseAmortizationEvent,Expense Amortization Event,List Data,Activities,high,OTHER,No
+expensePlan,Expense Amortization Plan,Transaction Data,Employees,medium,OTHER,No
+expenseAmortizationRule,Expense Amortization Rule,Setup Data,Sales,high,OTHER,No
+ExpenseCategory,Expense Category,Setup Data,Marketing,high,OTHER,No
+expenseItem,Expense Item,List Data,Items,high,ITEM,No
+expenseReport,Expense Report,Transaction Data,Purchases,high,OTHER,No
+ExpenseReportPolicy,Expense Report Policy,Transaction Data,Purchases,high,OTHER,No
+CUSTOMRECORD_EXPORT_FILE_TYPES,Export File Type,Transaction Data,Purchases,high,CUSTOM,Yes
+pickActionFailureReason,Failure Reason,Transaction Data,Sales,high,OTHER,No
+FairValueDimension,Fair Value Dimension,System Data,Other System,low,OTHER,No
+FairValueFormula,Fair Value Formula,System Data,Other System,low,OTHER,No
+FairValuePrice,Fair Value Price,System Data,Other System,low,OTHER,No
+FairValueRangePolicy,Fair Value Range Checking Policy,Transaction Data,Bank,high,OTHER,No
+CUSTOMLIST_FAM_LIST_ACCRUAL_CONVENTION,FAM Accrual Convention,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NCFAR_ALTDEPRECIATION,FAM Alternate Depreciation,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NCFAR_ALTMETHODS,FAM Alternate Methods,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_NCFAR_ANNUALENTRY,FAM Annual Method Entry,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NCFAR_ASSET,FAM Asset,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_FAM_ASSETFIELDIDTYPE,FAM Asset Field ID Type,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NCFAR_ASSETPROPOSAL,FAM Asset Proposal,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMLIST_NCFAR_PROPOSALSTATUS,FAM Asset Proposal Status,Transaction Data,Purchases,high,OTHER,No
+CUSTOMRECORD_FAM_ASSETREGISTERREPLINE,FAM Asset Register Rep Line,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_FAM_ASSETREGISTERREP,FAM Asset Register Report,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_FAM_ASSETRESETDATA,FAM Asset Reset Data,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_FAM_ASSET_SPLIT_RULES,FAM Asset Split Rules,Setup Data,Sales,high,OTHER,No
+CUSTOMLIST_NCFAR_ASSETSTATUS,FAM Asset Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_FAM_ASSETSUMMARYREPLINE,FAM Asset Summary Rep Line,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_FAM_ASSETSUMMARYREP,FAM Asset Summary Report,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_NCFAR_TRANSFERACCOUNTS,FAM Asset Transfer Accounts,Setup Data,Accounting,high,ACCOUNTING,Yes
+CUSTOMRECORD_NCFAR_ASSETTYPE,FAM Asset Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NCFAR_ASSETUSAGE,FAM Asset Usage,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_FAM_ASSETVALUES,FAM Asset Values,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_NCFAR_CONVENTIONS,FAM Conventions,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_FAM_DATERANGE_SHORTCUTS,FAM Date Range Shortcuts,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NCFAR_ALTDEPRDEF,FAM Default Alt Depreciation,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_NCFAR_DEPRACTIVE,FAM Depreciation Active,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NCFAR_DEPRHISTORY,FAM Depreciation History,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NCFAR_DEPRMETHOD,FAM Depreciation Method,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_FAM_DEPRMONTHREPORTLINE,FAM Depreciation Monthly Report Line,List Data,Employees,high,CUSTOM,Yes
+CUSTOMLIST_NCFAR_DEPRPERIOD,FAM Depreciation Period,Setup Data,Accounting,high,OTHER,No
+CUSTOMLIST_FAM_DEPR_TABLES,FAM Depreciation Rate Tables,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NCFAR_DEPRRULES,FAM Depreciation Rules,Setup Data,Sales,high,OTHER,No
+CUSTOMRECORD_FAM_DEPRSCHEDREPORT,FAM Depreciation Schedule Report,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_FAM_DEPRSCHEDREPORTLINE,FAM Depreciation Schedule Report Line,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMLIST_NCFAR_DEPRHISTMETHODS,FAM Depr History Methods,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NCFAR_DISPOSALTYPE,FAM Disposal Type,Transaction Data,Purchases,high,OTHER,No
+CUSTOMLIST_FAM_ERRORHANDLINGTYPE,FAM Error Handling Type,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NCFAR_EXPENSEINCOME,FAM Expense/Income,Transaction Data,Employees,medium,CUSTOM,Yes
+CUSTOMLIST_FAM_LIST_FINAL_CONVENTION,FAM Final Period Convention,Setup Data,Accounting,high,OTHER,No
+CUSTOMLIST_FAM_FORECASTSTATUS,FAM Forecast Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_ASSETLIFETIMES,FAM Lifetimes,Transaction Data,Employees,medium,CUSTOM,Yes
+CUSTOMLIST_FAR_MONTHNAMES,FAM Month Names,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_FAM_PAPERORIENTATION,FAM Paper Orientation,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_FAM_PAPERSIZE,FAM Paper Size,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_FAM_LIST_PERIOD_CONVENTION,FAM Period Convention,Setup Data,Accounting,high,OTHER,No
+CUSTOMRECORD_FAM_PROCESS,FAM Process,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_FAM_PROCSTATUS,FAM Process Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NCFAR_ALTDEPR_PROPOSAL,FAM Proposal Alt Depreciation,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_FAM_RECENT_DIAGNOSIS,FAM Recent Diagnosis,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_REPAIRMAINTCATEGORY,FAM Repair & Maint Category,Setup Data,Marketing,high,CUSTOM,Yes
+CUSTOMRECORD_REPAIRMAINTSUBCATEGORY,FAM Repair & Maint Sub A,Setup Data,Marketing,high,CUSTOM,Yes
+CUSTOMRECORD_REPAIRMAINTSUBCATEGORYB,FAM Repair & Maint Sub B,Setup Data,Marketing,high,CUSTOM,Yes
+CUSTOMRECORD_FAM_REPORT,FAM Report,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_FAM_REPORT_TEMPLATE,FAM Report Template,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMLIST_FAM_REPORTTYPES,FAM Report Types,Transaction Data,Purchases,high,OTHER,No
+CUSTOMLIST_NCFAR_REVISIONRULES,FAM Revision Rules,Setup Data,Sales,high,OTHER,No
+CUSTOMLIST_FAM_ROUNDINGMETHODS,FAM Rounding Methods,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_FAM_SCHEDULE_OPTIONS,FAM Schedule Options,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_FAM_SETUPSUMMARY,FAM Setup Summary,Setup Data,Company,high,OTHER,No
+CUSTOMRECORD_FAM_SPECIALDEPRECIATION,FAM Special Depreciation,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMTRANSACTION_FAM_SPECIALDEPR_JRN,FAM Special Depreciation Entry,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMLIST_FAM_PROCSTAGESTATUS,FAM Stage Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NCFAR_SYSTEMSETUP,FAM System Setup,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMLIST_NCFAR_TAXMETHODSTATUS,FAM Tax Method Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_FAM_TPAF_MAPPING,FAM Transaction Field Map,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_NCFAR_TRANSACTIONTYPE,FAM Transaction Type,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMLIST_NCFAR_UNITMEASURMENT,FAM Unit of Measurement,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_FAM_LIST_USEDACCOUNTS,FAM Used Accounts,Setup Data,Accounting,high,ACCOUNTING,No
+FaxTemplate,Fax Template,System Data,Other System,low,OTHER,No
+CompanyFeatureSetup,Features,Setup Data,Company,high,OTHER,No
+CustomFieldAll,Field,Customizations,Custom Objects,high,OTHER,No
+SystemNoteField,Field,List Data,Communications,high,OTHER,No
+scriptEventType,Field Type,List Data,Activities,high,OTHER,No
+scriptFieldType,Field Type,Customizations,Scripts,high,OTHER,No
+File,File,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_DAD_ENABLED_RECORD_TYPE,File Drag and Drop Record Type,Customizations,Custom Records,high,CUSTOM,Yes
+payItemStatus,Filing Status,List Data,Items,high,ITEM,No
+PlanningEngineFilterType,Filter Type,Customizations,Custom Objects,medium,OTHER,No
+FinChrg,FIN_CHRG,List Data,Employees,high,OTHER,No
+FinancialException,Financial Exception,System Data,Other System,low,OTHER,No
+FinancialExceptionTransactionReference,Financial Exception Transaction Reference,Transaction Data,Bank,medium,TRANSACTION,No
+financialInstitution,Financial Institution,System Data,Other System,low,OTHER,No
+fiConnectivityPlugin,Financial Institution Connectivity Plug-in,System Data,Other System,low,OTHER,No
+FIParserPlugin,Financial Institution Parser Plug-in,System Data,Other System,low,OTHER,No
+FirstRunTimeSelect,First Run Time Select,Transaction Data,Employees,medium,OTHER,No
+FirstVisit,First Site Visit,System Data,Other System,low,OTHER,No
+FiscalCalendar,Fiscal Calendar,Setup Data,Accounting,high,OTHER,No
+FixedAmountProjectRevenueRule,Fixed Amount Project Revenue Rule,Setup Data,Sales,high,OTHER,No
+CUSTOMTRANSACTION_FAM_DEPR_JRN,Fixed Asset Depreciation Entry,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMTRANSACTION_FAM_DISP_JRN,Fixed Asset Disposal Entry,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMTRANSACTION_FAM_REVALUATION_JRN,Fixed Asset Revaluation Entry,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMTRANSACTION_FAM_TRANSFER_JRN,Fixed Asset Transfer Entry,Transaction Data,Bank,high,TRANSACTION,No
+FolderType,Folder Type,Customizations,Custom Objects,medium,OTHER,No
+font,Font,System Data,Other System,low,OTHER,No
+Forecast,Forecast,System Data,Other System,low,OTHER,No
+ForecastType,Forecast Type,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMRECORD_2663_FORMAT_DETAILS,Format Details,Customizations,Custom Records,high,CUSTOM,Yes
+formatProfile,Format Profile,System Data,Other System,low,OTHER,No
+EventFrequency,Frequency,List Data,Activities,high,OTHER,No
+FrequencyType,Frequency,Customizations,Custom Objects,medium,OTHER,No
+FulfillmentChoice,Fulfillment Choice,Transaction Data,Order Management,high,OTHER,No
+fulfillmentExceptionReason,Fulfillment Exception Reason,Transaction Data,Sales,high,OTHER,No
+fulfillmentRequest,Fulfillment Request,Transaction Data,Order Management,high,OTHER,No
+FulfillmentRequestType,Fulfillment Type,Transaction Data,Order Management,high,OTHER,No
+FullSubsidiaryHierarchy,Full Subsidiary Hierarchy,Setup Data,Company,medium,SETUP,No
+CUSTOMRECORD_NS_IMP_GAP,Gaps,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_IBE_GAP_TYPES,Gap Types,Customizations,Custom Records,high,CUSTOM,Yes
+gatewayTokenFamily,Gateway Token Family,Setup Data,Marketing,high,OTHER,No
+generalToken,General Token,List Data,Payment Instruments,high,OTHER,No
+GenericResource,Generic Resource,Transaction Data,Sales,high,OTHER,No
+GenericResourceSubsidiaryRelationship,Generic Resource-Subsidiary Relationship,Setup Data,Company,medium,SETUP,No
+Geography,Geography,System Data,Other System,low,OTHER,No
+GeolocationMethod,Geolocation Method,Setup Data,Company,medium,SETUP,No
+GiftCertificate,Gift Certificate,System Data,Other System,low,OTHER,No
+giftCertificateItem,Gift Certificate Item,List Data,Items,high,ITEM,No
+GLNumberingSequence,GL Audit Numbering Sequence,System Data,Audit,high,OTHER,No
+GLImpactAdjustment,GL Impact Adjustment,Transaction Data,Inventory,medium,OTHER,No
+GlobalAccountMapping,Global Account Mapping,Setup Data,Accounting,high,ACCOUNTING,No
+GlobalInventoryRelationship,Global Inventory Relationship,List Data,Items,high,OTHER,No
+goal,Goal,System Data,Other System,low,OTHER,No
+goalstatus,Goal,System Data,Other System,low,OTHER,No
+goalmood,Goal,System Data,Other System,low,OTHER,No
+GovernmentIssuedIdType,Government-Issued ID Type,Customizations,Custom Objects,medium,OTHER,No
+EntityGroupRestriction,Group,List Data,Relationships,high,OTHER,No
+EntityGroup,Group,List Data,Relationships,high,OTHER,No
+GroupingSegment,Grouping Segment,System Data,Other System,low,OTHER,No
+ComSearchGroupSynonym,Group Synonym,System Data,Other System,low,OTHER,No
+entityGroupType,Group Type,List Data,Relationships,high,OTHER,No
+paymentHandlingMode,Handling Mode,List Data,Payment Instruments,medium,TRANSACTION,No
+CUSTOMLIST_MCTMS_HANDLING_UNIT_TYPES,Handling Unit Types,Customizations,Custom Lists,high,OTHER,No
+HostedPage,Hosted Page,System Data,Other System,low,OTHER,No
+ImportedEmployeeExpense,Imported Employee Expense,List Data,Employees,high,ENTITY,No
+ImportedEmployeeExpenseStatus,Imported Employee Expense Status,List Data,Employees,high,ENTITY,No
+CUSTOMLIST_3038_IMPORT_STATUS,Import Status,Transaction Data,Purchases,high,OTHER,No
+CUSTOMLIST_3038__IMPORT_TASK_TYPE,Import Task Type,List Data,Activities,high,OTHER,No
+InboundShipmentPOItem,Inbound_PO_Item,List Data,Items,high,ITEM,No
+InboundShipment,Inbound Shipment,Transaction Data,Order Management,high,OTHER,No
+Incoterm,Incoterm,System Data,Other System,low,OTHER,No
+IncotermType,Incoterm Type,Customizations,Custom Objects,medium,OTHER,No
+infoItem,Info Item,List Data,Items,high,ITEM,No
+integrationApp,Integration,System Data,Integration,high,OTHER,No
+RecSysAnalyticsReport,Intelligent Item Recommendations,List Data,Items,high,OTHER,No
+RecSysAnalyticsReportAgg,Intelligent Item Recommendations,List Data,Items,high,OTHER,No
+RecSysConversion,Intelligent Recommendations Analytics-Transaction Line Relationship,System Data,Workflow,high,OTHER,No
+IntercompanyAllocationSchedule,Intercompany Allocation Schedule,Setup Data,Company,high,SETUP,No
+IntercompanyJournalEntry,Intercompany Journal,Setup Data,Company,high,OTHER,No
+IntercoStatus,Intercompany Status,Setup Data,Company,high,OTHER,No
+CUSTOMLIST_SHIPC_INT_TAXID_TYPE,Int Tax Id Type List,Customizations,Custom Lists,high,OTHER,No
+InvDistr,INV_DISTR,System Data,Other System,low,OTHER,No
+inventoryAdjustment,Inventory Adjustment,List Data,Items,high,OTHER,No
+CUSTOMRECORD_ATLAS_INV_ADJ_REASN,Inventory Adjustment Reason,List Data,Items,high,CUSTOM,Yes
+InventoryBalance,Inventory Balance,List Data,Items,high,OTHER,No
+InventoryCostRevaluation,Inventory Cost Revaluation,List Data,Items,high,OTHER,No
+InventoryCostTemplate,Inventory Cost Template,List Data,Items,high,OTHER,No
+InventoryCount,Inventory Count,List Data,Items,high,OTHER,No
+inventoryDistribution,Inventory Distribution,List Data,Items,high,OTHER,No
+inventoryItem,Inventory Item,List Data,Items,high,ITEM,No
+itemType,Inventory Item Type,List Data,Items,high,ITEM,No
+CUSTOMLIST_EB_INVENTORY_PACKAGE,Inventory Package,List Data,Items,high,OTHER,No
+CUSTOMRECORD_EB_INV_PGK_RESTRICTION,Inventory Package Restrictions - Valid,List Data,Items,high,CUSTOM,Yes
+CUSTOMRECORD_EB_INVENTORY_PACKAGE,Inventory Packages - Valid,List Data,Items,high,CUSTOM,Yes
+standardcostdefaulttype,Inventory Standard Cost,List Data,Items,high,OTHER,No
+inventoryStatus,Inventory Status,List Data,Items,high,OTHER,No
+InventoryStatusChange,Inventory Status Change,List Data,Items,high,OTHER,No
+inventoryTransfer,Inventory Transfer,List Data,Items,high,OTHER,No
+InventoryWorksheet,Inventory Worksheet,List Data,Items,high,OTHER,No
+Invoice,Invoice,Transaction Data,Bank,medium,TRANSACTION,No
+InvoiceGroup,Invoice Group,Transaction Data,Bank,medium,TRANSACTION,No
+Issue,Issue,System Data,Other System,low,OTHER,No
+IssueExternalStatus,Issue External Status,System Data,Other System,low,OTHER,No
+IssuePriority,Issue Priority,System Data,Other System,low,OTHER,No
+IssueRelationshipDirection,Issue relationship type,Customizations,Custom Objects,medium,OTHER,No
+IssueReproducibility,Issue Reproducibility,System Data,Other System,low,OTHER,No
+IssueRole,Issue Role,Setup Data,Users,high,OTHER,No
+IssueStatus,Issue Status,System Data,Other System,low,OTHER,No
+IssueTrackCode,Issue Tracking Mode,System Data,Other System,low,OTHER,No
+IssueType,Issue Type,Customizations,Custom Objects,medium,OTHER,No
+IssueVersionRelation,Issue Version Relation,System Data,Other System,low,OTHER,No
+itemBase,Item,List Data,Items,high,ITEM,No
+generalizedItem,Item,List Data,Items,high,ITEM,No
+item,Item,List Data,Items,high,ITEM,No
+CUSTOMRECORD_ITEM360_USER_ACCESS,Item 360 Access,Setup Data,Users,high,ITEM,Yes
+CUSTOMRECORD_ITEM360_CRITERIA_CONFIG,Item 360 Criteria Configuration,Setup Data,Company,high,ITEM,Yes
+CUSTOMRECORD_ITEM360_CRITERIA_GRID,Item 360 Criteria Grid,List Data,Items,high,ITEM,Yes
+ItemAccountMapping,Item Account Mapping,Setup Data,Accounting,high,ITEM,No
+CUSTOMLIST_EB_ITEM_APPROVAL_STATUS,Item Approval Statuts,List Data,Items,high,ITEM,No
+CUSTOMLIST_EB_ITEM_CATEGORY_LIST,Item Categories,Setup Data,Marketing,high,ITEM,No
+CUSTOMRECORD_EDP_ITEM_CATEGORY,Item Category,Setup Data,Marketing,high,ITEM,Yes
+CUSTOMLIST_EB_ITEM_CATEGORY_TYPE,Item Category Type,Setup Data,Marketing,high,ITEM,No
+ItemClassification,Item Classification,Setup Data,Classifications,high,ITEM,No
+ItemCollection,Item Collection,List Data,Items,high,ITEM,No
+CUSTOMRECORD_SC_ITEM_COUNT,Item Count,List Data,Items,high,ITEM,Yes
+CUSTOMRECORD_SC_ITEM_COUNT_DETAILS,Item Count Details,List Data,Items,high,ITEM,Yes
+CUSTOMLIST_SC_ITEM_COUNT_STATUSES,Item Count Statuses,List Data,Items,high,ITEM,No
+ItemDemandPlan,Item Demand Plan,List Data,Items,high,ITEM,No
+CUSTOMLIST_EB_ITEM_DESCRIPTION,Item Description,List Data,Items,high,ITEM,No
+CUSTOMRECORD_EB_ITEM_DESCRIPTION,Item Descriptions - Valid,List Data,Items,high,ITEM,Yes
+OrderReservationFulfillment,Item Fulfillment,List Data,Items,high,OTHER,No
+itemFulfillment,Item Fulfillment,List Data,Items,high,ITEM,No
+itemGroup,Item Group,List Data,Items,high,ITEM,No
+ItemCollectionItemMap,Item-Item Collection Relationship,List Data,Items,high,ITEM,No
+itemLocationConfiguration,Item Location Configuration,Setup Data,Company,high,ITEM,No
+InvtItemPriceHistory,Item Pricing,List Data,Items,high,ITEM,No
+ItemProcessFamily,Item Process Family,Setup Data,Marketing,high,ITEM,No
+itemProcessGroup,Item Process Group,List Data,Items,high,ITEM,No
+ItemReceipt,Item Receipt,List Data,Items,high,ITEM,No
+ItemRevenueCategory,Item Revenue Category,Setup Data,Marketing,high,ITEM,No
+ItemRevision,Item Revision,List Data,Items,high,ITEM,No
+ItemSegment,Item Segment,List Data,Items,high,ITEM,No
+ItemSegmentIncludingSynthetic,Item Segment,List Data,Items,high,ITEM,No
+CUSTOMRECORD_EVD_ITEMSET,Item Set,List Data,Items,high,ITEM,Yes
+ItemSource,Item Source,List Data,Items,high,ITEM,No
+CUSTOMRECORD_EB_ITEM_STATE_PERMISSION,Item State Permissions,Setup Data,Users,high,ITEM,Yes
+CUSTOMRECORD_SCM_ITEM_SUBSTITUTE,Item Substitute,List Data,Items,high,ITEM,Yes
+ItemSubtype,Item subtype,List Data,Items,high,ITEM,No
+ItemSupplyPlan,Item Supply Plan,List Data,Items,high,ITEM,No
+PresItemType,Item Type,List Data,Items,high,ITEM,No
+ItemUnit,Item unit,List Data,Items,high,ITEM,No
+CUSTOMRECORD_MODE_OF_TRANSPORT,ITR Mode of Transport,Transaction Data,Purchases,high,CUSTOM,Yes
+HcmJob,Job,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_L10N_JOB_PROP,Job Property,Customizations,Custom Records,high,CUSTOM,Yes
+JobRequisition,Job Requisition,Transaction Data,Purchases,high,OTHER,No
+JobRequisitionPostingType,Job Requisition Posting Type,Transaction Data,Purchases,high,OTHER,No
+JobRequisitionStatus,Job Requisition Status,Transaction Data,Purchases,high,OTHER,No
+ProjectResourceAggregate,Job Resource,Transaction Data,Sales,high,OTHER,No
+CUSTOMRECORD_L10N_JOB_RULE,Job Rule,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_L10N_JOB_RULE_PROP,Job Rule Property,Setup Data,Sales,high,CUSTOM,Yes
+ProjectSubsidiaryRelationship,Job-Subsidiary Relationship,Setup Data,Company,medium,SETUP,No
+JournalEntry,Journal,Transaction Data,Financial,high,OTHER,No
+Journal,Journal,Transaction Data,Financial,high,OTHER,No
+CUSTOMRECORD_NS_PM_KEY_MILESTONES,Key Milestones,Customizations,Custom Records,high,CUSTOM,Yes
+kitItem,Kit/Package,List Data,Items,high,ITEM,No
+KnowledgeBase,Knowledge Base,System Data,Other System,low,OTHER,No
+Kudos,Kudos,System Data,Other System,low,OTHER,No
+LaborBasedProjectRevenueRule,Labor Based Project Revenue Rule,Setup Data,Sales,high,OTHER,No
+LaborCategory,Labor Category,Setup Data,Marketing,high,OTHER,No
+LaborCostCard,Labor Cost Card,List Data,Payment Instruments,medium,OTHER,No
+LaborCostCardSegment,Labor Cost Card Segment,List Data,Payment Instruments,medium,OTHER,No
+LaborCostElement,Labor Cost Element,System Data,Other System,low,OTHER,No
+LagType,Lag Type,Customizations,Custom Objects,medium,OTHER,No
+LandedCostItem,Landed Cost Item,List Data,Items,high,ITEM,No
+CUSTOMRECORD_SCM_LC_PROFILE,Landed Cost Template,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_SCM_LC_PROFILE_DETAIL,Landed Cost Template Detail,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_SCM_LC_MAPPING,Landed Cost Template Mapping,Customizations,Custom Records,high,CUSTOM,Yes
+Language,Language,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_LSA,Last Sales Activity Record,List Data,Activities,high,CUSTOM,Yes
+LeadSource,Lead Source,List Data,Relationships,high,OTHER,No
+CUSTOMTRANSACTION_FAM_LEASEPROPOSAL,Lease,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMRECORD_FAM_LEASECONTRACT,Lease Contract,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_FAM_LEASEPAYMENTS,Lease Payments,List Data,Payment Instruments,medium,TRANSACTION,Yes
+MailTemplate,Letter Template,System Data,Other System,low,OTHER,No
+CUSTOMLIST_DL_LEVEL_WISE_RECIPIENT,Level Wise Recipient,Customizations,Custom Lists,high,OTHER,No
+LiaAdjst,LIA_ADJST,System Data,Other System,low,OTHER,No
+LiabPymt,LIAB_PYMT,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_8299_LICENSE_CACHE,License Cache,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_8299_LICENSE_CACHE_STATUS,License Cache Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_8299_LICENSE_SERVER,License Server Details,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_MEYER_CUST_LIFECYCLE_STAGES,Lifecycle Stage,Customizations,Custom Lists,high,OTHER,No
+LimitType,Limit Type,Customizations,Custom Objects,medium,OTHER,No
+SubscriptionLineType,Line Type,Customizations,Scripts,high,OTHER,No
+CUSTOMLIST_ATLAS_LINK,Link,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NS_IBE_LINKAGE_TYPES,Linkage types,Customizations,Custom Records,high,CUSTOM,Yes
+TranLinkType,Link Type,Customizations,Custom Objects,medium,OTHER,No
+InboundShipmentLink,Link Type,Transaction Data,Order Management,high,OTHER,No
+CUSTOMRECORD_EB_LINK_WORKORD_TO_SALESORD,Link Work Order to Sales Order,Transaction Data,Sales,high,CUSTOM,Yes
+CUSTOMLIST1370,List for Freight Charges,Customizations,Custom Lists,high,OTHER,No
+Locale,Locale,System Data,Other System,low,OTHER,No
+CUSTOMLIST_12194_PROCESSING_RESULT,Localization Processing Result,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_SUITE_L10N_VARIABLE,Localization Variables,Customizations,Custom Records,high,CUSTOM,Yes
+Location,Location,Setup Data,Company,medium,SETUP,No
+CUSTOMRECORD_EB_LOCATIONATTACHMENTS,Location Attachments,Setup Data,Company,medium,SETUP,Yes
+LocationCalendarHour,Location Calendar Hour,Setup Data,Company,medium,SETUP,No
+LocationCostingGroup,Location Costing Group,Setup Data,Company,medium,SETUP,No
+LocSegmentMapping,Location Mapping,Setup Data,Locations,high,OTHER,No
+LocationType,Location Type,Setup Data,Company,medium,SETUP,No
+LoginAudit,Login Audit Trail,System Data,Audit,high,OTHER,No
+IPRestrictions,Login Restrictions,System Data,Audit,high,OTHER,No
+ItemSupplyLotSizingType,Lot Sizing Method,List Data,Items,high,ITEM,No
+manufacturingComponent,Manufacturing Component,Transaction Data,Purchases,high,OTHER,No
+ManufacturingCostTemplate,Manufacturing Cost Template,Transaction Data,Manufacturing,high,OTHER,No
+manufacturingOperationTask,Manufacturing Operation Task,List Data,Activities,high,OTHER,No
+MfgPlannedTime,Manufacturing Planned Time,Transaction Data,Employees,medium,OTHER,No
+MfgProject,Manufacturing Project,Transaction Data,Manufacturing,high,OTHER,No
+ManufacturingRouting,Manufacturing Routing,Transaction Data,Manufacturing,high,OTHER,No
+manufacturingTransaction,Manufacturing Transaction,Transaction Data,Bank,medium,TRANSACTION,No
+mapReduceScript,Map/Reduce Script,Customizations,Scripts,high,OTHER,No
+mapReduceScriptDeployment,Map/Reduce Script Deployment,Customizations,Scripts,high,OTHER,No
+CUSTOMRECORD_SAS_MAPPING_SETUP,Mapping Setup,Setup Data,Company,high,CUSTOM,Yes
+MaritalStatus,Marital Status,System Data,Other System,low,OTHER,No
+Campaign,Marketing Campaign,System Data,Other System,low,OTHER,No
+markupItem,Markup,List Data,Items,high,ITEM,No
+massUpdateScript,Massupdate Script,Customizations,Scripts,high,OTHER,No
+massUpdateScriptDeployment,Massupdate Script Deployment,Customizations,Scripts,high,OTHER,No
+verificationMatchCode,Match Code,System Data,Other System,low,OTHER,No
+CUSTOMLIST_MFGMOB_PREFERENCE_NUMLIST,Maximum Number of Line Items,Setup Data,Company,high,OTHER,No
+MediaType,Media Type,Customizations,Custom Objects,medium,OTHER,No
+MemDoc,Memorized Transaction Definition,System Data,Workflow,high,OTHER,No
+memDocTransactionTemplate,Memorized Transaction Template,Transaction Data,Bank,medium,TRANSACTION,No
+MerchandiseHierarchyLevel,Merchandise Hierarchy Level,System Data,Other System,low,OTHER,No
+MerchandiseHierarchyNode,Merchandise Hierarchy Node,System Data,Other System,low,OTHER,No
+MerchandiseHierarchyVersion,Merchandise Hierarchy Version,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_EB_MERGE_ORDER,Merge Order,Customizations,Custom Records,high,CUSTOM,Yes
+MergeType,Merge Type,Customizations,Custom Objects,medium,OTHER,No
+Message,Message,List Data,Communications,high,OTHER,No
+MessageType,Message Type,List Data,Communications,high,OTHER,No
+CUSTOMRECORD_SUITE_L10N_METRICS,Metrics,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_BADGEIDSUBRECORD,Mfg Mobile - Badge Details,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_BADGEIDS,Mfg Mobile - Badge Ids,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_BADGELOGDETAILS,Mfg Mobile - Badge Log Details,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_MFGMOB_BADGESTATUS,Mfg Mobile - Badge Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_MFGMOB_BADGESTATUSSUMMARY,Mfg Mobile - Badge Status Summary,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_CONSUMPTION_SERIALNO,Mfg Mobile - Consumption Serial Numbers,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_MATERIALCONSUMPTION,Mfg Mobile - Material Consumption,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_MFGMOB_MESSAGESEVERITY,Mfg Mobile - Message Severity,List Data,Communications,high,OTHER,No
+CUSTOMLIST_MFGMOB_MESSAGESOURCE,Mfg Mobile - Message Source,List Data,Communications,high,OTHER,No
+CUSTOMRECORD_MFGMOB_OPERATIONDETAILS,Mfg Mobile - Operation Details,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_PAUSEREASONCODES,Mfg Mobile - Pause Reason Codes,Setup Data,Users,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_PREFERENCES,Mfg Mobile - Preferences,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_PRINT_TEMPLATE,Mfg Mobile - Print Preferences,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_PRODUCTIONREPORTING,Mfg Mobile - Production Reporting,List Data,Items,high,ITEM,Yes
+CUSTOMRECORD_MFGMOB_PRODUCTION_SERIALNOS,Mfg Mobile - Production Serial Numbers,List Data,Items,high,ITEM,Yes
+CUSTOMRECORD_MFGMOB_REASONDETAILS,Mfg Mobile - Reason Details,Transaction Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_REPORTSCRAP,Mfg Mobile - Report Scrap,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_RUNDETAILS,Mfg Mobile - Run Details,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_RUNDOWNTIME,Mfg Mobile - Run Downtime,Transaction Data,Employees,medium,CUSTOM,Yes
+CUSTOMLIST_MFGMOB_OP_RUNSTATUS,Mfg Mobile - Run Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_MFGMOB_SA_MATERIALCONS,Mfg Mobile - SA Material Consumption,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_SA_PRODREPORTING,Mfg Mobile - SA Production Reporting,List Data,Items,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_SA_WORKDETAILS,Mfg Mobile - SA Work Details,Transaction Data,Manufacturing,medium,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_SCRAPREASONCODES,Mfg Mobile - Scrap Reason Codes,Transaction Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_SCRAPREASONDETAILS,Mfg Mobile - Scrap Reason Details,Transaction Data,Sales,high,CUSTOM,Yes
+CUSTOMLIST_MFGMOB_SETUPSTATUS,Mfg Mobile - Setup/Run Status,Setup Data,Company,high,OTHER,No
+CUSTOMRECORD_MFGMOB_SETUPDETAILS,Mfg Mobile - Setup Details,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_SETUPDOWNTIME,Mfg Mobile - Setup Downtime,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMLIST_MFGMOB_OP_SETUPSTATUS,Mfg Mobile - Setup Status 2,Setup Data,Company,high,OTHER,No
+CUSTOMRECORD_MFGMOB_SHIFT,Mfg Mobile - Shift,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_MFGMOB_TRANSACTIONTYPE,Mfg Mobile - Transaction Type,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMRECORD_MFGMOB_UPDATE_AUTOISSUE,Mfg Mobile - Update Auto-Issue,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_WORKCENTER_PREF,Mfg Mobile - Work Center Preference,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_WORKDETAILS,Mfg Mobile - Work Details,Transaction Data,Manufacturing,medium,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_WORKMESSAGES,Mfg Mobile - Work Messages,List Data,Communications,high,CUSTOM,Yes
+CUSTOMLIST_MFGMOB_WORKSTATUS,Mfg Mobile - Work Status,Transaction Data,Manufacturing,medium,OTHER,No
+CUSTOMRECORD_MFGMOB_WORKWORKORDERDETAILS,Mfg Mobile - Work Transactions Details,Transaction Data,Manufacturing,high,CUSTOM,Yes
+CUSTOMRECORD_NS_IBE_MIGRATION_BUNDLE,Migration Bundle,Customizations,Custom Records,high,CUSTOM,Yes
+BillingMilestone,Milestone,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMRECORD_SAS_MIRROR_APPROVAL,Mirror Approval,Customizations,Custom Records,high,CUSTOM,Yes
+mitPurpose,Mit Purpose,Transaction Data,Purchases,high,OTHER,No
+CUSTOMRECORD_MFGMOB_OPERATIONS_INPROCESS,MM - Operations In Progress,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MFGMOB_PRINT_INTERMEDIATE,MM - Print Intermediate Record,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_ACCOUNT_PREF,Mobile - Account Preference,Setup Data,Company,high,ACCOUNTING,Yes
+CUSTOMRECORD_MOBILE_ACTION,Mobile - Action,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_ACTION_TYPES,Mobile - Action Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_APP_ATTACHMENT,Mobile - App Attachment,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_TRANSAC_ATTACHMENT,Mobile - App Attachment Set,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_APPLICATION_DEFAULTS,Mobile - Application Default,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_APP_RESTLET_CONFIG,Mobile - Application Restlet,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_QUEUES,Mobile - App Request,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_ACCOUNT_SETUP_QUEUE,Mobile - App Setup Queue,Setup Data,Company,high,ACCOUNTING,Yes
+CUSTOMRECORD_MOBILE_NO_CODE_QUEUE,Mobile - Attach Files Status,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_APP_ATTCH_AUDIT,Mobile - Attachment Details,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_COLOR_OPTION,Mobile - Color Option,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_CONFIG_CLR_UPDATE_BY,Mobile - Color Updated By,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_INJECTION_REC_TYPES,Mobile - Config Record Type,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_CONFIG_INJECTION,Mobile - Configuration,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_CONFIG_COL_MERGE_CRI,Mobile Configuration - Merge,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_INJECTION_VAL_TYPES,Mobile - Config Value Type,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_CONTENT_AREA,Mobile - Content Area,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_CONFIG_TABLE_COLUMN,Mobile - Custom Column,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_CONFIG_TABLE_COLUMNS,Mobile - Custom Column Setup,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_CUSTOM_COL_MERGE_CRI,Mobile Customization - Merge,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_DATA_TYPE,Mobile - Data Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_DEPENDENCYLOOKUP,Mobile - Dependency Lookup,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_HTTP_METHODS,Mobile - HTTP Method,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_IMPORTED_PROCESS,Mobile - Imported Process,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_INFO_SCREEN_ELEMENT,Mobile - Info Screen Element,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_PARAM,Mobile - Input Parameter,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_INTERIM_ELK_LOGS,Mobile - Interim ELK Logs,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_LABELS,Mobile - Label,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_HIBC_LIC_CODE,Mobile - Labeler ID,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_LAYOUT,Mobile - Layout,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_MENU_ITEMS,Mobile - Menu Item,List Data,Items,high,ITEM,Yes
+CUSTOMRECORD_MOBILE_MESSAGES,Mobile - Message,List Data,Communications,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_NO_CODE_CONFIG,Mobile - No Code Settings,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_OUTPUT_CONFIGURATION,Mobile - Output Parameter,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_PAGE,Mobile - Page,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_PAGE_ELEMENT,Mobile - Page Element,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_ELEMENT_SIZES,Mobile - Page Element Size,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_ELEMENT_TYPES,Mobile - Page Element Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_IND_PAGE_MAPPING,Mobile - Page Mapping,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_PAGE_TYPE,Mobile - Page Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_ACT_PREF_KEYS,Mobile - Preference Key,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_PRINT_CUS_EVALUATION,Mobile – Printing Custom Value,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_PRINT_CUS_EVAL_FIELD,Mobile – Printing Default,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_PRINT_REPORTS,Mobile - Print Reports,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_PROCESS,Mobile - Process,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_REGISTERED_APPS,Mobile - Registered App,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_ROW_COLOR,Mobile - Row Color,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_CONFIG_ROW_COLOR,Mobile – Row Color Setting,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_CONFIG_ROW_CLRS_PRNT,Mobile – Row Color Settings,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_CONFIG_DATA_TABLES,Mobile - Setup Details,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_SEQ_SUB_ACTIONS,Mobile - Sub-action,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_TABLE_COLUMN,Mobile - Table Column,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_TABLE_CONFIGURATION,Mobile - Table Configuration,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_TARGET_CUSTOM_RECORD,Mobile - Target Custom Record,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_TEXT_STYLE,Mobile - Text Style,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_TOGGLE_STATES,Mobile - Toggle State,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_TRANSLATION_TEXT,Mobile - Translation Text,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MOBILE_TABLE_COL_LOCATION,Mobile - Trans Tbl Col Loc,Setup Data,Company,medium,SETUP,Yes
+CUSTOMRECORD_MOBILE_TBL_FOOTER_BUTTON,Mobile - Trans Tbl Footer Btn,Customizations,Custom Records,high,CUSTOM,Yes
+ApplicabilityModeType,Mode,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMRECORD_NS_IMP_REQ_MODULE,Module,Customizations,Custom Records,high,CUSTOM,Yes
+companyBudgetMonths,Month,Setup Data,Company,high,ACCOUNTING,No
+monthlyClosingOption,Monthly Closing Option,System Data,Other System,low,OTHER,No
+MonthlyQuota,Monthly Quota,System Data,Other System,low,OTHER,No
+MonthlyRecurringRevenue,Monthly Recurring Revenue,System Data,Other System,low,OTHER,No
+MonthsOfYear,Months Of Year,Transaction Data,Sales,high,OTHER,No
+UserOAuthToken,My Access Token,Setup Data,Users,high,OTHER,No
+CUSTOMRECORD_MYCARRIER_PACKAGE,MyCarrier Package,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_MCTMS_PACKAGE_ITEMS,MyCarrier Packed Items,List Data,Items,high,ITEM,Yes
+CUSTOMRECORD_TRANSACTION_NATURE,Nature of Transaction,Transaction Data,Bank,medium,TRANSACTION,Yes
+CUSTOMRECORD_NOTC,Nature of Transaction Codes,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NAV_CATEGORY,Navigation Category,Setup Data,Marketing,high,CUSTOM,Yes
+CUSTOMRECORD_NAV_SHORTCUT,Navigation Shortcut,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NAV_SHORTCUTGROUP,Navigation Shortcut Group,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NAV_SHORTCUT_TOOLTIP,Navigation Shortcut Tooltip,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_WD_NAW_WORKFLOW_EXCEP,NAW workflow exceptions,Transaction Data,Manufacturing,medium,CUSTOM,Yes
+NegativeNumberFormat,Negative Number Format,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_NS_PS_CUTOV_DETAIL,NetSuite Cutover Details,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_PS_MFG_CUTOVER_ITEMS,NetSuite Cutover Items,List Data,Items,high,ITEM,Yes
+CUSTOMLIST_NS_PM_MILESTONE_STATUS_LIST,NetSuite Milestone Status List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PM_PRIORITY_LIST,NetSuite PM Issue Priorities,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PM_ISSUE_STATUS_LIST,NetSuite PM Issue Status List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PM_ISSUE_TYPE_LIST,NetSuite PM Issue Type List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PM_MILESTONE_SCHEDULE,NetSuite PM Milestone Schedule,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PM_PROJECTYPE,NetSuite PM Project Type,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PM_RISK_IMPACT_LIST,NetSuite PM Risk Impact List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PM_RISK_PROB_LIST,NetSuite PM Risk Prob. List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PM_RISK_RESOLUTION_LIST,NetSuite PM Risk Resolutions,Transaction Data,Sales,high,OTHER,No
+CUSTOMLIST_NS_PM_RISK_SEVERITY_LIST,NetSuite PM Risk Severity List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PM_STATUS_CODE_LIST,NetSuite PM Status Code List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PS_ACTION_ITEM_PRIORITY,NetSuite PS AI Priority,List Data,Items,high,ITEM,No
+CUSTOMLIST_NS_PS_ACTION_ITEM_STATUS,NetSuite PS AI Status List,List Data,Items,high,ITEM,No
+CUSTOMLIST_NS_PS_PROCESS_LIST,NetSuite PS Business Process,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PS_CUTOVER_STATUS_LIST,NetSuite PS Cutover Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NS_PS_MEETING_NOTES,NetSuite PS Meeting Notes,List Data,Communications,high,CUSTOM,Yes
+CUSTOMLIST_NS_PS_UAT_STATUS_LISTING,NetSuite PS UAT Item Status,List Data,Items,high,OTHER,No
+CUSTOMLIST_NS_ONE_CHANGE_LOG_REV_DEC,NetSuite Review Decision,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_PM_ONE_STAGE_LISTING,NetSuite Stage Listing,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_TS_BASE_STATUS_LIST,NetSuite TS Base Status List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_TS_BUS_PROCESS_LIST,NetSuite TS Bus Process List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_TS_DEPLOYED_TO_LIST,NetSuite TS Deployed To List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_TS_FEATURE_LIST,NetSuite TS Feature List,Setup Data,Company,high,OTHER,No
+CUSTOMLIST_NS_TS_FIX_TYPE_LIST,NetSuite TS Fix Type List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_NS_TS_ISSUE_STATUSES,NetSuite TS Issue Statuses,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_NS_TS_ISSUE_TYPE_LIST,NetSuite TS Issue Type Listing,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_TS_PRIORITY_LIST,NetSuite TS Priority List,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_NS_TS_TEST_PHASE_LIST,NetSuite TS Test Phase List,Customizations,Custom Lists,high,OTHER,No
+NettingSettlement,Netting Settlement,System Data,Other System,low,OTHER,No
+NettingStatement,Netting Statement,Transaction Data,Sales,high,OTHER,No
+NewsItem,News Item,List Data,Items,high,ITEM,No
+Nexus,Nexus,System Data,Other System,low,OTHER,No
+CUSTOMRECORDPACKSHIP_NONDELIVERY_SHPMNT,Nondelivery Shipment,Transaction Data,Order Management,high,CUSTOM,Yes
+nonInventoryPurchaseItem,Non-inventory Item for Purchase,List Data,Items,high,ITEM,No
+nonInventoryResaleItem,Non-inventory Item for Resale,List Data,Items,high,ITEM,No
+nonInventorySaleItem,Non-inventory Item for Sale,List Data,Items,high,ITEM,No
+nonInventoryItem,Non-inventory Items,List Data,Items,high,ITEM,No
+note,Note,List Data,Communications,high,OTHER,No
+NoteType,Note Type,List Data,Communications,high,OTHER,No
+Notification,Notification,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_NSAPM_PTS_SETUPSUMMARY,NSAPM PTS Set Up Summary,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_NSAPM_RPM_SETUP_DATE_RANGE,NSAPM RPM SetUp Date Range,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_NSAPM_RPM_SETUP_GENERAL,NSAPM RPM Setup General,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_NSAPM_RPM_SETUP_RECORDPAGES,NSAPM RPM SetUp Record Pages,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_NSAPM_SETUP_EMPLOYEE_ACCESS,NSAPM Setup Employees Access,Setup Data,Company,high,ENTITY,Yes
+CUSTOMRECORD_NSAPM_SETUP_PARENT,NSAPM Setup Parent,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_NSAPM_SETUP_ROLES_ACCESS,NSAPM Setup Roles Access,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMLIST_IMPLEM1_FILE_TYPE,NS DMT File Type,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_IMPLEM1_TASK_CATEGORY,NS DMT Task Category,Setup Data,Marketing,high,OTHER,No
+NseDailyMetric,NSE Automatic Metrics,System Data,Other System,low,OTHER,No
+NseDailyRecordAction,NSE Automatic Record Actions,Customizations,Custom Objects,medium,OTHER,No
+NseHierarchy,NSE Element Hierarchy,System Data,Other System,low,OTHER,No
+WorkAreaRecordMetric,NSE Work Area Auto Daily Record Metrics,Transaction Data,Manufacturing,medium,OTHER,No
+CUSTOMLIST76,NS UAT Language,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST72,NS UAT Markets,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST74,NS UAT Region,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST75,NS UAT Sub Category,Setup Data,Marketing,high,OTHER,No
+CUSTOMLIST73,NS UAT Vertical,Setup Data,Marketing,high,OTHER,No
+CUSTOMLIST_IMPLEM1_YESNO,NS Yes/No/NA,Customizations,Custom Lists,high,OTHER,No
+NumberFormat,Number Format,System Data,Other System,low,OTHER,No
+AuthorizationConsent,OAuth 2.0 Authorized Application,System Data,Security,high,OTHER,No
+UserAuthorizationConsent,OAuth 2.0 Authorized Application,Setup Data,Users,high,OTHER,No
+OAuth2ClientCredentials,OAuth 2.0 Client Credentials,System Data,Security,high,OTHER,No
+OcrImportJob,OCR Import Job,Transaction Data,Purchases,high,OTHER,No
+OcrImportJobReview,OCR Import Job Review,Transaction Data,Purchases,high,OTHER,No
+ocrPlugin,OCR Plugin,System Data,Other System,low,OTHER,No
+OnboardingPlan,Onboarding Plan,System Data,Other System,low,OTHER,No
+OnboardingTask,Onboarding Task,List Data,Activities,high,OTHER,No
+OnboardingTaskContent,Onboarding Task Content,List Data,Activities,high,OTHER,No
+ComSearchOneWaySynonym,One-way Synonym,System Data,Other System,low,OTHER,No
+CUSTOMLIST_SC_ONHANDCHANGE_ACTION,On Hand Change Action,Customizations,Custom Lists,high,OTHER,No
+onlineCaseForm,Online Case Form,System Data,Other System,low,OTHER,No
+OnlineFormTemplate,Online Form Template,System Data,Other System,low,OTHER,No
+OnlineLeadForm,Online Lead Form,List Data,Relationships,high,OTHER,No
+CUSTOMRECORD_EB_OPEN_AR_BY_SALESREP,Open A/R by Sales Rep,Transaction Data,Sales,medium,CUSTOM,Yes
+ManufacturingCompletionOperation,Operation,Transaction Data,Manufacturing,high,OTHER,No
+OpportunitiesAndEstimates,Opportunities and Estimates,Transaction Data,Purchases,high,OTHER,No
+opportunity,Opportunity,Transaction Data,Purchases,high,OTHER,No
+orderAllocationStrategy,Order Allocation Strategy,Setup Data,Company,medium,SETUP,No
+OrderReleaseLine,Order Release Line,System Data,Other System,low,OTHER,No
+OrderReservation,Order Reservation,System Data,Other System,low,OTHER,No
+OrdersAndReturns,Orders and Returns,Transaction Data,Customers,medium,OTHER,No
+OrdersAndReturnsLineLevel,Orders and Returns Line Level,Transaction Data,Customers,medium,OTHER,No
+SalesOrderStatus,Order Status,Transaction Data,Bank,medium,TRANSACTION,No
+orderTypeRecord,Order Type,Customizations,Custom Objects,medium,OTHER,No
+OrganizationValue,Organizational Value,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_OB_ORG_TREE,Org Browser Tree,Customizations,Custom Records,high,CUSTOM,Yes
+OriginatingLead,Originating Lead,List Data,Relationships,high,OTHER,No
+CUSTOMRECORD_PACKSHIP_CUST_3RDPARTY_ACC,Other Billing Accounts,Setup Data,Accounting,high,CUSTOM,Yes
+otherChargeItem,Other Charge,List Data,Items,high,ITEM,No
+otherChargePurchaseItem,Other Charge for Purchase,List Data,Items,high,ITEM,No
+otherChargeResaleItem,Other Charge for Resale,List Data,Items,high,ITEM,No
+otherChargeSaleItem,Other Charge for Sale,List Data,Items,high,ITEM,No
+OtherGovernmentIssuedId,Other Government-Issued ID,System Data,Other System,low,OTHER,No
+otherName,Other Name,System Data,Other System,low,OTHER,No
+otherNameCategory,Other Name Category,Setup Data,Marketing,high,OTHER,No
+OtherNameSubsidiaryRelationship,Other Name-Subsidiary Relationship,Setup Data,Company,medium,SETUP,No
+outboundRequest,Outbound Requests,System Data,Other System,low,OTHER,No
+overheadType,Overhead Type,Customizations,Custom Objects,medium,OTHER,No
+OvertimePolicy,Overtime Policy,Transaction Data,Purchases,high,OTHER,No
+OwnershipTransfer,Ownership Transfer,Transaction Data,Bank,high,OTHER,No
+CUSTOMRECORD_PACINGGOAL,Pacing Goal,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CARRIER_PACKAGES,Package Codes,Customizations,Custom Records,high,CUSTOM,Yes
+ShippingPackage,Packages,Transaction Data,Order Management,high,OTHER,No
+CUSTOMRECORD_EB_ITEM_PACKAGING_LIST,Packaging List,List Data,Items,high,ITEM,Yes
+CUSTOMLIST_EB_PACKAGING_TYPE_DESC,Packaging Type Description,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_PACKSHIP_ADVANCED_OPTIONS,Packship - Advanced Options,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_ANCILLARY_OPTIONS,PackShip - Ancillary Endorsements Option,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_AUTOGENERATE_TYPES,PackShip - Autogenerated ID Format,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_AUTO_PRINTRULEDATA,PackShip Auto Printing Rule data,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CARRIERS,PackShip - Carrier,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CARRIERMAPPING,PackShip - Carrier Mapping,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CARRIER_OPTIONS,PackShip - Carrier Options,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CARRIER_SELECTION,PackShip - Carrier Selection,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CARRIER_SERVICES,PackShip - Carrier Service,List Data,Items,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CARTON_ORDER_MAP,PackShip - Carton-Order Id Map,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_COD_PAYMENT_TYPES,Packship - COD Payment Types,List Data,Payment Instruments,medium,TRANSACTION,Yes
+CUSTOMRECORD_COD_CURRENCY_TYPE,PackShip - Collect On Delivery Currency,Setup Data,Accounting,high,ACCOUNTING,Yes
+CUSTOMRECORD_COD_PAYMENT_TYPE,Packship - Collect On Delivery Type,List Data,Payment Instruments,medium,TRANSACTION,Yes
+CUSTOMRECORD_PACKSHIP_COMPANY_DETAILS,PackShip - Company Details,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_DEL_CONFIRMATION,Pack Ship - Delivery Confirmation,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_DIMENSION_UNITS,PackShip - Dimension Unit,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_DRY_ICE_WEIGHT_UNITS,Packship - Dry Ice Weight Unit,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CUST_ENCRYP_KEY,PackShip - Encryption Key,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_FEDEX_PACKAGE_TYPE,PackShip - FedEx Package Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_GROUP_TYPE,PackShip - Group Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_INSURANCE,Pack Ship - Insurance,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_PACKSHIP_LABELTYPES,PackShip - Label Types,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_PACKSHIP_LHS_VALUE_TYPE,PackShip - LHS Value Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_LIST_PRINT_PARENT,PackShip - List Print Parent Record,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_ADDRESS_LIST,Packship - Location Address,Setup Data,Locations,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_LOCKRECORD,PackShip Lock Record,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_PACKSHIP_LOCK_RECORD_STATUS,PackShip - Lock Record Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_ORDER_IF_MAP,PackShip - Non Adv Inv Order IF Map,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_PACKAGE,PackShip - Package,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_DEFAULT_PKG_CODES,PackShip - Package Code Settings,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_PACKAGE_DETAILS,Packship - Package Details,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CARTON,PackShip - Pack Carton,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CARTONITEM,PackShip - Packed Item,List Data,Items,high,ITEM,Yes
+CUSTOMRECORD_PACKSHIP_CARTONITEMDETAILS,PackShip - Packed Item Details,List Data,Items,high,ITEM,Yes
+CUSTOMRECORD_PACKSHIP_SHIPUNITTYPE,PackShip - Packing Item,List Data,Items,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_PALLET,PackShip - Pallet,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_CARRIERINFO,PackShip - Print Carrier Information,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_PRINT_CART_AND_ITM,PackShip - Print Carton And Items,List Data,Items,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_ORDERINFO,PackShip - Print Customer Order Info,List Data,Relationships,high,CUSTOM,Yes
+CUSTOMRECORD_PRINTING_DATA,PackShip - Printed Shipping Data,Transaction Data,Order Management,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_PRINT_FORMATS_IF,Packship - Print Formats on IF,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_PRINT_ITMS_IN_CART,PackShip - Print Items In Cartons,List Data,Items,high,CUSTOM,Yes
+CUSTOMRECORD_RETURN_PICKUP_ATTEMPTS,Packship - Return Pickup Attempts,Transaction Data,Customers,medium,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_RULE,PackShip - Rule,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_RULE_CONDITION,PackShip - Rule Condition,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_RULE_DATATYPE,PackShip - Rule Data Type,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_RULE_ENABLE_OPTION,PackShip - Rule Enable Options,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_RULE_GROUP,PackShip - Rule Group,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_RG_TYPE,PackShip - Rule Group Type,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_RG_VAL_SOURCE,PackShip - Rule Group Value Source,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_RULE_LHS,PackShip - Rule LHS,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_RULE_OPERATORS,PackShip - Rule Operator,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMLIST_PACKSHIP_SHIPENGINECOST,Packship - ShipEngine Cost,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_PACKSHIP_SHIPMANIFEST,PackShip - Shipment,Transaction Data,Order Management,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CUSTOMER_API_KEY,PackShip - Shipping API Key,List Data,Employees,medium,ENTITY,Yes
+CUSTOMRECORD_PACKSHIP_SHIPPING_COST_DIST,PackShip - Shipping Cost Distribution,Transaction Data,Order Management,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_SHIP_ITEM_CONFIG,PackShip - Shipping Item Settings,Setup Data,Company,high,ITEM,Yes
+CUSTOMRECORD_PACKSHIP_WAREHOUSE,Packship - ShipWareHouse,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_UPS_PACKAGE_TYPES,PackShip - UPS Package Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_USPS_PACKAGE_TYPES,PackShip - USPS Package Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_WEIGH_SCALE_UNITS,PackShip - Weight Unit,Customizations,Custom Records,high,CUSTOM,Yes
+Page,Page,System Data,Other System,low,OTHER,No
+PageUrl,Page URL,System Data,Other System,low,OTHER,No
+Partner,Partner,List Data,Employees,medium,ENTITY,No
+partnerCategory,Partner Category/Role,Setup Data,Marketing,high,ENTITY,No
+partnerCommission,Partner Commission,List Data,Employees,medium,ENTITY,No
+partnerCommissionPlan,Partner Commission Plan,List Data,Employees,medium,ENTITY,No
+partnerCommissionSchedule,Partner Commission Schedule,List Data,Employees,medium,ENTITY,No
+PartnerSubsidiaryRelationship,Partner-Subsidiary Relationship,Setup Data,Subsidiaries,high,ENTITY,No
+PartnerSystem,Partner System,List Data,Employees,medium,ENTITY,No
+Passport,Passport,Transaction Data,Purchases,high,OTHER,No
+paycheck,Paycheck,Transaction Data,Bank,high,OTHER,No
+paycheckJournal,Paycheck Journal,Transaction Data,Bank,high,OTHER,No
+MasterPayCode,Pay Code,System Data,Other System,low,OTHER,No
+paymentItem,Payment,List Data,Items,high,TRANSACTION,No
+CUSTOMRECORD_2663_PAYMENT_AGGREGATION,Payment Aggregation,List Data,Payment Instruments,medium,TRANSACTION,Yes
+CUSTOMRECORD_2663_BATCH,Payment Batch,List Data,Payment Instruments,medium,CUSTOM,Yes
+CUSTOMLIST_2663_BATCH_PRIORITY,Payment Batch Priority,List Data,Payment Instruments,medium,OTHER,No
+CUSTOMLIST_2663_BATCH_STATUS,Payment Batch Status,List Data,Payment Instruments,medium,OTHER,No
+paymentCard,Payment Card,List Data,Payment Instruments,high,TRANSACTION,No
+paymentCardBin,Payment Card BIN,List Data,Payment Instruments,high,TRANSACTION,No
+paymentCardToken,Payment Card Token,List Data,Payment Instruments,high,TRANSACTION,No
+paymentEvent,Payment Event,List Data,Activities,high,TRANSACTION,No
+CUSTOMRECORD_2663_FILE_ADMIN,Payment File Administration,List Data,Payment Instruments,medium,CUSTOM,Yes
+CUSTOMRECORD_2663_PAYMENT_FILE_FORMAT,Payment File Format,List Data,Payment Instruments,medium,TRANSACTION,Yes
+CUSTOMRECORD_12194_FILE_TEMPLATE_REQUEST,Payment File Template Request,List Data,Payment Instruments,medium,CUSTOM,Yes
+gatewayNotification,Payment Gateway Asynchronous Notifications,List Data,Employees,high,OTHER,No
+paymentGatewayPlugin,Payment Gateway Plugin,List Data,Payment Instruments,medium,TRANSACTION,No
+paymentInitiator,Payment Initiator,List Data,Payment Instruments,medium,TRANSACTION,No
+paymentInstrument,Payment Instrument,List Data,Payment Instruments,high,TRANSACTION,No
+PaymentLinkSetup,Payment Link Setup,Setup Data,Company,high,TRANSACTION,No
+paymentMethod,Payment Method,List Data,Payment Instruments,medium,TRANSACTION,No
+CUSTOMLIST_11664_PAYMENT_MODE,Payment Mode,List Data,Payment Instruments,medium,TRANSACTION,No
+CUSTOMLIST_EP_PAYMENT_PRIORITY,Payment Priority,List Data,Payment Instruments,medium,TRANSACTION,No
+PaymentProcessingProfile,Payment Processing Profile,List Data,Payment Instruments,medium,TRANSACTION,No
+paymentResultPreview,Payment Result Preview,List Data,Payment Instruments,medium,TRANSACTION,No
+CUSTOMRECORD_2663_PAYMENT_SCHEDULE,Payment Schedule,List Data,Payment Instruments,medium,TRANSACTION,Yes
+paymentStatus,Payment Status,List Data,Payment Instruments,medium,TRANSACTION,No
+paymentStatusReason,Payment Status Reason,List Data,Payment Instruments,medium,TRANSACTION,No
+CUSTOMLIST_2663_PAYMENT_TYPE,Payment Type,List Data,Payment Instruments,medium,TRANSACTION,No
+payrollBatch,Payroll Batch,List Data,Employees,high,OTHER,No
+payrollItem,Payroll Item,List Data,Employees,high,ITEM,No
+PayrollItemGroup,Payroll Item Group,List Data,Employees,high,ITEM,No
+payItemType,Payroll Item Type,List Data,Employees,high,ITEM,No
+PdfTemplate,PDF Template,System Data,Other System,low,OTHER,No
+payrollBatchPending,Pending,List Data,Employees,high,OTHER,No
+pctCompleteProjectRevenueRule,Percent Complete Project Revenue Rule,Setup Data,Sales,high,OTHER,No
+performanceMetric,Performance Metric,System Data,Other System,low,OTHER,No
+PerformanceReview,Performance Review,System Data,Other System,low,OTHER,No
+performanceReviewQuestion,Performance Review Question,System Data,Other System,low,OTHER,No
+performanceReviewQuestionType,Performance Review Question Type,Customizations,Custom Objects,medium,OTHER,No
+performanceReviewRatingScale,Performance Review Rating Scale,System Data,Other System,low,OTHER,No
+PerformanceReviewSchedule,Performance Review Schedule,System Data,Other System,low,OTHER,No
+PerformanceReviewScheduleTalentDataset,Performance Review Scheduler Employee Dataset,List Data,Employees,high,OTHER,No
+performanceReviewStatus,Performance Review Status,System Data,Other System,low,OTHER,No
+PerformanceReviewTemplate,Performance Review Template,System Data,Other System,low,OTHER,No
+period,Period,Setup Data,Accounting,high,OTHER,No
+PeriodClosingTask,Period Closing Task,Setup Data,Accounting,high,OTHER,No
+periodEndJournal,Period End Journal,Setup Data,Accounting,high,OTHER,No
+ItemPeriodicLotSizeType,Periods of Supply Type,Setup Data,Accounting,high,ITEM,No
+permission,Permission,Setup Data,Users,high,OTHER,No
+PermittedCompanyTypeKeys,Permitted Company Types - Restrictions only RT,Setup Data,Company,high,OTHER,No
+ItemSegmentCustomerSegmentMap,Personalization Rules,Setup Data,Sales,high,ENTITY,No
+PhoneCall,Phone Call,List Data,Activities,high,OTHER,No
+PiAccessLog,PiAccessLog,System Data,Audit,high,OTHER,No
+pickType,Picking Type,Customizations,Custom Objects,medium,OTHER,No
+pickStrategy,Pick Strategy,System Data,Other System,low,OTHER,No
+pickTask,Pick Task,List Data,Activities,high,OTHER,No
+PickTaskInventoryBalance,Pick Task Inventory Balance,List Data,Activities,high,OTHER,No
+plannedExpense,Planned Expense,Transaction Data,Employees,medium,OTHER,No
+plannedOrder,Planned Order,System Data,Other System,low,OTHER,No
+plannedRevenue,Planned Revenue,System Data,Other System,low,OTHER,No
+plannedRevenueType,Planned Revenue Type,Customizations,Custom Objects,medium,OTHER,No
+plannedStandardCost,Planned Standard Cost,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_ATLAS_ITEM_PLANNER,Planner,List Data,Items,high,ITEM,Yes
+planningItemCategory,Planning Item Category,Setup Data,Marketing,high,ITEM,No
+planningItemGroup,Planning Item Group,List Data,Items,high,ITEM,No
+planningItemGroupSource,Planning Item Group Source,List Data,Items,high,ITEM,No
+planningRuleGroup,Planning Rule Group,Setup Data,Sales,high,OTHER,No
+CUSTOMRECORD_NS_IBE_REQ_PLAN_STATUSES,Planning Statuses,Customizations,Custom Records,high,CUSTOM,Yes
+planningView,Planning Workbench View,Transaction Data,Manufacturing,medium,OTHER,No
+RetirementPlanType,Plan Type,Customizations,Custom Objects,medium,OTHER,No
+platformExtensionPlugin,Platform Extension Plug-in,System Data,Other System,low,OTHER,No
+InboundShipmentPurchaseOrder,PO,Transaction Data,Bank,medium,TRANSACTION,No
+portlet,Portlet,Transaction Data,Purchases,high,OTHER,No
+portletDeployment,Portlet Deployment,Transaction Data,Purchases,high,OTHER,No
+Position,Position,Transaction Data,Purchases,high,OTHER,No
+PostingAccountActivity,Posting Account Activity,Setup Data,Accounting,high,ACCOUNTING,No
+CUSTOMRECORD_EB_PPE_LEVELS,PPE Levels,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST2369,PPE Requirements,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD2268,Preferred Adj Reason,Transaction Data,Sales,high,CUSTOM,Yes
+CUSTOMLIST_EB_PREMIX_CONTAINER,Premix Container,Customizations,Custom Lists,high,OTHER,No
+priceBook,Price Book,System Data,Other System,low,OTHER,No
+priceCalculationFormula,Price Calculation Formula,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_EDP_PRICE_DETAIL_UPDATE,Price Detail Update,Customizations,Custom Records,high,CUSTOM,Yes
+priceLevel,Price Level,System Data,Other System,low,OTHER,No
+pricePlan,Price Plan,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_EDP_PRICE_UPDATE,Price Update,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_EDP_ERROR_LOGS,Price Update Error Messages,List Data,Communications,high,CUSTOM,Yes
+CUSTOMRECORD_EDP_PRICE_UPDATE_SYS_NOTES,Price Update Logs,List Data,Communications,high,CUSTOM,Yes
+CUSTOMLIST_EDP_UPDATE_STATUS,Price Update Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_EDP_UPDATE_TYPE,Price Update Type,Customizations,Custom Lists,high,OTHER,No
+priceUsingType,Price Using,Customizations,Custom Objects,medium,OTHER,No
+pricing,Pricing,System Data,Other System,low,OTHER,No
+pricingGroup,Pricing Group,System Data,Other System,low,OTHER,No
+PriceModelType,Pricing Model,Customizations,Custom Objects,medium,OTHER,No
+pricingWithCustomers,Pricing per Customer,List Data,Employees,medium,ENTITY,No
+CUSTOMRECORD_PRINT_ACCOUNT_PREFERENCE,Print - Account Preference,Setup Data,Company,high,ACCOUNTING,Yes
+CUSTOMRECORD_PRINT_ACOUNT_PREFERENCE_KEY,Print - Account Preference Key,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_WHITELIST_IP_ADDRESS,Print - Allowlist IP Address,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_APIKEY_HANDLE,Print - API Key Handle,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_AUDIT,Print - Audit,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_DATA_TYPE,Print - Data Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_FILESERVING_MAP,Print - File Service Map,List Data,Items,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_FUNCTION_REGISTRY,Print - Function Registry,Customizations,Custom Records,high,CUSTOM,Yes
+AdvancedPdfTemplatePrintingType,Printing Type,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMRECORD_PRINT_OPERATOR,Print - Operator,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_PREVIEW_FILE_ID,Print - Preview File ID,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_PRINTER_GROUP,Print - Printer Group,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_PRINTER_SUBLIST,Print – Printer Group Mapping,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_PRINTER_GRP_PRINTERS,Print - Printer Mapping,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_PRINTERS,Print - Printers,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_PRINTER_TYPE,Print - Printer Type,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_REPORT_TYPE,Print - Report Type,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_CRITERIA_DETAIL,Print - Rule Criteria,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_RULE_GROUP,Print - Rule Group,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_RULE_MAPPINGS,Print - Rule Mappings,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_RULE_VALUES,Print - Rule Values,Setup Data,Sales,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_SESSION_PRINTER,Print - Session Printer,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_PRINT_SOURCE_TYPE,Print - Source Type,Transaction Data,Sales,high,OTHER,No
+CUSTOMRECORD_PRINT_PRINTSTATUS,Print - Status,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PRINT_TEMPLATES,Print - Templates,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_ITEM360_PRIORITY,Priority,List Data,Items,high,ITEM,No
+CUSTOMRECORD_MEYER_PRIOR_YEAR_REVENUE,Prior Year Revenue,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_IMP_PROCESS,Process,Customizations,Custom Records,high,CUSTOM,Yes
+IssueProduct,Product,List Data,Items,high,ITEM,No
+PaCustomerProfile,Product Analytics - Customer Profiles,List Data,Employees,medium,ENTITY,No
+PaMetricResult,Product Analytics - Metric Results,List Data,Items,high,OTHER,No
+FormatProfileType,Profile Type,Customizations,Custom Objects,medium,OTHER,No
+job,Project,System Data,Other System,low,OTHER,No
+ProjectBudget,Project Budget,Setup Data,Accounting,high,ACCOUNTING,No
+projectExpenseType,Project Expense Type,Transaction Data,Employees,medium,OTHER,No
+ProjectIcChargeRequest,Project Intercompany Cross Charge Request,Setup Data,Company,high,OTHER,No
+ProjectIcChargeRequestTrigger,Project Intercompany Cross Charge Request Trigger Type,Setup Data,Company,high,OTHER,No
+CUSTOMRECORD_NS_PM_ISSUES,Project Issues,Customizations,Custom Records,high,CUSTOM,Yes
+ProjectFinancials,Project Profitability,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_NS_PM_READINESSSCORECARD,Project Readiness Scorecard,List Data,Payment Instruments,medium,CUSTOM,Yes
+ProjectResourceAvailableTime,Project Resource Available Time,Transaction Data,Sales,high,OTHER,No
+JobResourceRole,Project Resource Role,Setup Data,Users,high,OTHER,No
+revRecEventPRevRule,Project Revenue Rule,Setup Data,Sales,high,OTHER,No
+projectRevenueRule,Project Revenue Rule,Setup Data,Sales,high,OTHER,No
+projectRevenueRuleType,Project Revenue Rule Type,Setup Data,Sales,high,OTHER,No
+CUSTOMRECORD_NS_PM_PROJECT_RISKS,Project Risks,Customizations,Custom Records,high,CUSTOM,Yes
+JobStatus,Project Status,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_NS_IBE_PROJECT_STATUSES,Project Statuses,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_ONE_PM_SUMMARY,Project Summary,Customizations,Custom Records,high,CUSTOM,Yes
+projectTask,Project Task,List Data,Activities,high,OTHER,No
+projectTaskConstraintType,Project Task Constraint Type,List Data,Activities,high,OTHER,No
+projectTemplate,Project Template,System Data,Other System,low,OTHER,No
+ProjectTemplateSubsidiaryRelationship,Project Template-Subsidiary Relationship,Setup Data,Company,medium,SETUP,No
+ProjectTimeApprovalType,Project Time Approval Type,Transaction Data,Employees,medium,OTHER,No
+JobType,Project Type,Customizations,Custom Objects,medium,OTHER,No
+promisingSetup,Promising Setup,Setup Data,Company,high,OTHER,No
+promotionCode,Promotion,System Data,Other System,low,OTHER,No
+promotionsPlugin,Promotions Plugin,System Data,Other System,low,OTHER,No
+Prompt,Prompt,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_EB_PROOF_OF_DELIVERY,Proof of Delivery,Customizations,Custom Records,high,CUSTOM,Yes
+ProrateBy,Prorate By,System Data,Other System,low,OTHER,No
+ProrateByOption,Prorate By Option,System Data,Other System,low,OTHER,No
+CUSTOMLIST_LOTSN_TRACE_TYPE,PSGSS| LoTSN - Trace Type,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_LOTSN_TRANSACTION_SUBTABS,PSGSS | LoTSN - Trans Subtab,Transaction Data,Bank,medium,TRANSACTION,No
+PublishedSavedSearch,Published Saved Search,System Data,Other System,low,OTHER,No
+PurchaseContract,Purchase Contract,Transaction Data,Purchases,high,OTHER,No
+PurchaseOrder,Purchase Order,Transaction Data,Bank,medium,TRANSACTION,No
+ratableEventPurpose,Purpose,List Data,Activities,high,OTHER,No
+CUSTOMLIST_NS_ONE_REQ_QUALIFICATION,Qualification,Customizations,Custom Lists,high,OTHER,No
+QuantityPricingSchedule,Quantity Pricing Schedule,System Data,Other System,low,OTHER,No
+Quota,Quota,System Data,Other System,low,OTHER,No
+rateRoundingType,Rate Rounding Type,Customizations,Custom Objects,medium,OTHER,No
+rateSourceType,Rate Source Type,Transaction Data,Sales,high,OTHER,No
+ApplicabilityReasonType,Reason,Transaction Data,Sales,high,OTHER,No
+CUSTOMLIST_ATLAS_RC_PO,Reason Code (PO),Transaction Data,Purchases,high,OTHER,No
+CUSTOMLIST_ATLAS_RC_SO,Reason Code (SO),Transaction Data,Sales,high,OTHER,No
+CUSTOMLIST_SHIPC_REASONFOR_EXPORT_LIST,Reason for Export List,Transaction Data,Purchases,high,OTHER,No
+Receivables,Receivables,System Data,Other System,low,OTHER,No
+ReceivablesLineLevel,Receivables Line Level,System Data,Other System,low,OTHER,No
+ReceiveInboundShipment,Receive Inbound Shipment,Transaction Data,Order Management,high,OTHER,No
+RecentActivity,Recent Activity,List Data,Activities,high,OTHER,No
+RecentRecord,Recent Records,Customizations,Custom Objects,medium,OTHER,No
+RecentTransactions,Recent Transactions,Transaction Data,Bank,medium,TRANSACTION,No
+RecSysBlocklist,Recommendation Blocklist,Customizations,Custom Objects,medium,OTHER,No
+RecSysScenario,Recommendation Scenario,System Data,Other System,low,OTHER,No
+UmdField,Record Field,Customizations,Custom Objects,medium,OTHER,No
+AccountingBookStatus,RECORDLABEL.accountingbookstatus,Setup Data,Accounting,high,ACCOUNTING,No
+Coamappingaccttype,RECORDLABEL.coamappingaccttype,Customizations,Custom Objects,medium,OTHER,No
+EffectiveBomControlType,RECORDLABEL.effectivebomcontroltype,Customizations,Custom Objects,medium,OTHER,No
+Emaillayout,RECORDLABEL.emaillayout,List Data,Communications,high,OTHER,No
+InventoryStatusState,RECORDLABEL.inventorystatustype,List Data,Items,high,OTHER,No
+Itemdemandplantype,RECORDLABEL.itemdemandplantype,List Data,Items,high,ITEM,No
+permissionLevel,RECORDLABEL.permissionlevel,Setup Data,Users,high,OTHER,No
+PermissionType,RECORDLABEL.permissiontype,Setup Data,Users,high,OTHER,No
+PreferenceType,RECORDLABEL.preferencetype,Setup Data,Company,high,OTHER,No
+Printlayout,RECORDLABEL.printlayout,Customizations,Custom Objects,medium,OTHER,No
+Segmappingdclass,RECORDLABEL.segmappingdclass,Setup Data,Company,medium,SETUP,No
+Segmappingddept,RECORDLABEL.segmappingddept,Customizations,Custom Objects,medium,OTHER,No
+Segmappingdloc,RECORDLABEL.segmappingdloc,Customizations,Custom Objects,medium,OTHER,No
+Segmappingsclass,RECORDLABEL.segmappingsclass,Setup Data,Company,medium,SETUP,No
+Segmappingsdept,RECORDLABEL.segmappingsdept,Customizations,Custom Objects,medium,OTHER,No
+Segmappingsloc,RECORDLABEL.segmappingsloc,Customizations,Custom Objects,medium,OTHER,No
+Terminationregretted,RECORDLABEL.terminationregretted,Customizations,Custom Objects,medium,OTHER,No
+timeOffChangeType,RECORDLABEL.timeoffchangetype,List Data,Employees,high,OTHER,No
+timeOffTimeUnit,RECORDLABEL.timeofftimeunit,List Data,Employees,high,OTHER,No
+translationlanguage,RECORDLABEL.translationlanguage,Customizations,Custom Objects,medium,OTHER,No
+validPayrollProcessType,RECORDLABEL.validpayrollprocesstype,List Data,Employees,high,OTHER,No
+CustomizableRecordType,Record Type,Customizations,Custom Objects,high,OTHER,No
+ScriptCustomRecordType,Record Type,Customizations,Custom Records,medium,CUSTOM,Yes
+recordType,Record Type,Customizations,Custom Objects,medium,OTHER,No
+ScriptRecordType,Record Type,Customizations,Scripts,high,OTHER,No
+CUSTOMLIST_2663_RECURRENCE,Recurrence,Customizations,Custom Lists,high,OTHER,No
+billingScheduleRecurrencePattern,Recurrence Pattern,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMLIST_2663_REFERENCE_AMENDED_TYPE,Reference Amended Type,Customizations,Custom Lists,high,OTHER,No
+reforecastMethod,Reforecast Method,System Data,Other System,low,OTHER,No
+region,Region,System Data,Other System,low,OTHER,No
+OrderFrequencyType,Release Frequency,Customizations,Custom Objects,medium,OTHER,No
+workflowReleaseStatus,Release Status,Transaction Data,Manufacturing,medium,OTHER,No
+CUSTOMRECORD_NS_IBE_RELEASE_VERSION,Release Version,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_FAM_RENTALFREQ,Rental Frequency,Customizations,Custom Lists,high,OTHER,No
+SupplyReplenishmentType,Replenishment Method,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMLIST_EB_REPLICATION_TYPES_LIST,Replication Types,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_EB_REPLOCATIONSRECORDPROD,Rep Locations,Setup Data,Company,medium,SETUP,Yes
+ReportDefinition,Report Definition,Transaction Data,Purchases,high,OTHER,No
+reportingSection,Reporting Section,Transaction Data,Purchases,high,OTHER,No
+RequestForQuote,Request For Quote,Transaction Data,Purchases,high,OTHER,No
+CUSTOMRECORD_NS_IBE_REQ_CATEGORIES,Requirement Categories,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_IBE_REQ_LINKAGE,Requirement Linkage,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_IBE_REQUIREMENT,Requirements,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_IBE_REQ_STATUSES,Requirement Statuses,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_IBE_REQ_TYPES,Requirement Types,Customizations,Custom Records,high,CUSTOM,Yes
+PurchaseRequisition,Requisition,Transaction Data,Purchases,high,OTHER,No
+ResidentStatus,Resident Status,System Data,Other System,low,OTHER,No
+resource,Resource,Transaction Data,Sales,high,OTHER,No
+resourceAllocation,Resource Allocation,Setup Data,Company,medium,SETUP,No
+resourceGroup,Resource Group,Transaction Data,Sales,high,OTHER,No
+restlet,Restlet,System Data,Other System,low,OTHER,No
+restletDeployment,Restlet Deployment,Customizations,Scripts,high,OTHER,No
+Restriction,Restriction,System Data,Other System,low,OTHER,No
+RetirementPlan,Retirement Plan,System Data,Other System,low,OTHER,No
+returnAuthorization,Return Authorization,Transaction Data,Customers,high,OTHER,No
+CUSTOMLIST_ATLAS_RETRN_RSN_LIST,Return Reason,Transaction Data,Sales,high,OTHER,No
+EliminationJournalDetail,REV_REC_JOURNAL_DETAIL,Transaction Data,Financial,high,OTHER,No
+RevRecJournalDetail,REV_REC_JOURNAL_DETAIL,Transaction Data,Financial,high,OTHER,No
+ForeignCurrencyRevaluations,Revalue Open Foreign Currency Balances,Setup Data,Accounting,high,ACCOUNTING,No
+revenueAllocationgroup,Revenue Allocation Group,Setup Data,Company,medium,SETUP,No
+revenueArrangement,Revenue Arrangement,System Data,Other System,low,OTHER,No
+revenueCommitment,Revenue Commitment,System Data,Other System,low,OTHER,No
+revenueCommitmentReversal,Revenue Commitment Reversal,System Data,Other System,low,OTHER,No
+revenueContract,Revenue Contract,Transaction Data,Purchases,high,OTHER,No
+RevenueElement,Revenue Element,System Data,Other System,low,OTHER,No
+advancedRevRecPlugin,Revenue Management Plug-in,System Data,Other System,low,OTHER,No
+revenuePlanStatus,Revenue Plan Status,System Data,Other System,low,OTHER,No
+revenuePlanType,Revenue Plan Type,Customizations,Custom Objects,medium,OTHER,No
+billingRevenueEvent,Revenue Recognition Event,List Data,Activities,high,TRANSACTION,No
+RevRecFieldMapping,Revenue Recognition Field Map,Customizations,Custom Objects,medium,OTHER,No
+subscriptionRevRecOption,Revenue Recognition Option,Customizations,Scripts,high,OTHER,No
+RevenuePlan,Revenue Recognition Plan,System Data,Other System,low,OTHER,No
+RevenueRecognitionRule,Revenue Recognition Rule,Setup Data,Sales,high,OTHER,No
+RevRecSchedule,Revenue Recognition Schedule,System Data,Other System,low,OTHER,No
+RevRecTemplate,Revenue Recognition Template,System Data,Other System,low,OTHER,No
+RevenueRecognitionTreatment,Revenue Recognition Treatment,System Data,Other System,low,OTHER,No
+role,Role,Setup Data,Users,high,OTHER,No
+rotationType,Rotation Type,Customizations,Custom Objects,medium,OTHER,No
+RoundingGainLoss,Rounding Gain/Loss,System Data,Other System,low,OTHER,No
+salesInvoiced,Sales (Invoiced),Transaction Data,Bank,medium,TRANSACTION,No
+salesOrdered,Sales (Ordered),Transaction Data,Bank,medium,TRANSACTION,No
+SalesCampaign,Sales Campaign,Transaction Data,Sales,medium,OTHER,No
+CUSTOMRECORD_CSEG_MLI_SALES_CHAN,Sales Channel,Setup Data,Marketing,high,CUSTOM,Yes
+SalesChannel,Sales Channel,Setup Data,Marketing,high,OTHER,No
+CUSTOMLIST_EB_SALES_DIVISION_LIST,Sales Division,Transaction Data,Sales,medium,OTHER,No
+CUSTOMRECORD_SALES_HISTORY,Sales History,Transaction Data,Sales,medium,CUSTOM,Yes
+CUSTOMLIST_SALES_INDUSTRIES,Sales Industries,Transaction Data,Sales,medium,OTHER,No
+CUSTOMRECORD_WSG_SM_IMPORT,Sales Management Import,Transaction Data,Purchases,high,CUSTOM,Yes
+salesOrder,Sales Order,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMRECORD_EB_SALESORDER_COMM_UPDATE,Sales Order Commission Update,Transaction Data,Bank,medium,TRANSACTION,Yes
+salesOverview,Sales Overview,Transaction Data,Sales,high,OTHER,No
+CUSTOMRECORD_SALES_PRICE_ESTIMATES,Sales Price Estimate,Transaction Data,Sales,medium,CUSTOM,Yes
+CUSTOMRECORD_SALES_PRICE_ESTIMATE_LINES,Sales Price Estimate Line,Transaction Data,Sales,medium,CUSTOM,Yes
+CUSTOMLIST_SALES_PRODUCT_CONC,Sales Product Concentrations,List Data,Items,high,ITEM,No
+CUSTOMRECORD_SALES_PRODUCT_COSTS,Sales Product Costs,List Data,Items,high,ITEM,Yes
+CUSTOMRECORD_SALES_PRODUCT_DISCOUNTS,Sales Product Discounts,List Data,Items,high,ITEM,Yes
+CUSTOMRECORD_SALES_PRODUCT_PRICES,Sales Product Prices,List Data,Items,high,ITEM,Yes
+CUSTOMRECORD_SALES_PRODUCTS,Sales Products,List Data,Items,high,ITEM,Yes
+CUSTOMLIST_SALES_PRODUCT_UOM,Sales Product Units of Measure,List Data,Items,high,ITEM,No
+salesReadiness,Sales Readiness,Transaction Data,Sales,medium,OTHER,No
+CUSTOMLIST_SALES_REGIONS,Sales Regions,Transaction Data,Sales,medium,OTHER,No
+CUSTOMRECORD_EB_SALESREP_INFO,Sales Rep,Transaction Data,Sales,medium,CUSTOM,Yes
+salesRole,Sales Role,Setup Data,Users,high,OTHER,No
+salesTaxPayment,Sales Tax Payment,List Data,Payment Instruments,medium,TRANSACTION,No
+salesTerritory,Sales Territory,Setup Data,Sales,high,OTHER,No
+CUSTOMLIST_SAS_APPROVAL_ACTION,SAS Approval Action,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_SAS_TRANSACTION_STATE,SAS Transaction State,Transaction Data,Bank,medium,TRANSACTION,No
+CUSTOMLIST_SAS_TRANSACTION_TYPES,SAS Transaction Types,Transaction Data,Bank,medium,TRANSACTION,No
+savedsearch,Saved Search,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_SAS_SS_EXP_MAPPING,Saved Search Exceptions Mapping,Customizations,Custom Records,high,CUSTOM,Yes
+usrsavedsearch,Saved Workbook,Transaction Data,Manufacturing,medium,OTHER,No
+scheduleBUomCodes,schedulebuomcodes,System Data,Other System,low,OTHER,No
+scheduledScript,Scheduled Script,Customizations,Scripts,high,OTHER,No
+scheduledScriptDeployment,Scheduled Script Deployment,Customizations,Scripts,high,OTHER,No
+ScheduledScriptInstance,Scheduled Script Instance,Customizations,Scripts,high,OTHER,No
+CUSTOMLIST_2663_SCHEDULE_EVENT_TYPE,Schedule Event Type,List Data,Activities,high,OTHER,No
+CUSTOMLIST_2663_SCHEDULE_TYPE,Schedule Type,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_ATLAS_WO_ATT1,Scheduling Attribute 1,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_ATLAS_WO_ATT2,Scheduling Attribute 2,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_ATLAS_WO_ATT3,Scheduling Attribute 3,Customizations,Custom Lists,high,OTHER,No
+schedulingMethod,Scheduling Method,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_SCM_DPS_TASKVIEW,SCM DPS Task View,List Data,Activities,high,CUSTOM,Yes
+CUSTOMRECORD_SCM_DPS_USERDISPLAY,SCM DPS User Display,Setup Data,Users,high,CUSTOM,Yes
+CUSTOMRECORD_SCM_PREFERENCES,SCM Preferences,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_SCM_PRINTREPORTLOG,SCM Print Report Log,Transaction Data,Purchases,high,CUSTOM,Yes
+CUSTOMLIST_SCM_PRINTSTATUS,SCM Print Status,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_DT_TILE_COMPARETYPE,Scorecard Comparison Type,List Data,Payment Instruments,medium,OTHER,No
+CUSTOMLIST_DT_TILE_SUMMARYTYPE,Scorecard Summary Type,List Data,Payment Instruments,medium,OTHER,No
+script,Script,Customizations,Scripts,high,OTHER,No
+scriptDeployment,Script Deployment,Customizations,Scripts,high,OTHER,No
+scriptNoteType,Script Note Type,List Data,Communications,high,OTHER,No
+scriptPortletType,Script Portlet Type,Transaction Data,Purchases,high,OTHER,No
+scriptType,Script Type,Customizations,Scripts,high,OTHER,No
+SearchSchedule,Search Schedule,System Data,Other System,low,OTHER,No
+NumberingPerExpression,Segment,System Data,Other System,low,OTHER,No
+LocationAssignmentOptimalFulfillment,Select the optimal fulfillment strategy,Setup Data,Company,medium,SETUP,No
+sentEmail,Sent Email,List Data,Communications,high,OTHER,No
+inventoryNumber,Serial/Lot Number,List Data,Items,high,OTHER,No
+ScriptNote,Server Script Log,List Data,Communications,high,OTHER,No
+serviceItem,Service,List Data,Items,high,ITEM,No
+servicePurchaseItem,Service for Purchase,List Data,Items,high,ITEM,No
+serviceResaleItem,Service for Resale,List Data,Items,high,ITEM,No
+serviceSaleItem,Service for Sale,List Data,Items,high,ITEM,No
+Session,Session,System Data,Other System,low,OTHER,No
+CompanyInformation,Setup: Company Information,Setup Data,Company,high,OTHER,No
+taxPreferences,Set Up Taxes,Setup Data,Company,high,OTHER,No
+IssueSeverity,Severity,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_CARRIER_NAME,Ship_Carrier Name,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_SHIP_STSTUS_LIST,Ship_status list,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_SHIPCENTRAL_ADDRESSVALIDATI,Ship Central Address Validation,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_LOG_TRANSACTIONS,ShipCentral - API Log Transactions,Transaction Data,Bank,medium,TRANSACTION,Yes
+CUSTOMRECORD_SHIPCENTRALCOUNTRY,ShipCentral Country,Transaction Data,Inventory,medium,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_LLS_SHIP_GROUP,ShipCentral - LLS Orders Ship Group,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_PACKING_ROLE,Ship Central Packing,Setup Data,Users,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_SHIPPREFERENCE,Ship Central Preferences,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_SHIPCENTRAL_ROLERECORD,ShipCentral Role Record,Setup Data,Users,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_SHIPMENT_SETUP,Ship Central Shipment Setup,Setup Data,Company,high,CUSTOM,Yes
+CUSTOMRECORD_SHIPPING_ROLE,Ship Central Shipping,Setup Data,Users,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_CONTENTS,Shipment Contents,Transaction Data,Order Management,high,CUSTOM,Yes
+CUSTOMRECORD_PACKSHIP_REFS_PER_CARRIER,Shipment References,Transaction Data,Order Management,high,CUSTOM,Yes
+ShipperPackageTypeCode,Shipper Package Type Code,Customizations,Custom Objects,medium,OTHER,No
+ShipperServiceCode,Shipper Service Code,List Data,Items,high,OTHER,No
+CUSTOMRECORD_PACKSHIP_DESCRIPTION,Shipping Description Type,Transaction Data,Order Management,high,CUSTOM,Yes
+CUSTOMRECORD_SHIPC_DUTIES_TAXES_LIST,Shipping Duties and Taxes,Transaction Data,Order Management,high,CUSTOM,Yes
+ShipItem,Shipping Item,List Data,Items,high,ITEM,No
+CUSTOMRECORD_PACKSHIP_LABEL_REFERENCE,Shipping Label Reference,Transaction Data,Order Management,high,CUSTOM,Yes
+CUSTOMLIST_EB_SHIPPING_MU_TYPES,Shipping Mark Up Types,Transaction Data,Order Management,high,OTHER,No
+CUSTOMRECORD_EB_SHIPPINGOPTION,Shipping Option,Transaction Data,Order Management,high,CUSTOM,Yes
+ShippingPartnerRegistration,Shipping Partner Registration,List Data,Employees,medium,ENTITY,No
+shippingPartnersPlugin,Shipping Partners Plugin,List Data,Employees,medium,ENTITY,No
+shoppingCart,Shopping Cart,System Data,Other System,low,OTHER,No
+Section,Site Categories,System Data,Other System,low,OTHER,No
+SiteCategory,Site Category,Setup Data,Marketing,high,OTHER,No
+SiteEntryPointType,Site Entry Point Type,Transaction Data,Purchases,high,OTHER,No
+siteRegistrationType,Site Registration Type,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMRECORD_NS_IBE_SKILL_TYPE,Skills,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_SC_DASHBOARD_DATA_SCHEDULED,Smart Count Dashboard Data,Transaction Data,Inventory,medium,CUSTOM,Yes
+CUSTOMRECORD_SC_SETUP_PREFERENCES,Smart Count Setup Preferences,Setup Data,Company,high,CUSTOM,Yes
+USRSnapshot,Snapshot,System Data,Other System,low,OTHER,No
+softDescriptor,Soft Descriptor,Transaction Data,Sales,high,OTHER,No
+solution,Solution,Transaction Data,Sales,high,OTHER,No
+revenuePlanSource,Source,Transaction Data,Sales,high,OTHER,No
+IssueSource,Source,Transaction Data,Sales,high,OTHER,No
+revenueElementSourceType,Source Record Type,Transaction Data,Sales,high,OTHER,No
+revRecDateSourceType,Source Type,Transaction Data,Sales,high,OTHER,No
+revRecAmountSourceType,Source Type,Transaction Data,Sales,high,OTHER,No
+specialAccountType,Special Account Type,Setup Data,Accounting,high,ACCOUNTING,No
+webapp,SSP Application,System Data,Integration,medium,OTHER,No
+standardCostVersion,Standard Cost Version,System Data,Other System,low,OTHER,No
+state,State/Province/County,Transaction Data,Inventory,medium,OTHER,No
+StatisticalJournalEntry,Statistical Journal,Transaction Data,Financial,high,OTHER,No
+statisticalSchedule,Statistical Schedule,System Data,Other System,low,OTHER,No
+VendRfqStatus,Status,System Data,Other System,low,OTHER,No
+OcrImportJobType,Status,Transaction Data,Purchases,high,OTHER,No
+VendorBillStatus,Status,List Data,Relationships,high,TRANSACTION,No
+SupplyChainSnapshotSimulationDocStatus,Status,System Data,Other System,low,OTHER,No
+ApplicabilityStatusType,Status,Customizations,Custom Objects,medium,OTHER,No
+JournalStatus,Status,Transaction Data,Financial,high,OTHER,No
+pickTaskStatus,Status,List Data,Activities,high,OTHER,No
+StorePickupFulfillmentStatus,Status,Transaction Data,Order Management,high,OTHER,No
+OcrImportJobStatus,Status,Transaction Data,Purchases,high,OTHER,No
+CustomerChargeStatus,Status,List Data,Employees,medium,ENTITY,No
+VendorPaymentStatus,Status,List Data,Payment Instruments,medium,TRANSACTION,No
+CheckStatus,Status,Transaction Data,Bank,high,OTHER,No
+StatusType,Status,Customizations,Custom Objects,medium,OTHER,No
+PurchaseContractStatus,Status,Transaction Data,Purchases,high,OTHER,No
+PeriodEndJournalStatus,Status,Setup Data,Accounting,high,OTHER,No
+VendorReturnAuthorizationStatus,Status,List Data,Employees,medium,ENTITY,No
+EstimateStatus,Status,System Data,Other System,low,OTHER,No
+ReturnAuthorizationStatus,Status,Transaction Data,Customers,high,OTHER,No
+scriptStatus,Status,Customizations,Scripts,high,OTHER,No
+CustomerRefundStatus,Status,List Data,Employees,medium,ENTITY,No
+InvoiceStatus,Status,Transaction Data,Bank,medium,TRANSACTION,No
+SalesTaxPaymentStatus,Status,List Data,Payment Instruments,medium,TRANSACTION,No
+DocumentStatus,Status,System Data,Other System,low,OTHER,No
+BlanketPurchaseOrderStatus,Status,Transaction Data,Bank,medium,TRANSACTION,No
+PurchaseRequisitionStatus,Status,Transaction Data,Purchases,high,OTHER,No
+subscriptionChangeOrderStatus,Status,Customizations,Scripts,high,OTHER,No
+ItemFulfillmentStatus,Status,List Data,Items,high,ITEM,No
+CreditMemoStatus,Status,Transaction Data,Bank,medium,OTHER,No
+OpportunityStatus,Status,Transaction Data,Purchases,high,OTHER,No
+invoiceGroupStatus,Status,Transaction Data,Bank,medium,TRANSACTION,No
+FulfillmentRequestStatus,Status,Transaction Data,Order Management,high,OTHER,No
+InventoryCountStatus,Status,List Data,Items,high,OTHER,No
+CustomerPaymentStatus,Status,List Data,Payment Instruments,medium,TRANSACTION,No
+PurchaseOrderStatus,Status,Transaction Data,Bank,medium,TRANSACTION,No
+DepositApplicationStatus,Status,Transaction Data,Bank,high,OTHER,No
+waveStatus,Status,System Data,Other System,low,OTHER,No
+ExpenseReportStatus,Status,Transaction Data,Purchases,high,OTHER,No
+NettingStatementDocumentStatus,Status,Transaction Data,Sales,high,OTHER,No
+CashSaleStatus,Status,Transaction Data,Sales,high,OTHER,No
+pickActionStatus,Status,System Data,Workflow,high,OTHER,No
+RfqStatus,Status,System Data,Other System,low,OTHER,No
+UsageStatus,Status,System Data,Other System,low,OTHER,No
+subscriptionLineStatus,Status,Customizations,Scripts,high,OTHER,No
+WorkOrderStatus,Status,Transaction Data,Manufacturing,high,OTHER,No
+PlannedOrderStatusType,Status,Customizations,Custom Objects,medium,OTHER,No
+payrollDocumentStatus,Status,List Data,Employees,high,OTHER,No
+CustomerAuthorizationStatus,Status,List Data,Employees,medium,ENTITY,No
+TransferOrderStatus,Status,Transaction Data,Bank,high,OTHER,No
+CustomerDepositStatus,Status,List Data,Employees,medium,ENTITY,No
+VatLiabilityStatus,Status,System Data,Other System,low,OTHER,No
+StockBehaviorType,Stock Behavior Type,Customizations,Custom Objects,medium,OTHER,No
+storeAddItemBehavior,Store Add Item Behavior,List Data,Items,high,ITEM,No
+StoreListLook,Store List Look,Customizations,Custom Objects,medium,OTHER,No
+storeLook,Store Look,System Data,Other System,low,OTHER,No
+storePickupFulfillment,Store Pickup Fulfillment,Transaction Data,Order Management,high,OTHER,No
+storePortletStyle,Store Portlet Style,Transaction Data,Purchases,high,OTHER,No
+storeUpsellDisplay,Store Upsell Display,System Data,Other System,low,OTHER,No
+LocationAssignmentGroupingStrategy,Strategies,Setup Data,Company,medium,SETUP,No
+CUSTOMRECORD_SUBNAV_SETTINGS,SubNav - Settings,Customizations,Custom Records,high,CUSTOM,Yes
+InventoryDetailLine,Subrecord,List Data,Items,high,OTHER,No
+subscription,Subscription,Customizations,Scripts,high,OTHER,No
+subscriptionChangeOrder,Subscription Change Order,Customizations,Scripts,high,OTHER,No
+subscriptionLine,Subscription Line,Customizations,Scripts,high,OTHER,No
+SubscriptionLineRevision,Subscription Line Revision,Customizations,Scripts,high,OTHER,No
+subscriptionPlan,Subscription Plan,Customizations,Scripts,high,OTHER,No
+SubscriptionRenewalHistory,Subscription Renewal History,Customizations,Scripts,high,OTHER,No
+SubscriptionStatus,Subscription Status,Customizations,Scripts,high,OTHER,No
+subscriptionTerm,Subscription Term,Customizations,Scripts,high,OTHER,No
+Subsidiary,Subsidiary,Setup Data,Company,medium,SETUP,No
+SubsidiarySettings,Subsidiary Settings,Setup Data,Company,medium,SETUP,No
+subtotalItem,Subtotal Item,List Data,Items,high,ITEM,No
+suitelet,Suitelet,System Data,Other System,low,OTHER,No
+suiteletDeployment,Suitelet Deployment,Customizations,Scripts,high,OTHER,No
+CUSTOMLIST_SQRT_QUERY_CATEGORIES,SuiteQL Query Categories,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_SQRT_QUERY_HISTORY,SuiteQL Query History,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_SQRT_RESULT_FORMATS,SuiteQL Result Formats,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_SQRT_SAVED_QUERIES,SuiteQL Saved Query,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMLIST_SQRT_SHARING_LEVELS,SuiteQL Sharing Levels,Customizations,Custom Lists,high,OTHER,No
+SuiteScriptDetail,Suite Script Detail,Customizations,Scripts,high,OTHER,No
+CUSTOMRECORD_ATLAS_FINWORKBOOK_STRINGS,SuiteSuccess FinWB Strings,Transaction Data,Manufacturing,medium,CUSTOM,Yes
+CUSTOMLIST_ATLAS_FINWB_TRANS_LIST,SuiteSuccess FinWB Translation,Customizations,Custom Lists,high,OTHER,No
+CUSTOMRECORD_ATLAS_PROWORKBOOK_STRINGS,SuiteSuccess Proc WB Strings,Transaction Data,Manufacturing,medium,CUSTOM,Yes
+CUSTOMLIST_ATLAS_PROWB_TRANS_LIST,SuiteSuccess ProWB Translation,Customizations,Custom Lists,high,OTHER,No
+payrollBatchSummary,Summary,List Data,Employees,high,OTHER,No
+CUSTOMLIST_SALES_SUPER_CONC_SPEC,Super Concentrate Specialties,Transaction Data,Sales,medium,OTHER,No
+CUSTOMLIST_SALES_SUPER_CONC,Super Concentrations,Transaction Data,Sales,medium,OTHER,No
+OrderReservationAllocation,Supply Allocation,Setup Data,Company,medium,SETUP,No
+predictedRiskTrainEvalHistory,Supply Chain Predicted Risks Training and Evaluation History,System Data,Audit,high,OTHER,No
+supplyChainSnapshot,Supply Chain Snapshot,System Data,Other System,low,OTHER,No
+supplyChainSnapshotSimulation,Supply Chain Snapshot Simulation,System Data,Other System,low,OTHER,No
+supplyChangeOrder,Supply Change Order,System Data,Other System,low,OTHER,No
+supplyChangeOrderStatus,Supply Change Order,System Data,Other System,low,OTHER,No
+supplyChangeOrderAction,Supply Change Order Action,System Data,Workflow,high,OTHER,No
+SupplyChangeOrderApprovalStatus,Supply Change Order Approval Status,System Data,Workflow,high,OTHER,No
+supplyPlanDefinition,Supply Plan Definition,System Data,Other System,low,OTHER,No
+demandSourceType,Supply Plan Definition,Transaction Data,Sales,high,OTHER,No
+ItemSupplyType,Supply Type,List Data,Items,high,ITEM,No
+CUSTOMLIST_EB_ITEM_SURFACTANTS,Surfactant,List Data,Items,high,ITEM,No
+CurrencySymbolPlacement,Symbol Placement,Setup Data,Accounting,high,ACCOUNTING,No
+SystemEmailTemplate,System Email Template (Scriptable),List Data,Communications,high,OTHER,No
+SystemJournal,System Journal,Transaction Data,Financial,high,OTHER,No
+SystemNote,System Note,List Data,Communications,high,OTHER,No
+systemNoteContextType,System Notes,List Data,Communications,high,OTHER,No
+SystemNote2,System Notes v2,List Data,Communications,high,OTHER,No
+StoreTabType,Tab Type,Customizations,Custom Objects,medium,OTHER,No
+IssueTag,Tag,System Data,Other System,low,OTHER,No
+tag,Tag,System Data,Other System,low,OTHER,No
+BulkOwnershipTransfer,Take Ownership,Transaction Data,Bank,high,OTHER,No
+Task,Task,List Data,Activities,high,OTHER,No
+CUSTOMRECORD_TASK_LIST,Task List,List Data,Activities,high,CUSTOM,Yes
+CUSTOMRECORD_L10N_TASK_LIST_PROP,Task List Property,List Data,Activities,high,CUSTOM,Yes
+CUSTOMRECORD_L10N_TASK_RESULT,Task Result,List Data,Activities,high,CUSTOM,Yes
+TaxLiab,TAX_LIAB,System Data,Other System,low,OTHER,No
+TaxPymt,TAX_PYMT,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_PACKSHIP_TAXABLE_ENTITY,Taxable Entity,List Data,Relationships,high,CUSTOM,Yes
+taxCalculationPlugin,Tax Calculation Plugin,System Data,Other System,low,OTHER,No
+salesTaxItem,Tax Code,List Data,Items,high,ITEM,No
+taxAcct,Tax Control Account,Setup Data,Accounting,high,OTHER,No
+taxGroup,Tax Group,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_PACKSHIP_TAXIDS,Tax Identifiers,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORDPACKSHIP_TAX_ID_TYPE,Tax Id Type,Customizations,Custom Records,high,CUSTOM,Yes
+taxItemTaxGroup,Tax Item,List Data,Items,high,ITEM,No
+taxItemAvailability,TaxItem Availability,List Data,Items,high,ITEM,No
+taxJurisdiction,Tax Jurisdiction,System Data,Other System,low,OTHER,No
+VatLiability,Tax Liability Cheque,System Data,Other System,low,OTHER,No
+TaxLiabilityPayment,Tax Liability Payment,List Data,Payment Instruments,medium,TRANSACTION,No
+TaxLiabilityPaymentLegacy,Tax Liability Payment (Read-Only),List Data,Payment Instruments,medium,TRANSACTION,No
+taxOverrideMethod,Tax Override Method,System Data,Other System,low,OTHER,No
+taxPeriod,Tax Period,Setup Data,Accounting,high,OTHER,No
+taxRoundingType,Tax Rounding Method,Customizations,Custom Objects,medium,OTHER,No
+taxSchedule,Tax Schedule,System Data,Other System,low,OTHER,No
+taxType,Tax Type,Customizations,Custom Objects,medium,OTHER,No
+CUSTOMRECORD_EB_RMS_MEMBER_BASE,Team Member Base,Setup Data,Sales,high,CUSTOM,Yes
+TegRcvbl,TEG_RCVBL,System Data,Other System,low,OTHER,No
+tegataPayable,Tegata Payable,System Data,Other System,low,OTHER,No
+tegataReceivable,Tegata Receivable,System Data,Other System,low,OTHER,No
+TegPybl,TEGPYBL,System Data,Other System,low,OTHER,No
+CrmTemplate,Template,System Data,Other System,low,OTHER,No
+CrmTemplateCategory,Template Category,Setup Data,Marketing,high,OTHER,No
+CrmTemplateType,Template Type,Customizations,Custom Objects,medium,OTHER,No
+TerminationReason,Termination Reason,Transaction Data,Sales,high,OTHER,No
+Hcmterminationcategory,Termination Reason Category,Setup Data,Marketing,high,OTHER,No
+term,Terms,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_TERMS_OF_TRADE_CODE,Terms of trade code,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_PS_MFG_UAT_TEMPLATE,Test Cases,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_NS_TS_TEST_ISSUE,Test Issues,Customizations,Custom Records,high,CUSTOM,Yes
+testPlugin,Test Plugin,System Data,Other System,low,OTHER,No
+TextEnhanceAction,Text Enhance Action,System Data,Workflow,high,OTHER,No
+textScale,Text Scale,System Data,Other System,low,OTHER,No
+TimeCode,Time Code,Transaction Data,Employees,medium,OTHER,No
+TimeEntry,Time Entry,Transaction Data,Employees,high,OTHER,No
+TimeModificationRequest,Time Modification Request,Transaction Data,Employees,medium,OTHER,No
+TimeOffChange,Time-Off Change,List Data,Employees,high,OTHER,No
+TimeOffPlan,Time-Off Plan,List Data,Employees,high,OTHER,No
+TimeOffRequest,Time-Off Request,List Data,Employees,high,OTHER,No
+TimeOffRule,Time-Off Rule,Setup Data,Sales,high,OTHER,No
+TimeOffType,Time-Off Type,List Data,Employees,high,OTHER,No
+TimeBill,Time Tracking,Transaction Data,Bank,medium,TRANSACTION,No
+TimelineType,Time Type,Transaction Data,Employees,medium,OTHER,No
+TimeZone,Time Zone,Transaction Data,Employees,medium,OTHER,No
+CUSTOMLIST_SAS_TOL_REAPPROVAL_TYPE,Tolerance Re-Approval Type,Customizations,Custom Lists,high,OTHER,No
+Topic,Topic,System Data,Other System,low,OTHER,No
+TopSellingItems,Top Selling Items,List Data,Items,high,ITEM,No
+CUSTOMRECORD_LOT_SN_TRACE_GRID,Trace-Grid,Customizations,Custom Records,high,CUSTOM,Yes
+CUSTOMRECORD_LOTSN_TRACEABILITY_PREF,Trace Preferences,Setup Data,Company,high,CUSTOM,Yes
+TrackingNumber,Tracking Number,System Data,Other System,low,OTHER,No
+TrafficSource,Traffic,Transaction Data,Sales,high,OTHER,No
+transaction,Transaction,Transaction Data,Bank,medium,TRANSACTION,No
+TransactionAccountingRuleActionLog,Transaction Accounting Rules Action Log,Setup Data,Accounting,high,TRANSACTION,No
+TransactionAccountingRuleSet,Transaction Accounting Rule Set,Setup Data,Accounting,high,TRANSACTION,No
+transactionHistory,Transaction Audit Trail,Transaction Data,Bank,medium,TRANSACTION,No
+TransactionBilling,Transaction Billing,Transaction Data,Bank,medium,TRANSACTION,No
+TransactionBinNumbers,Transaction Bin Numbers,Transaction Data,Bank,medium,TRANSACTION,No
+transactionDeletionReason,Transaction Deletion Reason,Transaction Data,Bank,medium,TRANSACTION,No
+Formtemplate,Transaction Form,System Data,Workflow,high,OTHER,No
+revRecEventTranLine,Transaction Line,List Data,Activities,high,OTHER,No
+TransactionNumberingAuditLog,Transaction Numbering Audit Log,Transaction Data,Bank,medium,TRANSACTION,No
+TransactionStatus,Transaction Status,Transaction Data,Bank,medium,TRANSACTION,No
+VendorPrepaymentDocumentStatus,Transaction Status,List Data,Payment Instruments,medium,TRANSACTION,No
+TaxLiabilityPaymentLegacyStatus,Transaction Status,List Data,Payment Instruments,medium,TRANSACTION,No
+TaxLiabilityPaymentStatus,Transaction Status,List Data,Payment Instruments,medium,TRANSACTION,No
+transactionType,Transaction Type,Transaction Data,Bank,medium,TRANSACTION,No
+CustomFieldTranType,Transaction Type,Customizations,Custom Objects,high,OTHER,No
+transfer,Transfer,Transaction Data,Bank,high,OTHER,No
+transferOrder,Transfer Order,Transaction Data,Bank,high,OTHER,No
+intercompanyTransferOrder,Transfer Order,Setup Data,Company,high,OTHER,No
+translationBundle,Translation Bundle,System Data,Other System,low,OTHER,No
+workflowTriggerType,Trigger Type,Transaction Data,Manufacturing,medium,OTHER,No
+transactionLineType,Type,Transaction Data,Bank,medium,TRANSACTION,No
+revRecRecurrenceType,Type,Customizations,Custom Objects,medium,OTHER,No
+vsoeDiscountType,Type,Transaction Data,Sales,high,OTHER,No
+AmortizationType,Type,Customizations,Custom Objects,medium,OTHER,No
+PresentationItemType,Type,List Data,Items,high,ITEM,No
+paymentInstrumentStateType,Type,List Data,Payment Instruments,high,TRANSACTION,No
+TransactionName,Type,Transaction Data,Bank,medium,TRANSACTION,No
+vsoeDeferralType,Type,Transaction Data,Sales,high,OTHER,No
+paymentOperation,Type,List Data,Payment Instruments,medium,TRANSACTION,No
+ItemSegmentType,Type,List Data,Items,high,ITEM,No
+vsoeSopGroupType,Type,Transaction Data,Sales,high,OTHER,No
+subscriptiontermtype,Type,Customizations,Scripts,high,OTHER,No
+EmploymentCategory,Type,Setup Data,Marketing,high,OTHER,No
+paymentInstrumentType,Type,List Data,Payment Instruments,high,TRANSACTION,No
+revRecChangeImpactType,Type,Customizations,Custom Objects,medium,OTHER,No
+SubscriptionMessageType,Type,List Data,Communications,high,OTHER,No
+storeType,Type,Customizations,Custom Objects,medium,OTHER,No
+UnbilledReceivableGrouping,Unbilled Receivable Adjustment Journal Grouping,Transaction Data,Bank,medium,TRANSACTION,No
+undeliveredEmail,Undelivered Email,List Data,Communications,high,OTHER,No
+DistanceUnit,Unit,System Data,Other System,low,OTHER,No
+subscriptiontermunit,Unit,Customizations,Scripts,high,OTHER,No
+CUSTOMRECORD_SHIPCOUNTRY_UOM,Unit Conversion per Country,Transaction Data,Inventory,medium,CUSTOM,Yes
+pickDecomposition,Units for Pick Decomposition,Transaction Data,Purchases,high,OTHER,No
+unitsType,Units Type,Customizations,Custom Objects,medium,OTHER,No
+UnlockedTimePeriod,Unlock Time Period,Setup Data,Accounting,high,OTHER,No
+UnrealizedGainLoss,Unrealized Gain/Loss,System Data,Other System,low,OTHER,No
+CUSTOMLIST_AVA_BOTTLETAX_UOM_NETVOLUME,UOM-Net Volume(Bottle Tax),Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_AVA_BOTTLETAX_UOM_PACKSIZE,UOM-Pack Size(Bottle Tax),Customizations,Custom Lists,high,OTHER,No
+FXRATEUPDATEZONE,Update Time Zone,Transaction Data,Employees,medium,OTHER,No
+usage,Usage,System Data,Other System,low,OTHER,No
+CUSTOMLIST_LIST_SHIP_DEMOACCOUNT,Use for Ship Central Demo,Setup Data,Accounting,high,ACCOUNTING,No
+CUSTOMLIST_ITEM360_USERORROLE,User/Role,Setup Data,Users,high,ITEM,No
+userEventScript,Userevent Script,Setup Data,Users,high,OTHER,No
+UserEventScriptDeployment,User Event Script Deployment,Setup Data,Users,high,OTHER,No
+UsrDsExecutionLog,UsrDsExecutionLog,System Data,Audit,high,OTHER,No
+validatePostbackStatus,Validate PostBack status,Transaction Data,Purchases,high,OTHER,No
+CUSTOMLIST_EVD_VALIDATIONTYPE,Validation Type,Customizations,Custom Lists,high,OTHER,No
+CUSTOMLIST_SC_VARIANCES,Variance,Transaction Data,Payables,high,OTHER,No
+varianceType,Variance Type,Transaction Data,Payables,high,OTHER,No
+Vendor,Vendor,List Data,Employees,medium,ENTITY,No
+VendorAutomatedClearingHouse,Vendor Automated Clearing House,List Data,Employees,medium,ENTITY,No
+CUSTOMLIST_VB_MEMO_LIST,Vendor Bill Memo List,List Data,Relationships,high,OTHER,No
+VendorCategory,Vendor Category,Setup Data,Marketing,high,ENTITY,No
+CUSTOMRECORD_ATLAS_VENDOR_CERT_REC,Vendor Certification,List Data,Employees,medium,ENTITY,Yes
+VendorPayment,Vendor Payment,List Data,Payment Instruments,medium,TRANSACTION,No
+vendorPaymentInstrument,Vendor Payment Instrument,List Data,Payment Instruments,high,TRANSACTION,No
+VendorPrepayment,Vendor Prepayment,List Data,Payment Instruments,medium,TRANSACTION,No
+VendorPrepaymentApplication,Vendor Prepayment Application,List Data,Payment Instruments,medium,TRANSACTION,No
+VendorRequestForQuote,Vendor Request For Quote,List Data,Employees,medium,ENTITY,No
+VendorReturnAuthorization,Vendor Return Authorization,List Data,Employees,medium,ENTITY,No
+VendorSubsidiaryRelationship,Vendor-Subsidiary Relationship,Setup Data,Subsidiaries,high,ENTITY,No
+CUSTOMLIST_NS_PM_VERTICAL,Vertical,Setup Data,Marketing,high,OTHER,No
+VisaType,Visa Type,Customizations,Custom Objects,medium,OTHER,No
+wave,Wave,System Data,Other System,low,OTHER,No
+CUSTOMRECORD3060,WB Testing WB,Customizations,Custom Records,high,CUSTOM,Yes
+webApplication,Web Application,System Data,Integration,medium,OTHER,No
+webSite,Website,System Data,Integration,medium,OTHER,No
+webSiteFieldsetRecordType,Web Site Field Set Record Type,Customizations,Custom Objects,medium,OTHER,No
+webSiteHomePage,Website Home Page,System Data,Integration,medium,OTHER,No
+webSiteHomePageType,Website Home Page Type,Customizations,Custom Objects,medium,OTHER,No
+SiteItemTemplate,Web Site Item/Category Templates,Setup Data,Marketing,high,ITEM,No
+redirect,Web Site Redirect,System Data,Integration,medium,OTHER,No
+webSiteScope,Website Scope,System Data,Integration,medium,OTHER,No
+StoreTab,Web Site Tab,System Data,Integration,medium,OTHER,No
+SiteTheme,Web Site Theme,System Data,Integration,medium,OTHER,No
+CustomerSegmentFlagType,Website Visibility Level,List Data,Employees,medium,ENTITY,No
+timeSheet,Weekly Timesheet,Transaction Data,Employees,medium,OTHER,No
+CUSTOMLIST_2663_WEEK_OF_MONTH,Week of Month,Customizations,Custom Lists,high,OTHER,No
+winLossReason,Win/Loss Reason,Transaction Data,Sales,high,OTHER,No
+WorkAssignment,Work Assignment,Transaction Data,Manufacturing,medium,OTHER,No
+WorkAssignmentStatus,Work Assignment Status,Transaction Data,Manufacturing,medium,OTHER,No
+workbookBuilderPlugin,Workbook Builder Plug-in,Transaction Data,Manufacturing,medium,OTHER,No
+Wbs,Work Breakdown Structure,Transaction Data,Manufacturing,medium,OTHER,No
+workCalendar,Work Calendar,List Data,Activities,high,OTHER,No
+workflow,Workflow,Transaction Data,Manufacturing,medium,OTHER,No
+workflowActionScript,Workflow Action Script,Transaction Data,Manufacturing,medium,OTHER,No
+workflowActionScriptDeployment,Workflow Action Script Deployment,Transaction Data,Manufacturing,medium,OTHER,No
+workflowInstance,Workflow Instance,Transaction Data,Manufacturing,medium,OTHER,No
+CUSTOMRECORD_MEYER_WORKFLOW_REJECT_REASO,Workflow Reject Reason,Transaction Data,Sales,high,CUSTOM,Yes
+workflowState,Workflow State,Transaction Data,Manufacturing,medium,OTHER,No
+workOrder,Work Order,Transaction Data,Manufacturing,high,OTHER,No
+workOrderClose,Work Order Close,Transaction Data,Manufacturing,high,OTHER,No
+workOrderCompletion,Work Order Completion,Transaction Data,Manufacturing,high,OTHER,No
+workOrderIssue,Work Order Issue,Transaction Data,Manufacturing,high,OTHER,No
+workplace,Workplace,Transaction Data,Manufacturing,medium,OTHER,No
+CUSTOMRECORD_DC_WRITE_OFF_LIMITS,Write Off Limits,Customizations,Custom Records,high,CUSTOM,Yes
+YtdAdjst,YTD_ADJST,System Data,Other System,low,OTHER,No
+CUSTOMRECORD_11724_BANK_FEE_SCHED,Zengin Bank Fee Schedule,Transaction Data,Bank,high,CUSTOM,Yes
+zone,Zone,System Data,Other System,low,OTHER,No

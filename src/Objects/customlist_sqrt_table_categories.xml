@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customlist scriptid="customlist_sqrt_table_categories">
+  <label>SuiteQL Table Categories</label>
+  <description>All categories and subcategories for NetSuite table classification based on DATA-CLASSIFICATION.md</description>
+  <isinactive>F</isinactive>
+  <isordered>T</isordered>
+  <customvalues>
+    <!-- Setup Data Categories and Subcategories -->
+    <customvalue scriptid="val_company">
+      <value>Company</value>
+      <abbreviation>COMP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>1</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_company_feature_setup">
+      <value>Company Feature Setup</value>
+      <abbreviation>COMPFEAT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>2</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_company_preferences">
+      <value>Company Preferences</value>
+      <abbreviation>COMPPREF</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>3</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_subsidiaries">
+      <value>Subsidiaries</value>
+      <abbreviation>SUBS</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>4</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_departments">
+      <value>Departments</value>
+      <abbreviation>DEPT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>5</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_locations">
+      <value>Locations</value>
+      <abbreviation>LOC</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>6</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_classifications">
+      <value>Classifications</value>
+      <abbreviation>CLASS</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>7</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_sales_channels">
+      <value>Sales Channels</value>
+      <abbreviation>SALESCHAN</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>8</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_setup_accounting">
+      <value>Accounting</value>
+      <abbreviation>SETUPACCT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>9</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_accounts">
+      <value>Accounts</value>
+      <abbreviation>ACCTS</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>10</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_budget_exchange_rates">
+      <value>Budget Exchange Rates</value>
+      <abbreviation>BUDGETFX</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>11</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_consolidated_exchange_rates">
+      <value>Consolidated Exchange Rates</value>
+      <abbreviation>CONSOLFX</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>12</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_currency_exchange_rates">
+      <value>Currency Exchange Rates</value>
+      <abbreviation>CURRFX</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>13</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_fiscal_calendars">
+      <value>Fiscal Calendars</value>
+      <abbreviation>FISCALCAL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>14</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_accounting_periods">
+      <value>Accounting Periods</value>
+      <abbreviation>ACCTPER</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>15</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_expense_categories">
+      <value>Expense Categories</value>
+      <abbreviation>EXPCAT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>16</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_expense_report_policies">
+      <value>Expense Report Policies</value>
+      <abbreviation>EXPPOL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>17</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_project_resource_roles">
+      <value>Project Resource Roles</value>
+      <abbreviation>PROJROLE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>18</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_setup_sales">
+      <value>Sales</value>
+      <abbreviation>SETUPSALES</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>19</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_teams">
+      <value>Teams</value>
+      <abbreviation>TEAMS</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>20</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_rules">
+      <value>Rules</value>
+      <abbreviation>RULES</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>21</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_territories">
+      <value>Territories</value>
+      <abbreviation>TERR</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>22</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_marketing">
+      <value>Marketing</value>
+      <abbreviation>MKTG</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>23</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_categories">
+      <value>Categories</value>
+      <abbreviation>CAT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>24</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_audiences">
+      <value>Audiences</value>
+      <abbreviation>AUD</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>25</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_verticals">
+      <value>Verticals</value>
+      <abbreviation>VERT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>26</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_families">
+      <value>Families</value>
+      <abbreviation>FAM</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>27</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_search_engines">
+      <value>Search Engines</value>
+      <abbreviation>SEARCH</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>28</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_channels">
+      <value>Channels</value>
+      <abbreviation>CHAN</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>29</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_offers">
+      <value>Offers</value>
+      <abbreviation>OFFER</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>30</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_support">
+      <value>Support</value>
+      <abbreviation>SUPP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>31</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_support_cases">
+      <value>Support Cases</value>
+      <abbreviation>SUPPCASE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>32</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_users">
+      <value>Users</value>
+      <abbreviation>USERS</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>33</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_roles">
+      <value>Roles</value>
+      <abbreviation>ROLES</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>34</sortorder>
+    </customvalue>
+
+    <!-- List Data Categories and Subcategories -->
+    <customvalue scriptid="val_list_accounting">
+      <value>Accounting</value>
+      <abbreviation>LISTACCT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>35</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_subsidiary">
+      <value>Subsidiary</value>
+      <abbreviation>SUB</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>36</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_department">
+      <value>Department</value>
+      <abbreviation>DEPT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>37</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_location">
+      <value>Location</value>
+      <abbreviation>LOC</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>38</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_classification">
+      <value>Classification</value>
+      <abbreviation>CLASS</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>39</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_account">
+      <value>Account</value>
+      <abbreviation>ACCT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>40</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_activities">
+      <value>Activities</value>
+      <abbreviation>ACT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>41</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_calendar_event">
+      <value>Calendar Event</value>
+      <abbreviation>CALEVENT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>42</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_phone_call">
+      <value>Phone Call</value>
+      <abbreviation>PHONE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>43</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_task">
+      <value>Task</value>
+      <abbreviation>TASK</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>44</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_communications">
+      <value>Communications</value>
+      <abbreviation>COMM</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>45</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_message">
+      <value>Message</value>
+      <abbreviation>MSG</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>46</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_note">
+      <value>Note</value>
+      <abbreviation>NOTE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>47</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_employees">
+      <value>Employees</value>
+      <abbreviation>EMP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>48</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_employee">
+      <value>Employee</value>
+      <abbreviation>EMPLOYEE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>49</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_items">
+      <value>Items</value>
+      <abbreviation>ITEM</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>50</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_item_by_itemtype">
+      <value>Item (by ItemType)</value>
+      <abbreviation>ITEMTYPE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>51</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_payment_instruments">
+      <value>Payment Instruments</value>
+      <abbreviation>PAY</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>52</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_general_token">
+      <value>General Token</value>
+      <abbreviation>TOKEN</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>53</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_payment_card">
+      <value>Payment Card</value>
+      <abbreviation>PAYCARD</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>54</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_payment_card_token">
+      <value>Payment Card Token</value>
+      <abbreviation>CARDTOKEN</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>55</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_relationships">
+      <value>Relationships</value>
+      <abbreviation>REL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>56</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_customer">
+      <value>Customer</value>
+      <abbreviation>CUST</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>57</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_customer_subsidiary_relationship">
+      <value>Customer Subsidiary Relationship</value>
+      <abbreviation>CUSTSUBREL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>58</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_entity_group">
+      <value>Entity Group</value>
+      <abbreviation>ENTGROUP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>59</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_lead">
+      <value>Lead</value>
+      <abbreviation>LEAD</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>60</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_lead_contact">
+      <value>Lead Contact</value>
+      <abbreviation>LEADCONT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>61</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_prospect">
+      <value>Prospect</value>
+      <abbreviation>PROSP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>62</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_prospect_contact">
+      <value>Prospect Contact</value>
+      <abbreviation>PROSPCONT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>63</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_vendor">
+      <value>Vendor</value>
+      <abbreviation>VEND</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>64</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_vendor_subsidiary_relationship">
+      <value>Vendor Subsidiary Relationship</value>
+      <abbreviation>VENDSUBREL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>65</sortorder>
+    </customvalue>
+
+    <!-- Transaction Data Categories and Subcategories -->
+    <customvalue scriptid="val_bank">
+      <value>Bank</value>
+      <abbreviation>BANK</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>66</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_checks">
+      <value>Checks</value>
+      <abbreviation>CHECK</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>67</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_deposits">
+      <value>Deposits</value>
+      <abbreviation>DEP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>68</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_transfers">
+      <value>Transfers</value>
+      <abbreviation>XFER</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>69</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_credit_card_charges">
+      <value>Credit Card Charges</value>
+      <abbreviation>CCCHARGE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>70</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_credit_card_refunds">
+      <value>Credit Card Refunds</value>
+      <abbreviation>CCREFUND</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>71</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_purchases">
+      <value>Purchases</value>
+      <abbreviation>PURCH</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>72</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_purchase_orders">
+      <value>Purchase Orders</value>
+      <abbreviation>PO</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>73</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_requisitions">
+      <value>Requisitions</value>
+      <abbreviation>REQ</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>74</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_requests_for_quote">
+      <value>Requests for Quote</value>
+      <abbreviation>RFQ</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>75</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_purchase_contracts">
+      <value>Purchase Contracts</value>
+      <abbreviation>PCONTRACT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>76</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_blanket_purchase_orders">
+      <value>Blanket Purchase Orders</value>
+      <abbreviation>BPO</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>77</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_purchase_order_receipts">
+      <value>Purchase Order Receipts</value>
+      <abbreviation>PORECEIPT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>78</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_vendor_return_authorizations">
+      <value>Vendor Return Authorizations</value>
+      <abbreviation>VRA</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>79</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_inbound_shipments">
+      <value>Inbound Shipments</value>
+      <abbreviation>INSHIP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>80</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_payables">
+      <value>Payables</value>
+      <abbreviation>PAYBL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>81</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_vendor_bills">
+      <value>Vendor Bills</value>
+      <abbreviation>VBILL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>82</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_bill_payments">
+      <value>Bill Payments</value>
+      <abbreviation>BILLPAY</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>83</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_vendor_prepayments">
+      <value>Vendor Prepayments</value>
+      <abbreviation>VPREPAY</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>84</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_bill_variances">
+      <value>Bill Variances</value>
+      <abbreviation>BILLVAR</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>85</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_vendor_return_credits">
+      <value>Vendor Return Credits</value>
+      <abbreviation>VRCREDIT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>86</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_trans_sales">
+      <value>Sales</value>
+      <abbreviation>TSALES</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>87</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_opportunities">
+      <value>Opportunities</value>
+      <abbreviation>OPP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>88</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_quotes">
+      <value>Quotes</value>
+      <abbreviation>QUOTE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>89</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_sales_orders">
+      <value>Sales Orders</value>
+      <abbreviation>SO</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>90</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_cash_sales">
+      <value>Cash Sales</value>
+      <abbreviation>CASHSALE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>91</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_statement_charges">
+      <value>Statement Charges</value>
+      <abbreviation>STMTCHG</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>92</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_billing">
+      <value>Billing</value>
+      <abbreviation>BILL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>93</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_billing_operations">
+      <value>Billing Operations</value>
+      <abbreviation>BILLOPS</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>94</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_customers">
+      <value>Customers</value>
+      <abbreviation>CUSTRANS</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>95</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_customer_invoices">
+      <value>Customer Invoices</value>
+      <abbreviation>CINV</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>96</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_customer_payments">
+      <value>Customer Payments</value>
+      <abbreviation>CPAY</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>97</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_credit_memos">
+      <value>Credit Memos</value>
+      <abbreviation>CMEMO</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>98</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_refunds">
+      <value>Refunds</value>
+      <abbreviation>REFUND</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>99</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_return_authorizations">
+      <value>Return Authorizations</value>
+      <abbreviation>RMA</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>100</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_item_receipts">
+      <value>Item Receipts</value>
+      <abbreviation>IRECEIPT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>101</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_cash_sale_refunds">
+      <value>Cash Sale Refunds</value>
+      <abbreviation>CSREFUND</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>102</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_finance_charges">
+      <value>Finance Charges</value>
+      <abbreviation>FINCHG</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>103</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_customer_deposits">
+      <value>Customer Deposits</value>
+      <abbreviation>CDEP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>104</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_order_management">
+      <value>Order Management</value>
+      <abbreviation>ORDER</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>105</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_order_fulfillments">
+      <value>Order Fulfillments</value>
+      <abbreviation>FULFILL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>106</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_trans_employees">
+      <value>Employees</value>
+      <abbreviation>TEMPL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>107</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_expense_reports">
+      <value>Expense Reports</value>
+      <abbreviation>EXPRPT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>108</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_time_off">
+      <value>Time Off</value>
+      <abbreviation>TIMEOFF</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>109</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_time_entries">
+      <value>Time Entries</value>
+      <abbreviation>TIMEENT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>110</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_inventory">
+      <value>Inventory</value>
+      <abbreviation>INV</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>111</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_inventory_adjustments">
+      <value>Inventory Adjustments</value>
+      <abbreviation>INVADJ</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>112</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_inventory_counts">
+      <value>Inventory Counts</value>
+      <abbreviation>INVCOUNT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>113</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_inventory_cost_revaluations">
+      <value>Inventory Cost Revaluations</value>
+      <abbreviation>INVREVALC</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>114</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_inventory_bin_transfers">
+      <value>Inventory Bin Transfers</value>
+      <abbreviation>INVBINXFR</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>115</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_inventory_distributions">
+      <value>Inventory Distributions</value>
+      <abbreviation>INVDIST</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>116</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_inventory_transfers">
+      <value>Inventory Transfers</value>
+      <abbreviation>INVXFR</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>117</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_inventory_intercompany_transfer_orders">
+      <value>Inventory Intercompany Transfer Orders</value>
+      <abbreviation>INVICTO</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>118</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_inventory_transfer_orders">
+      <value>Inventory Transfer Orders</value>
+      <abbreviation>INVTO</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>119</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_inventory_status_changes">
+      <value>Inventory Status Changes</value>
+      <abbreviation>INVSTATC</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>120</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_manufacturing">
+      <value>Manufacturing</value>
+      <abbreviation>MFG</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>121</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_work_orders">
+      <value>Work Orders</value>
+      <abbreviation>WO</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>122</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_assembly_builds">
+      <value>Assembly Builds</value>
+      <abbreviation>ASMBUILD</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>123</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_component_issues">
+      <value>Component Issues</value>
+      <abbreviation>COMPISS</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>124</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_completions">
+      <value>Completions</value>
+      <abbreviation>COMPL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>125</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_demand_planning">
+      <value>Demand Planning</value>
+      <abbreviation>DEMAND</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>126</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_item_demand_plans">
+      <value>Item Demand Plans</value>
+      <abbreviation>ITEMDEM</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>127</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_item_supply_plans">
+      <value>Item Supply Plans</value>
+      <abbreviation>ITEMSUP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>128</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_supply_planning">
+      <value>Supply Planning</value>
+      <abbreviation>SUPPLY</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>129</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_supply_plan_definitions">
+      <value>Supply Plan Definitions</value>
+      <abbreviation>SUPDEF</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>130</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_quota_forecast">
+      <value>Quota/Forecast</value>
+      <abbreviation>QUOTA</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>131</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_sales_quotas">
+      <value>Sales Quotas</value>
+      <abbreviation>SQUOTA</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>132</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_rep_forecasts">
+      <value>Rep Forecasts</value>
+      <abbreviation>REPFCAST</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>133</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_manager_forecasts">
+      <value>Manager Forecasts</value>
+      <abbreviation>MGRFCAST</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>134</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_financial">
+      <value>Financial</value>
+      <abbreviation>FIN</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>135</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_journal_entries">
+      <value>Journal Entries</value>
+      <abbreviation>JE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>136</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_intercompany_journal_entries">
+      <value>Intercompany Journal Entries</value>
+      <abbreviation>ICJE</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>137</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_budgets">
+      <value>Budgets</value>
+      <abbreviation>BUDGET</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>138</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_allocation_schedules">
+      <value>Allocation Schedules</value>
+      <abbreviation>ALLOCSCHED</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>139</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_allocation_batches">
+      <value>Allocation Batches</value>
+      <abbreviation>ALLOCBATCH</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>140</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_open_currency_balance_revaluations">
+      <value>Open Currency Balance Revaluations</value>
+      <abbreviation>OCBREVAL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>141</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_project_intercompany_cross_charges">
+      <value>Project Intercompany Cross Charges</value>
+      <abbreviation>PROJICCC</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>142</sortorder>
+    </customvalue>
+
+    <!-- Customizations Categories and Subcategories -->
+    <customvalue scriptid="val_scripts">
+      <value>Scripts</value>
+      <abbreviation>SCRIPT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>143</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_script">
+      <value>Script</value>
+      <abbreviation>SCR</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>144</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_script_deployment">
+      <value>Script Deployment</value>
+      <abbreviation>SCRDEP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>145</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_custom_objects">
+      <value>Custom Objects</value>
+      <abbreviation>COBJ</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>146</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_custom_record_type">
+      <value>Custom Record Type</value>
+      <abbreviation>CRT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>147</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_custom_list">
+      <value>Custom List</value>
+      <abbreviation>CL</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>148</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_custom_field">
+      <value>Custom Field</value>
+      <abbreviation>CF</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>149</sortorder>
+    </customvalue>
+
+    <customvalue scriptid="val_uncategorized">
+      <value>Uncategorized</value>
+      <abbreviation>UNCAT</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>150</sortorder>
+    </customvalue>
+  </customvalues>
+</customlist>

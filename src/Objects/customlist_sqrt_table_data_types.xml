@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customlist scriptid="customlist_sqrt_table_data_types">
+  <label>SuiteQL Table Data Types</label>
+  <description>Classification data types for NetSuite tables based on navigation hierarchy</description>
+  <isinactive>F</isinactive>
+  <isordered>T</isordered>
+  <customvalues>
+    <customvalue scriptid="val_setup_data">
+      <value>Setup Data</value>
+      <abbreviation>SETUP</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>1</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_list_data">
+      <value>List Data</value>
+      <abbreviation>LIST</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>2</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_transaction_data">
+      <value>Transaction Data</value>
+      <abbreviation>TRANS</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>3</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_customizations">
+      <value>Customizations</value>
+      <abbreviation>CUSTOM</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>4</sortorder>
+    </customvalue>
+    <customvalue scriptid="val_system_data">
+      <value>System Data</value>
+      <abbreviation>SYSTEM</abbreviation>
+      <isinactive>F</isinactive>
+      <sortorder>5</sortorder>
+    </customvalue>
+  </customvalues>
+</customlist>
