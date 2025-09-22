@@ -1232,6 +1232,16 @@ The Enhanced SuiteQL Query Tool continues to evolve with exciting new features p
 ### 🗂️ Data Discovery & Management
 - **Table & Field Browser**: Interactive browser for exploring tables and fields available inside NetSuite, with search, filtering, and documentation features
 - **Advanced Autocomplete**: Enhanced autocomplete ability for existing tables and fields, providing intelligent suggestions based on NetSuite schema and query context
+
+### 🎨 UI Improvements (Pre v2.0)
+- **Full Find and Replace**: Comprehensive find and replace functionality across all tabs and text editor windows with regex support and batch operations
+
+### 🔧 Synthetic SQL Enhancements (Pre v2.0)
+- **DESCRIBE Statement**: Enhanced table and field introspection capabilities with detailed metadata output
+- **RESET SEQUENCES**: Administrative commands for sequence management and data maintenance operations
+- **Subquery Support in DML**: Advanced subquery capabilities within INSERT, UPDATE, and DELETE statements for complex data operations
+- **INSERT AS SELECT**: Direct data copying and transformation between tables with SELECT-based INSERT operations
+- **EXPORT Output Function**: Direct CSV export functionality executable from query editor or command line, outputting results directly to NetSuite File Cabinet
 - **Remote Library Integration**: Access to remote query collections and shared query repositories for collaborative query development
 - **Workbooks Integration**: Load and convert saved searches into SuiteQL queries, bridging the gap between traditional saved searches and modern SQL workflows
 - **File Cabinet Browser**: Integrated file management with basic file editing capabilities for managing scripts, templates, and data files
