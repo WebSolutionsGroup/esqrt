@@ -270,6 +270,72 @@ define([
                 }
             }
 
+            // Handle sublists if present
+            if (parsedStatement.sublists && parsedStatement.sublists.length > 0) {
+                log.debug({
+                    title: 'Processing sublists',
+                    details: 'Found ' + parsedStatement.sublists.length + ' sublist(s) to process'
+                });
+
+                for (var s = 0; s < parsedStatement.sublists.length; s++) {
+                    var sublist = parsedStatement.sublists[s];
+
+                    log.debug({
+                        title: 'Adding sublist line',
+                        details: 'Sublist: ' + sublist.sublistId + ', Fields: ' + JSON.stringify(sublist.fields)
+                    });
+
+                    try {
+                        // Debug: Try to get sublist information to help identify correct sublist ID
+                        log.debug({
+                            title: 'Attempting sublist operation',
+                            details: 'Record type: ' + recordType.type + ', Sublist ID: ' + sublist.sublistId
+                        });
+
+                        // Add a new line to the sublist
+                        newRecord.insertLine({
+                            sublistId: sublist.sublistId,
+                            line: 0
+                        });
+
+                        // Set field values for this sublist line
+                        for (var subFieldId in sublist.fields) {
+                            var subValue = sublist.fields[subFieldId];
+
+                            log.debug({
+                                title: 'Setting sublist field',
+                                details: 'Sublist: ' + sublist.sublistId + ', Field: ' + subFieldId + ', Value: ' + subValue
+                            });
+
+                            newRecord.setSublistValue({
+                                sublistId: sublist.sublistId,
+                                fieldId: subFieldId,
+                                line: 0,
+                                value: subValue
+                            });
+                        }
+
+                    } catch (sublistError) {
+                        log.error({
+                            title: 'Sublist processing error',
+                            details: 'Sublist: ' + sublist.sublistId + ', Error: ' + sublistError.message
+                        });
+
+                        // Provide helpful suggestions for common sublist ID mistakes
+                        var suggestion = suggestCorrectSublistId(recordType.type, sublist.sublistId);
+                        var errorMessage = 'Error processing sublist "' + sublist.sublistId + '": ' + sublistError.message;
+                        if (suggestion) {
+                            errorMessage += '\n\nSuggestion: Try using "' + suggestion + '" instead of "' + sublist.sublistId + '"';
+                        }
+
+                        throw error.create({
+                            name: 'SUBLIST_ERROR',
+                            message: errorMessage
+                        });
+                    }
+                }
+            }
+
             // Save the record
             var recordId = newRecord.save();
             createdRecords.push(recordId);
@@ -530,6 +596,61 @@ define([
             });
             return dateString; // Return original if formatting fails
         }
+    }
+
+    /**
+     * Suggest correct sublist ID based on record type and attempted sublist ID
+     *
+     * @param {string} recordType - NetSuite record type
+     * @param {string} attemptedSublistId - The sublist ID that failed
+     * @returns {string|null} Suggested sublist ID or null if no suggestion
+     */
+    function suggestCorrectSublistId(recordType, attemptedSublistId) {
+        // Common sublist ID mappings for different record types
+        var sublistMappings = {
+            'inventorycosttemplate': {
+                'inventorycosttemplatecostdetail': 'costdetail',
+                'costdetail': 'costdetail',
+                'detail': 'costdetail'
+            },
+            'salesorder': {
+                'item': 'item',
+                'items': 'item'
+            },
+            'purchaseorder': {
+                'item': 'item',
+                'items': 'item'
+            },
+            'invoice': {
+                'item': 'item',
+                'items': 'item'
+            },
+            'estimate': {
+                'item': 'item',
+                'items': 'item'
+            }
+        };
+
+        var recordMappings = sublistMappings[recordType.toLowerCase()];
+        if (recordMappings) {
+            var suggestion = recordMappings[attemptedSublistId.toLowerCase()];
+            if (suggestion) {
+                return suggestion;
+            }
+        }
+
+        // Generic suggestions based on common patterns
+        if (attemptedSublistId.toLowerCase().includes('costdetail')) {
+            return 'costdetail';
+        }
+        if (attemptedSublistId.toLowerCase().includes('item')) {
+            return 'item';
+        }
+        if (attemptedSublistId.toLowerCase().includes('line')) {
+            return 'item';
+        }
+
+        return null;
     }
 
     // Public API

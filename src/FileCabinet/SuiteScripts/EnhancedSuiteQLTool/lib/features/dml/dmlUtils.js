@@ -25,6 +25,14 @@ define(['N/record', 'N/search', 'N/log'], function(record, search, log) {
             details: 'Original: "' + tableName + '", Lowercase: "' + lowerTableName + '"'
         });
 
+        // Debug: Check if we have the inventory cost template mapping
+        if (lowerTableName === 'inventorycosttemplate') {
+            log.debug({
+                title: 'determineRecordType - InventoryCostTemplate Debug',
+                details: 'Found inventorycosttemplate, using string literal "inventorycosttemplate"'
+            });
+        }
+
         // Custom record types (case-insensitive)
         if (lowerTableName.startsWith('customrecord_')) {
             return {
@@ -96,26 +104,71 @@ define(['N/record', 'N/search', 'N/log'], function(record, search, log) {
             'location': record.Type.LOCATION,
             'department': record.Type.DEPARTMENT,
             'classification': record.Type.CLASSIFICATION,
-            'subsidiary': record.Type.SUBSIDIARY
+            'subsidiary': record.Type.SUBSIDIARY,
+
+            // Inventory and costing - using string literals since constants may not exist
+            'inventorycosttemplate': 'inventorycosttemplate',
+            'inventorycosttemplatecostdetail': 'inventorycosttemplatecostdetail',
+            'inventorynumber': record.Type.INVENTORY_NUMBER,
+            'lotnumberedassemblyitem': record.Type.LOT_NUMBERED_ASSEMBLY_ITEM,
+            'lotnumberedinventoryitem': record.Type.LOT_NUMBERED_INVENTORY_ITEM,
+            'serializedassemblyitem': record.Type.SERIALIZED_ASSEMBLY_ITEM,
+            'serializedinventoryitem': record.Type.SERIALIZED_INVENTORY_ITEM,
+
+            // Lists and other records
+            'currency': record.Type.CURRENCY,
+            'paymentmethod': record.Type.PAYMENT_METHOD,
+            'paymentterm': record.Type.TERM,
+            'term': record.Type.TERM,
+            'taxtype': record.Type.TAX_TYPE,
+            'taxcode': record.Type.TAX_CODE,
+            'salestaxitem': record.Type.SALES_TAX_ITEM,
+            'discountitem': record.Type.DISCOUNT_ITEM,
+            'markupitem': record.Type.MARKUP_ITEM,
+            'paymentitem': record.Type.PAYMENT_ITEM,
+            'subtotalitem': record.Type.SUBTOTAL_ITEM,
+            'otherchargeitem': record.Type.OTHER_CHARGE_ITEM,
+            'giftcertificateitem': record.Type.GIFT_CERTIFICATE_ITEM
         };
 
         var recordType = standardRecordMap[tableName.toLowerCase()];
+
+        log.debug({
+            title: 'determineRecordType - Lookup Result',
+            details: 'Looking up "' + tableName.toLowerCase() + '", Found: ' + (recordType ? '"' + recordType + '"' : 'null')
+        });
+
         if (recordType) {
-            return {
+            var result = {
                 type: recordType,
                 isCustomRecord: false,
                 isCustomList: false
             };
+            log.debug({
+                title: 'determineRecordType - Standard Record Found',
+                details: 'Returning: ' + JSON.stringify(result)
+            });
+            return result;
         }
 
         // Default to treating as custom record if not found
         // But don't add prefix if table name already has a valid NetSuite prefix
+        log.debug({
+            title: 'determineRecordType - Fallback to Custom Record',
+            details: 'Table "' + tableName + '" not found in standard record map, treating as custom record'
+        });
+
         var finalType;
         if (lowerTableName.startsWith('customrecord_') || lowerTableName.startsWith('customlist_')) {
             finalType = lowerTableName;  // Use as-is if already has valid prefix
         } else {
             finalType = 'customrecord_' + lowerTableName;  // Add prefix for unknown tables
         }
+
+        log.debug({
+            title: 'determineRecordType - Final Custom Record Type',
+            details: 'Final type: "' + finalType + '"'
+        });
 
         return {
             type: finalType,

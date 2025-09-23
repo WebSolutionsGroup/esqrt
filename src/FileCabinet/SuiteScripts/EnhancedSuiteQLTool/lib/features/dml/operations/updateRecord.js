@@ -80,9 +80,14 @@ define([
      * @returns {Object} Execution result
      */
     function execute(parsedStatement) {
+        var debugDetails = 'Table: ' + parsedStatement.tableName + ', SET: ' + JSON.stringify(parsedStatement.setFields) + ', WHERE: ' + JSON.stringify(parsedStatement.whereCondition);
+        if (parsedStatement.sublists && parsedStatement.sublists.length > 0) {
+            debugDetails += ', SUBLISTS: ' + JSON.stringify(parsedStatement.sublists);
+        }
+
         log.debug({
             title: 'Executing UPDATE',
-            details: 'Table: ' + parsedStatement.tableName + ', SET: ' + JSON.stringify(parsedStatement.setFields) + ', WHERE: ' + JSON.stringify(parsedStatement.whereCondition)
+            details: debugDetails
         });
 
         try {
@@ -199,7 +204,20 @@ define([
         for (var i = 0; i < recordIds.length; i++) {
             try {
                 var recordId = recordIds[i];
-                updateSingleRecord(recordId, recordType.type, parsedStatement.setFields);
+
+                // Check if we have sublists to update
+                if (parsedStatement.sublists && parsedStatement.sublists.length > 0) {
+                    // Extract sublist conditions from WHERE clause
+                    var sublistConditions = null;
+                    if (parsedStatement.whereCondition && parsedStatement.whereCondition.sublistConditions) {
+                        sublistConditions = parsedStatement.whereCondition.sublistConditions;
+                    }
+
+                    updateRecordWithSublists(recordId, recordType.type, parsedStatement.setFields, parsedStatement.sublists, sublistConditions);
+                } else {
+                    updateSingleRecord(recordId, recordType.type, parsedStatement.setFields);
+                }
+
                 updatedRecords.push(recordId);
 
                 log.debug({
@@ -249,18 +267,32 @@ define([
             });
         }
 
+        // Handle new structure with main and sublist conditions
+        var mainCondition = whereCondition;
+        if (whereCondition.mainCondition !== undefined) {
+            // New structure: {mainCondition: ..., sublistConditions: [...]}
+            mainCondition = whereCondition.mainCondition;
+
+            if (!mainCondition) {
+                throw error.create({
+                    name: 'MISSING_MAIN_WHERE_CONDITION',
+                    message: 'UPDATE statements must include a main WHERE condition to identify records'
+                });
+            }
+        }
+
         // Handle compound conditions (AND/OR)
-        if (whereCondition.type === 'COMPOUND') {
-            return findRecordsWithCompoundCondition(whereCondition, recordType);
+        if (mainCondition.type === 'COMPOUND') {
+            return findRecordsWithCompoundCondition(mainCondition, recordType);
         }
 
         // Handle simple conditions
         if (recordType.isCustomList) {
             // For custom lists, use the custom list search logic
-            return findCustomListRecordsWithSimpleCondition(whereCondition, recordType);
+            return findCustomListRecordsWithSimpleCondition(mainCondition, recordType);
         } else {
             // For regular records, use the standard logic
-            return findRecordsWithSimpleCondition(whereCondition, recordType);
+            return findRecordsWithSimpleCondition(mainCondition, recordType);
         }
     }
 
@@ -285,7 +317,7 @@ define([
             try {
                 return findRecordsWithCombinedAndConditions(conditions, recordType);
             } catch (e) {
-                log.warn({
+                log.audit({
                     title: 'Combined AND search failed, falling back to intersection method',
                     details: 'Error: ' + e.message
                 });
@@ -510,7 +542,7 @@ define([
                     return null; // Unsupported condition type
             }
         } catch (e) {
-            log.warn({
+            log.audit({
                 title: 'Error converting condition to filter',
                 details: 'Condition: ' + JSON.stringify(condition) + ', Error: ' + e.message
             });
@@ -656,7 +688,7 @@ define([
                 return results;
                 
             } catch (stringFilterError) {
-                log.warn({
+                log.audit({
                     title: 'String-based filter failed',
                     details: 'Error: ' + stringFilterError.message
                 });
@@ -1025,7 +1057,7 @@ define([
                     values: [value1, value2]
                 });
             default:
-                log.warn({
+                log.audit({
                     title: 'Unsupported condition type for custom list',
                     details: 'Type: ' + condition.type
                 });
@@ -1353,7 +1385,7 @@ define([
             var fieldId = fieldIds[i];
             // Validate field before attempting to set it
             if (!dmlUtils.validateField(recordType, fieldId)) {
-                log.warn({
+                log.audit({
                     title: 'Invalid field detected',
                     details: 'Field: ' + fieldId + ', Record Type: ' + recordType
                 });
@@ -1367,6 +1399,432 @@ define([
             id: recordId,
             values: values
         });
+    }
+
+    /**
+     * Update a single record with sublist support
+     *
+     * @param {string} recordId - Record internal ID
+     * @param {string} recordType - NetSuite record type
+     * @param {Object} setFields - Main record fields to update
+     * @param {Array} sublists - Sublists to update
+     * @param {Array} sublistConditions - Sublist WHERE conditions (optional)
+     */
+    function updateRecordWithSublists(recordId, recordType, setFields, sublists, sublistConditions) {
+        log.debug({
+            title: 'Updating record with sublists',
+            details: 'Record ID: ' + recordId + ', Type: ' + recordType + ', Sublists: ' + sublists.length + ', SublistConditions: ' + (sublistConditions ? JSON.stringify(sublistConditions) : 'none')
+        });
+
+        // Load the record for sublist modifications (use dynamic mode for sublist operations)
+        var recordObj = record.load({
+            type: recordType,
+            id: recordId,
+            isDynamic: true
+        });
+
+        // Update main record fields first
+        if (setFields && Object.keys(setFields).length > 0) {
+            for (var fieldId in setFields) {
+                var value = setFields[fieldId];
+
+                log.debug({
+                    title: 'Setting main field',
+                    details: 'Field: ' + fieldId + ', Value: ' + value
+                });
+
+                try {
+                    recordObj.setValue({
+                        fieldId: fieldId,
+                        value: value
+                    });
+                } catch (fieldError) {
+                    log.error({
+                        title: 'Error setting main field',
+                        details: 'Field: ' + fieldId + ', Error: ' + fieldError.message
+                    });
+                    throw fieldError;
+                }
+            }
+        }
+
+        // Update sublists
+        for (var s = 0; s < sublists.length; s++) {
+            var sublist = sublists[s];
+
+            log.debug({
+                title: 'Processing sublist',
+                details: 'Sublist: ' + sublist.sublistId + ', Fields: ' + JSON.stringify(sublist.fields)
+            });
+
+            try {
+                // Get the number of lines in the sublist
+                var lineCount = recordObj.getLineCount({
+                    sublistId: sublist.sublistId
+                });
+
+                log.debug({
+                    title: 'Sublist line count',
+                    details: 'Sublist: ' + sublist.sublistId + ', Lines: ' + lineCount
+                });
+
+                // Debug: Show all available fields in the first sublist line
+                if (lineCount > 0) {
+                    try {
+                        // Try to get some common field values to help identify correct field names
+                        var debugFields = [
+                            'item', 'overheadtype', 'overheadType', 'overhead_type', 'type', 'costtype', 'costType', 'cost_type',
+                            'category', 'costcategory', 'costCategory',
+                            'overheadAmount', 'overheadamount', 'overhead_amount', 'amount', 'cost', 'value', 'rate',
+                            'overheadcost', 'overheadCost', 'overhead_cost', 'unitcost', 'unitCost', 'unit_cost',
+                            'fixedamount', 'fixedAmount', 'fixed_amount', 'variableamount', 'variableAmount', 'variable_amount'
+                        ];
+                        var fieldValues = {};
+
+                        for (var f = 0; f < debugFields.length; f++) {
+                            try {
+                                var fieldValue = recordObj.getSublistValue({
+                                    sublistId: sublist.sublistId,
+                                    fieldId: debugFields[f],
+                                    line: 0
+                                });
+                                if (fieldValue !== null && fieldValue !== undefined && fieldValue !== '') {
+                                    fieldValues[debugFields[f]] = fieldValue;
+                                }
+                            } catch (e) {
+                                // Field doesn't exist, skip
+                            }
+                        }
+
+                        log.audit({
+                            title: 'Available sublist fields (Line 0)',
+                            details: 'Sublist: ' + sublist.sublistId + ', Fields with values: ' + JSON.stringify(fieldValues)
+                        });
+                    } catch (debugError) {
+                        log.error({
+                            title: 'Error debugging sublist fields',
+                            details: 'Error: ' + debugError.message
+                        });
+                    }
+                }
+
+                // Find which lines to update based on sublist conditions
+                var linesToUpdate = [];
+
+                if (sublistConditions) {
+                    // Find sublist condition for this sublist
+                    var relevantCondition = null;
+                    for (var c = 0; c < sublistConditions.length; c++) {
+                        if (sublistConditions[c].sublistId === sublist.sublistId) {
+                            relevantCondition = sublistConditions[c].condition;
+                            break;
+                        }
+                    }
+
+                    if (relevantCondition) {
+                        // Check each line against the condition
+                        for (var line = 0; line < lineCount; line++) {
+                            log.debug({
+                                title: 'Checking sublist line against condition',
+                                details: 'Sublist: ' + sublist.sublistId + ', Line: ' + line + ', Condition: ' + JSON.stringify(relevantCondition)
+                            });
+
+                            if (evaluateSublistLineCondition(recordObj, sublist.sublistId, line, relevantCondition)) {
+                                linesToUpdate.push(line);
+                                log.debug({
+                                    title: 'Sublist line matches condition',
+                                    details: 'Sublist: ' + sublist.sublistId + ', Line: ' + line + ' will be updated'
+                                });
+                            } else {
+                                log.debug({
+                                    title: 'Sublist line does not match condition',
+                                    details: 'Sublist: ' + sublist.sublistId + ', Line: ' + line + ' will be skipped'
+                                });
+                            }
+                        }
+
+                        log.debug({
+                            title: 'Sublist lines matching condition',
+                            details: 'Sublist: ' + sublist.sublistId + ', Lines to update: ' + JSON.stringify(linesToUpdate)
+                        });
+                    } else {
+                        // No condition for this sublist, update all lines
+                        for (var line = 0; line < lineCount; line++) {
+                            linesToUpdate.push(line);
+                        }
+                    }
+                } else {
+                    // No sublist conditions, update all lines
+                    for (var line = 0; line < lineCount; line++) {
+                        linesToUpdate.push(line);
+                    }
+                }
+
+                // Update the selected lines (using dynamic record methods)
+                for (var i = 0; i < linesToUpdate.length; i++) {
+                    var lineToUpdate = linesToUpdate[i];
+
+                    log.debug({
+                        title: 'Updating sublist line (dynamic mode)',
+                        details: 'Sublist: ' + sublist.sublistId + ', Line: ' + lineToUpdate
+                    });
+
+                    // Select the line for editing
+                    recordObj.selectLine({
+                        sublistId: sublist.sublistId,
+                        line: lineToUpdate
+                    });
+
+                    for (var subFieldId in sublist.fields) {
+                        var subValue = sublist.fields[subFieldId];
+
+                        // Get the current value before updating
+                        var currentValue = recordObj.getCurrentSublistValue({
+                            sublistId: sublist.sublistId,
+                            fieldId: subFieldId
+                        });
+
+                        log.debug({
+                            title: 'Setting sublist field (dynamic mode)',
+                            details: 'Sublist: ' + sublist.sublistId + ', Line: ' + lineToUpdate + ', Field: ' + subFieldId + ', Current: ' + currentValue + ', New: ' + subValue
+                        });
+
+                        recordObj.setCurrentSublistValue({
+                            sublistId: sublist.sublistId,
+                            fieldId: subFieldId,
+                            value: subValue
+                        });
+
+                        // Verify the value was set
+                        var verifyValue = recordObj.getCurrentSublistValue({
+                            sublistId: sublist.sublistId,
+                            fieldId: subFieldId
+                        });
+
+                        log.debug({
+                            title: 'Sublist field value after setting (dynamic mode)',
+                            details: 'Sublist: ' + sublist.sublistId + ', Line: ' + lineToUpdate + ', Field: ' + subFieldId + ', Verified: ' + verifyValue
+                        });
+                    }
+
+                    // Commit the line changes
+                    recordObj.commitLine({
+                        sublistId: sublist.sublistId
+                    });
+
+                    log.debug({
+                        title: 'Committed sublist line',
+                        details: 'Sublist: ' + sublist.sublistId + ', Line: ' + lineToUpdate
+                    });
+                }
+
+            } catch (sublistError) {
+                log.error({
+                    title: 'Sublist update error',
+                    details: 'Sublist: ' + sublist.sublistId + ', Error: ' + sublistError.message
+                });
+
+                throw error.create({
+                    name: 'SUBLIST_UPDATE_ERROR',
+                    message: 'Error updating sublist "' + sublist.sublistId + '": ' + sublistError.message
+                });
+            }
+        }
+
+        // Save the record
+        log.debug({
+            title: 'About to save record',
+            details: 'Record ID: ' + recordId + ', Type: ' + recordType
+        });
+
+        try {
+            var savedId = recordObj.save();
+
+            log.audit({
+                title: 'Record with sublists updated successfully',
+                details: 'Record ID: ' + savedId + ', Main fields updated: ' + (setFields ? Object.keys(setFields).length : 0) + ', Sublists processed: ' + sublists.length
+            });
+
+            // Verify the changes were actually saved by reloading the record
+            try {
+                var verifyRecord = record.load({
+                    type: recordType,
+                    id: savedId,
+                    isDynamic: false
+                });
+
+                var verifyLineCount = verifyRecord.getLineCount({
+                    sublistId: 'costdetail'
+                });
+
+                if (verifyLineCount > 0) {
+                    var verifyValue = verifyRecord.getSublistValue({
+                        sublistId: 'costdetail',
+                        fieldId: 'overheadamount',
+                        line: 0
+                    });
+
+                    log.audit({
+                        title: 'Post-save verification',
+                        details: 'Record ID: ' + savedId + ', overheadamount value after save: ' + verifyValue
+                    });
+                } else {
+                    log.audit({
+                        title: 'Post-save verification',
+                        details: 'Record ID: ' + savedId + ', No sublist lines found after save'
+                    });
+                }
+            } catch (verifyError) {
+                log.error({
+                    title: 'Post-save verification failed',
+                    details: 'Error: ' + verifyError.message
+                });
+            }
+
+        } catch (saveError) {
+            log.error({
+                title: 'Record save failed',
+                details: 'Error: ' + saveError.message
+            });
+            throw saveError;
+        }
+    }
+
+    /**
+     * Evaluate if a sublist line matches a condition
+     *
+     * @param {Object} recordObj - NetSuite record object
+     * @param {string} sublistId - Sublist ID
+     * @param {number} line - Line number
+     * @param {Object} condition - Condition to evaluate
+     * @returns {boolean} True if line matches condition
+     */
+    function evaluateSublistLineCondition(recordObj, sublistId, line, condition) {
+        try {
+            log.debug({
+                title: 'evaluateSublistLineCondition - Entry',
+                details: 'Sublist: ' + sublistId + ', Line: ' + line + ', Condition type: ' + condition.type + ', Field: ' + condition.field + ', Full condition: ' + JSON.stringify(condition)
+            });
+
+            // For compound conditions, handle recursively first
+            if (condition.type === 'COMPOUND') {
+                log.debug({
+                    title: 'Processing compound condition',
+                    details: 'Operator: ' + condition.operator + ', Conditions count: ' + (condition.conditions ? condition.conditions.length : 'none')
+                });
+
+                if (condition.operator === 'AND') {
+                    // Handle array-based conditions structure
+                    if (condition.conditions && Array.isArray(condition.conditions)) {
+                        var allMatch = true;
+                        for (var i = 0; i < condition.conditions.length; i++) {
+                            if (!evaluateSublistLineCondition(recordObj, sublistId, line, condition.conditions[i])) {
+                                allMatch = false;
+                                break;
+                            }
+                        }
+                        return allMatch;
+                    } else if (condition.left && condition.right) {
+                        // Handle left/right structure
+                        return evaluateSublistLineCondition(recordObj, sublistId, line, condition.left) &&
+                               evaluateSublistLineCondition(recordObj, sublistId, line, condition.right);
+                    }
+                } else if (condition.operator === 'OR') {
+                    // Handle array-based conditions structure
+                    if (condition.conditions && Array.isArray(condition.conditions)) {
+                        var anyMatch = false;
+                        for (var i = 0; i < condition.conditions.length; i++) {
+                            if (evaluateSublistLineCondition(recordObj, sublistId, line, condition.conditions[i])) {
+                                anyMatch = true;
+                                break;
+                            }
+                        }
+                        return anyMatch;
+                    } else if (condition.left && condition.right) {
+                        // Handle left/right structure
+                        return evaluateSublistLineCondition(recordObj, sublistId, line, condition.left) ||
+                               evaluateSublistLineCondition(recordObj, sublistId, line, condition.right);
+                    }
+                }
+                return false;
+            }
+
+            // For simple conditions, get the field value
+            if (!condition.field) {
+                log.error({
+                    title: 'Missing field in condition',
+                    details: 'Condition: ' + JSON.stringify(condition)
+                });
+                return false;
+            }
+
+            var fieldValue = recordObj.getSublistValue({
+                sublistId: sublistId,
+                fieldId: condition.field,
+                line: line
+            });
+
+            log.debug({
+                title: 'Evaluating sublist line condition',
+                details: 'Sublist: ' + sublistId + ', Line: ' + line + ', Field: ' + condition.field + ', Value: ' + fieldValue + ', Condition: ' + JSON.stringify(condition)
+            });
+
+            switch (condition.type) {
+                case 'EQUALS':
+                case 'COMPARISON':  // Handle both EQUALS and COMPARISON types
+                    if (condition.operator === '=') {
+                        return fieldValue == condition.value;
+                    } else if (condition.operator === '!=') {
+                        return fieldValue != condition.value;
+                    } else if (condition.operator === '>') {
+                        return parseFloat(fieldValue) > parseFloat(condition.value);
+                    } else if (condition.operator === '>=') {
+                        return parseFloat(fieldValue) >= parseFloat(condition.value);
+                    } else if (condition.operator === '<') {
+                        return parseFloat(fieldValue) < parseFloat(condition.value);
+                    } else if (condition.operator === '<=') {
+                        return parseFloat(fieldValue) <= parseFloat(condition.value);
+                    } else if (condition.operator === 'LIKE') {
+                        var pattern = condition.value.replace(/%/g, '.*');
+                        var regex = new RegExp('^' + pattern + '$', 'i');
+                        return regex.test(String(fieldValue));
+                    }
+                    return fieldValue == condition.value; // Default to equals
+                case 'NOT_EQUALS':
+                    return fieldValue != condition.value;
+                case 'GREATER_THAN':
+                    return parseFloat(fieldValue) > parseFloat(condition.value);
+                case 'GREATER_THAN_OR_EQUAL':
+                    return parseFloat(fieldValue) >= parseFloat(condition.value);
+                case 'LESS_THAN':
+                    return parseFloat(fieldValue) < parseFloat(condition.value);
+                case 'LESS_THAN_OR_EQUAL':
+                    return parseFloat(fieldValue) <= parseFloat(condition.value);
+                case 'LIKE':
+                    var pattern = condition.value.replace(/%/g, '.*');
+                    var regex = new RegExp('^' + pattern + '$', 'i');
+                    return regex.test(String(fieldValue));
+                case 'COMPOUND':
+                    // This should not be reached since compound conditions are handled at the top
+                    log.error({
+                        title: 'Compound condition reached switch statement',
+                        details: 'This should have been handled earlier. Condition: ' + JSON.stringify(condition)
+                    });
+                    return false;
+                default:
+                    log.audit({
+                        title: 'Unsupported sublist condition type',
+                        details: 'Type: ' + condition.type + ', Full condition: ' + JSON.stringify(condition)
+                    });
+                    return false;
+            }
+        } catch (e) {
+            log.error({
+                title: 'Error evaluating sublist condition',
+                details: 'Sublist: ' + sublistId + ', Line: ' + line + ', Error: ' + e.message
+            });
+            return false;
+        }
     }
 
     /**

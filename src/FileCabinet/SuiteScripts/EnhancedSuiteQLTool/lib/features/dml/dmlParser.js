@@ -730,14 +730,27 @@ define(['N/log', 'N/error'], function(log, error) {
             details: 'Remainder: "' + remainder + '", SET: "' + setClause + '", WHERE: "' + whereClause + '"'
         });
 
-        return {
+        var parsedSetClause = parseSetClause(setClause);
+        var result = {
             operation: 'UPDATE',
             tableName: tableName,
             recordType: null, // Will be determined based on table name
-            setFields: parseSetClause(setClause),
             whereCondition: whereClause ? parseWhereClause(whereClause) : null,
             isPreview: isPreview
         };
+
+        // Handle the new structure that can return either just fields or fields + sublists
+        if (parsedSetClause.fields) {
+            result.setFields = parsedSetClause.fields;
+            if (parsedSetClause.sublists) {
+                result.sublists = parsedSetClause.sublists;
+            }
+        } else {
+            // Backward compatibility - if parseSetClause returns just fields
+            result.setFields = parsedSetClause;
+        }
+
+        return result;
     }
 
     /**
@@ -835,7 +848,19 @@ define(['N/log', 'N/error'], function(log, error) {
     function parseInsertSetSyntax(result, remainder) {
         // Remove SET keyword
         var setClause = remainder.replace(/^\s*SET\s+/i, '');
-        result.fields = parseSetClause(setClause);
+        var parsedSetClause = parseSetClause(setClause);
+
+        // Handle the new structure that can return either just fields or fields + sublists
+        if (parsedSetClause.fields) {
+            result.fields = parsedSetClause.fields;
+            if (parsedSetClause.sublists) {
+                result.sublists = parsedSetClause.sublists;
+            }
+        } else {
+            // Backward compatibility - if parseSetClause returns just fields
+            result.fields = parsedSetClause;
+        }
+
         return result;
     }
 
@@ -1025,7 +1050,12 @@ define(['N/log', 'N/error'], function(log, error) {
         });
 
         var fields = {};
-        var assignments = setClause.split(',');
+        var sublists = [];
+
+        // First, extract SUBLIST clauses before processing regular assignments
+        var remainingClause = extractSublistClauses(setClause, sublists);
+
+        var assignments = remainingClause.split(',');
 
         log.debug({
             title: 'parseSetClause assignments',
@@ -1060,7 +1090,79 @@ define(['N/log', 'N/error'], function(log, error) {
             fields[fieldName] = parseValue(value);
         }
 
-        return fields;
+        // Return both fields and sublists
+        var result = {
+            fields: fields
+        };
+
+        if (sublists.length > 0) {
+            result.sublists = sublists;
+        }
+
+        return result;
+    }
+
+    /**
+     * Extract SUBLIST clauses from SET clause
+     *
+     * @param {string} setClause - Original SET clause
+     * @param {Array} sublists - Array to populate with sublist data
+     * @returns {string} Remaining clause after removing SUBLIST clauses
+     */
+    function extractSublistClauses(setClause, sublists) {
+        log.debug({
+            title: 'extractSublistClauses',
+            details: 'Original clause: "' + setClause + '"'
+        });
+
+        var remainingClause = setClause;
+
+        // Pattern to match: SUBLIST sublistId (field1 = value1, field2 = value2)
+        var sublistPattern = /SUBLIST\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(\s*([^)]+)\s*\)/gi;
+        var match;
+
+        while ((match = sublistPattern.exec(setClause)) !== null) {
+            var sublistId = match[1];
+            var sublistFields = match[2];
+
+            log.debug({
+                title: 'Found SUBLIST clause',
+                details: 'Sublist: "' + sublistId + '", Fields: "' + sublistFields + '"'
+            });
+
+            // Parse the sublist fields (field1 = value1, field2 = value2)
+            var sublistFieldsObj = {};
+            var fieldAssignments = sublistFields.split(',');
+
+            for (var i = 0; i < fieldAssignments.length; i++) {
+                var assignment = fieldAssignments[i].trim();
+                var equalIndex = assignment.indexOf('=');
+
+                if (equalIndex !== -1) {
+                    var fieldName = assignment.substring(0, equalIndex).trim();
+                    var value = assignment.substring(equalIndex + 1).trim();
+                    sublistFieldsObj[fieldName] = parseValue(value);
+                }
+            }
+
+            sublists.push({
+                sublistId: sublistId,
+                fields: sublistFieldsObj
+            });
+
+            // Remove this SUBLIST clause from the remaining clause
+            remainingClause = remainingClause.replace(match[0], '');
+        }
+
+        // Clean up any extra commas left behind
+        remainingClause = remainingClause.replace(/,\s*,/g, ',').replace(/^,\s*|,\s*$/g, '').trim();
+
+        log.debug({
+            title: 'extractSublistClauses result',
+            details: 'Sublists found: ' + sublists.length + ', Remaining: "' + remainingClause + '"'
+        });
+
+        return remainingClause;
     }
 
     /**
@@ -1076,14 +1178,96 @@ define(['N/log', 'N/error'], function(log, error) {
 
         var trimmed = whereClause.trim();
 
-        // Try to parse as compound condition first
-        var compoundCondition = parseCompoundCondition(trimmed);
-        if (compoundCondition) {
-            return compoundCondition;
+        // Check for sublist conditions and extract them
+        var sublistConditions = [];
+        var mainWhereClause = extractSublistWhereConditions(trimmed, sublistConditions);
+
+        // Parse the main WHERE clause (non-sublist conditions)
+        var mainCondition = null;
+        if (mainWhereClause && mainWhereClause.trim()) {
+            // Try to parse as compound condition first
+            var compoundCondition = parseCompoundCondition(mainWhereClause);
+            if (compoundCondition) {
+                mainCondition = compoundCondition;
+            } else {
+                // Fall back to simple condition parsing
+                mainCondition = parseSimpleCondition(mainWhereClause);
+            }
         }
 
-        // Fall back to simple condition parsing
-        return parseSimpleCondition(trimmed);
+        // Return both main and sublist conditions
+        var result = {
+            mainCondition: mainCondition
+        };
+
+        if (sublistConditions.length > 0) {
+            result.sublistConditions = sublistConditions;
+        }
+
+        // For backward compatibility, if no sublist conditions, return just the main condition
+        if (sublistConditions.length === 0) {
+            return mainCondition;
+        }
+
+        return result;
+    }
+
+    /**
+     * Extract SUBLIST WHERE conditions from WHERE clause
+     *
+     * @param {string} whereClause - Original WHERE clause
+     * @param {Array} sublistConditions - Array to populate with sublist conditions
+     * @returns {string} Remaining WHERE clause after removing SUBLIST conditions
+     */
+    function extractSublistWhereConditions(whereClause, sublistConditions) {
+        log.debug({
+            title: 'extractSublistWhereConditions',
+            details: 'Original clause: "' + whereClause + '"'
+        });
+
+        var remainingClause = whereClause;
+
+        // Pattern to match: AND SUBLIST sublistId (condition)
+        var sublistPattern = /\bAND\s+SUBLIST\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(\s*([^)]+)\s*\)/gi;
+        var match;
+
+        while ((match = sublistPattern.exec(whereClause)) !== null) {
+            var sublistId = match[1];
+            var sublistConditionStr = match[2];
+
+            log.debug({
+                title: 'Found SUBLIST WHERE condition',
+                details: 'Sublist: "' + sublistId + '", Condition: "' + sublistConditionStr + '"'
+            });
+
+            // Parse the sublist condition (could be simple or compound)
+            var parsedSublistCondition;
+
+            // Check if it's a compound condition (contains AND/OR)
+            if (sublistConditionStr.match(/\s+(AND|OR)\s+/i)) {
+                parsedSublistCondition = parseCompoundCondition(sublistConditionStr);
+            } else {
+                parsedSublistCondition = parseSimpleCondition(sublistConditionStr);
+            }
+
+            sublistConditions.push({
+                sublistId: sublistId,
+                condition: parsedSublistCondition
+            });
+
+            // Remove this SUBLIST condition from the remaining clause
+            remainingClause = remainingClause.replace(match[0], '');
+        }
+
+        // Clean up any extra AND/OR operators left behind
+        remainingClause = remainingClause.replace(/\s+(AND|OR)\s*$/i, '').replace(/^\s*(AND|OR)\s+/i, '').trim();
+
+        log.debug({
+            title: 'extractSublistWhereConditions result',
+            details: 'Sublist conditions found: ' + sublistConditions.length + ', Remaining: "' + remainingClause + '"'
+        });
+
+        return remainingClause;
     }
 
     /**

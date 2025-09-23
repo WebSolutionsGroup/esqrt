@@ -31,8 +31,11 @@ define([
     '../../features/query/queryExecution',
     '../../features/query/parameterizedQueries',
     '../../features/savedQueries/savedQueriesManager',
-    '../../features/ui/layoutUtils'
-], function(constants, themes, modals, sidebarSections, queryTabs, mainLayout, editorSetup, historyManager, csvExporter, csvOptionsModal, jsonExporter, tableRenderer, controlsOptions, queryExecution, parameterizedQueries, savedQueriesManager, layoutUtils) {
+    '../../features/ui/layoutUtils',
+    '../../features/tableReference/tableReferenceData',
+    '../../features/tableReference/tableReferenceTabs',
+    '../../features/tableReference/tableReferenceComponents'
+], function(constants, themes, modals, sidebarSections, queryTabs, mainLayout, editorSetup, historyManager, csvExporter, csvOptionsModal, jsonExporter, tableRenderer, controlsOptions, queryExecution, parameterizedQueries, savedQueriesManager, layoutUtils, tableReferenceData, tableReferenceTabs, tableReferenceComponents) {
 
     /**
      * Get all JavaScript functions from feature modules
@@ -147,9 +150,15 @@ define([
                     codeEditor;
 
                 // Debug logging
-                // console.log('Enhanced SuiteQL Query Tool - Starting initialization...');
-                // console.log('jQuery available:', typeof jQuery !== 'undefined');
-                // console.log('CodeMirror available:', typeof CodeMirror !== 'undefined');
+                console.log('Enhanced SuiteQL Query Tool - Starting initialization...');
+                console.log('jQuery available:', typeof jQuery !== 'undefined');
+                console.log('CodeMirror available:', typeof CodeMirror !== 'undefined');
+
+                // Update loading message
+                const loadingElement = document.querySelector('.loading-message');
+                if (loadingElement) {
+                    loadingElement.textContent = 'Dependencies loaded, initializing components...';
+                }
 
                 window.jQuery = window.$ = jQuery;
 
@@ -161,22 +170,22 @@ define([
                 // Initialize responsive layout
                 try {
                     initializeResponsiveLayout();
-                    // console.log('Responsive layout initialized');
+                    console.log('Responsive layout initialized');
                 } catch(e) {
-                    // Silently handle layout initialization errors
+                    console.error('Error initializing responsive layout:', e);
                 }
 
                 // Initialize resizable layout
                 try {
                     initializeResizers();
-                    // console.log('Resizers initialized');
+                    console.log('Resizers initialized');
                 } catch(e) {
                     console.error('Error initializing resizers:', e);
                 }
 
                 // Set initial theme
                 document.body.classList.add('light-theme');
-                // console.log('Theme set to light');
+                console.log('Theme set to light');
 
                 // Include all JavaScript functions from modular architecture
                 ${editorSetup.getAllEditorJS()}
@@ -192,36 +201,68 @@ define([
                 ${parameterizedQueries.getParameterModalJS()}
                 ${savedQueriesManager.getAllSavedQueriesJS()}
                 ${layoutUtils.getAllLayoutUtilitiesJS()}
+                ${tableReferenceData.getTableReferenceDataJS()}
+                ${tableReferenceTabs.getTableReferenceTabsJS()}
+                ${tableReferenceComponents.getTableReferenceComponentsJS()}
 
                 // ========================================================================
                 // Initialization Functions
                 // ========================================================================
 
+                function updateLoadingMessage(message) {
+                    const loadingElement = document.querySelector('.loading-message');
+                    if (loadingElement) {
+                        loadingElement.textContent = message;
+                    }
+                }
+
                 function initializeApplication() {
+                    console.log('initializeApplication: Starting...');
+
                     // Initialize all components in the correct order
+                    console.log('initializeApplication: Initializing theme...');
+                    updateLoadingMessage('Initializing theme...');
                     initializeTheme();
 
                     // Always bring up the editor ASAP so other failures don't block it
+                    console.log('initializeApplication: Initializing CodeMirror...');
+                    updateLoadingMessage('Initializing code editor...');
                     initCodeMirror();
 
                     // Sidebar and history
+                    console.log('initializeApplication: Initializing sidebar sections...');
+                    updateLoadingMessage('Setting up sidebar...');
                     try { initializeSidebarSections(); } catch(e) { console.warn('initializeSidebarSections failed:', e); }
+                    console.log('initializeApplication: Initializing query history...');
                     try { initializeQueryHistory(); } catch(e) { console.warn('initializeQueryHistory failed:', e); }
 
                     // Layout and handlers
+                    console.log('initializeApplication: Initializing responsive layout...');
                     try { initializeResponsiveLayout(); } catch(e) { console.warn('initializeResponsiveLayout failed:', e); }
+                    console.log('initializeApplication: Initializing resizers...');
                     try { initializeResizers(); } catch(e) { console.warn('initializeResizers failed:', e); }
+                    console.log('initializeApplication: Initializing modal handlers...');
                     try { initializeModalHandlers(); } catch(e) { console.warn('initializeModalHandlers failed:', e); }
+                    console.log('initializeApplication: Initializing keyboard handlers...');
                     try { initializeKeyboardHandlers(); } catch(e) { console.warn('initializeKeyboardHandlers failed:', e); }
 
                     // Initialize query tabs after CodeMirror is ready
+                    console.log('initializeApplication: Scheduling query tabs initialization...');
                     setTimeout(function() {
+                        console.log('initializeApplication: Initializing query tabs...');
                         try { initializeQueryTabs(); } catch(e) { console.error('initializeQueryTabs failed:', e); }
                     }, 200);
 
                     // Initialize saved queries and controls
+                    console.log('initializeApplication: Initializing saved queries...');
                     try { initializeSavedQueries(); } catch(e) { console.warn('initializeSavedQueries failed:', e); }
+                    console.log('initializeApplication: Initializing controls panel...');
                     try { initializeControlsPanel(); } catch(e) { console.warn('initializeControlsPanel failed:', e); }
+
+                    // Initialize table reference functionality
+                    console.log('initializeApplication: Initializing table reference...');
+                    updateLoadingMessage('Loading table reference data...');
+                    try { initializeTableReference(); } catch(e) { console.warn('initializeTableReference failed:', e); }
 
                     // Set default query only if no tabs were loaded
                     setTimeout(function() {
@@ -234,19 +275,52 @@ define([
 
                     // Final layout adjustments
                     setTimeout(function() {
+                        updateLoadingMessage('Finalizing layout...');
                         try { adjustLayoutForScreenSize(); } catch(e) { console.warn('adjustLayoutForScreenSize failed:', e); }
                         if (codeEditor) {
                             try { codeEditor.refresh(); } catch(e) { console.warn('codeEditor.refresh failed:', e); }
                         }
+
+                        // Hide loading overlay
+                        console.log('initializeApplication: Hiding loading overlay...');
+                        updateLoadingMessage('Ready!');
+                        setTimeout(function() {
+                            const loadingOverlay = document.getElementById('loading-overlay');
+                            if (loadingOverlay) {
+                                loadingOverlay.style.display = 'none';
+                            }
+                        }, 200);
+
+                        console.log('initializeApplication: Complete!');
                     }, 500);
+                }
+
+                /**
+                 * Initialize Table Reference functionality
+                 */
+                function initializeTableReference() {
+                    // Table Reference is initialized through the sidebar sections
+                    // The actual loading happens when users expand the Table Explorer section
+                    console.log('Table Reference functionality initialized');
+
+                    // Debug: Check if functions are available
+                    console.log('loadTableExplorerData available:', typeof window.loadTableExplorerData);
+                    console.log('openTableReferenceTab available:', typeof window.openTableReferenceTab);
+                    console.log('toggleTableCategory available:', typeof window.toggleTableCategory);
+
+                    // Debug: Check if elements exist
+                    const tableExplorerContent = document.getElementById('tableExplorerContent');
+                    const systemContent = document.getElementById('systemContent');
+                    console.log('tableExplorerContent element:', !!tableExplorerContent);
+                    console.log('systemContent element:', !!systemContent);
                 }
 
                 // Initialize the complete application after a short delay to ensure all scripts are loaded
                 setTimeout(function() {
-                    // console.log('Starting application initialization...');
+                    console.log('Starting application initialization...');
                     try {
                         initializeApplication();
-                        // console.log('Application initialization completed');
+                        console.log('Application initialization completed');
                     } catch(e) {
                         console.error('Error during application initialization:', e);
                     }
@@ -280,10 +354,49 @@ define([
                     width: 4px;
                     background-color: var(--codeoss-border);
                     cursor: col-resize;
+                    position: absolute;
+                    right: -2px; /* Center the resizer on the border */
+                    top: 0;
+                    bottom: 0;
+                    z-index: 10;
+                    transition: all 0.2s ease;
+                    opacity: 0.6;
                 }
 
                 .codeoss-sidebar-resizer:hover {
                     background-color: var(--codeoss-accent);
+                    width: 6px; /* Make it slightly wider on hover for better visibility */
+                    right: -3px;
+                    opacity: 1;
+                }
+
+                .codeoss-sidebar-resizer:active {
+                    background-color: var(--codeoss-accent);
+                    opacity: 1;
+                }
+
+                /* Add a subtle visual indicator for the resizer */
+                .codeoss-sidebar-resizer::before {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 2px;
+                    height: 20px;
+                    background: repeating-linear-gradient(
+                        to bottom,
+                        transparent 0px,
+                        transparent 2px,
+                        var(--codeoss-text-tertiary) 2px,
+                        var(--codeoss-text-tertiary) 4px
+                    );
+                    opacity: 0.5;
+                    pointer-events: none;
+                }
+
+                .codeoss-sidebar-resizer:hover::before {
+                    opacity: 0.8;
                 }
 
                 /* CodeMirror Code - OSS styling */
@@ -758,6 +871,155 @@ define([
 
                 ::-webkit-scrollbar-thumb:hover {
                     background-color: var(--codeoss-text-secondary);
+                }
+
+                /* Table Explorer Styles */
+                .table-explorer-search {
+                    padding: 8px;
+                    border-bottom: 1px solid var(--codeoss-border);
+                }
+
+                .table-explorer-tree {
+                    padding: 4px 0;
+                }
+
+                .table-explorer-category {
+                    margin-bottom: 4px;
+                }
+
+                .table-explorer-category-header {
+                    padding: 6px 8px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: var(--codeoss-text-primary);
+                    border-radius: 3px;
+                }
+
+                .table-explorer-category-header:hover {
+                    background: var(--codeoss-hover-bg);
+                }
+
+                .table-explorer-category-icon {
+                    margin-right: 6px;
+                    font-size: 10px;
+                    width: 12px;
+                    text-align: center;
+                }
+
+                .table-explorer-category-content {
+                    padding-left: 16px;
+                    transition: all 0.3s ease;
+                    overflow: hidden;
+                }
+
+                .table-explorer-category-content.collapsed {
+                    max-height: 0;
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    overflow: hidden;
+                }
+
+                /* Family group styles */
+                .table-family-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    user-select: none;
+                }
+
+                .table-family-header:hover {
+                    background: var(--codeoss-background-hover) !important;
+                }
+
+                .family-toggle-icon {
+                    font-size: 8px;
+                    transition: transform 0.2s ease;
+                    width: 10px;
+                    text-align: center;
+                }
+
+                .table-family-content {
+                    transition: max-height 0.3s ease;
+                    overflow: hidden;
+                }
+
+                /* Table Explorer Item Styling */
+                .table-explorer-item {
+                    transition: background-color 0.2s ease;
+                    user-select: none;
+                }
+
+                .table-explorer-item:hover {
+                    background-color: var(--codeoss-background-hover) !important;
+                }
+
+                .table-explorer-item.selected {
+                    background-color: var(--codeoss-accent-bg) !important;
+                    border-left: 3px solid var(--codeoss-accent) !important;
+                    padding-left: 13px !important; /* Adjust for border */
+                }
+
+                /* Enhanced tooltips for table items */
+                .table-explorer-item[title] {
+                    position: relative;
+                }
+
+                .table-explorer-item[title]:hover::after {
+                    content: attr(title);
+                    position: absolute;
+                    left: 100%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    margin-left: 8px;
+                    padding: 4px 8px;
+                    background: var(--codeoss-bg-tertiary);
+                    color: var(--codeoss-text-primary);
+                    border: 1px solid var(--codeoss-border);
+                    border-radius: 3px;
+                    font-size: 10px;
+                    white-space: nowrap;
+                    z-index: 1000;
+                    pointer-events: none;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+
+                .table-family-content.collapsed {
+                    max-height: 0 !important;
+                }
+
+                .table-explorer-item {
+                    margin: 2px 0;
+                    border-radius: 3px;
+                    transition: background-color 0.15s ease;
+                }
+
+                .table-explorer-item:hover {
+                    background: var(--codeoss-hover-bg);
+                }
+
+                .table-explorer-empty {
+                    text-align: center;
+                    font-style: italic;
+                    color: var(--codeoss-text-secondary);
+                    padding: 12px;
+                }
+
+                /* Table Reference Sub-tab Styles */
+                .table-reference-subtab {
+                    transition: all 0.2s ease;
+                }
+
+                .table-reference-subtab:hover {
+                    background-color: var(--codeoss-background-hover) !important;
+                }
+
+                .table-reference-subtab.active {
+                    border-bottom-color: var(--codeoss-accent) !important;
+                    color: var(--codeoss-accent) !important;
+                    font-weight: 600;
                 }
             </style>
         `;
