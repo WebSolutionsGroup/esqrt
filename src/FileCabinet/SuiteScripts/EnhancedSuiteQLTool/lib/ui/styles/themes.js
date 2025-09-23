@@ -85,8 +85,6 @@ define([
                     --codeoss-border: #e5e5e5;
                     --codeoss-accent: #007acc;
                     --codeoss-accent-hover: #005a9e;
-                    --codeoss-accent-bg: #e3f2fd;
-                    --codeoss-background-hover: #f0f0f0;
                     --codeoss-success: #16825d;
                     --codeoss-warning: #bf8803;
                     --codeoss-error: #d73a49;
@@ -112,8 +110,6 @@ define([
                     --codeoss-border: #3e3e42;
                     --codeoss-accent: #007acc;
                     --codeoss-accent-hover: #1177bb;
-                    --codeoss-accent-bg: #1e3a5f;
-                    --codeoss-background-hover: #2a2d2e;
                     --codeoss-success: #4ec9b0;
                     --codeoss-warning: #ffcc02;
                     --codeoss-error: #f44747;
@@ -382,7 +378,6 @@ define([
                     min-width: 200px;
                     max-width: 500px;
                     flex-shrink: 0;
-                    position: relative; /* Enable positioning for the resizer */
                 }
 
                 .codeoss-editor-area {
@@ -433,48 +428,14 @@ define([
                     background-color: var(--codeoss-border);
                     cursor: col-resize;
                     position: absolute;
-                    right: -2px; /* Center the resizer on the border */
+                    right: 0;
                     top: 0;
                     bottom: 0;
                     z-index: 10;
-                    transition: all 0.2s ease;
-                    opacity: 0.6;
                 }
 
                 .codeoss-sidebar-resizer:hover {
                     background-color: var(--codeoss-accent);
-                    width: 6px; /* Make it slightly wider on hover for better visibility */
-                    right: -3px;
-                    opacity: 1;
-                }
-
-                .codeoss-sidebar-resizer:active {
-                    background-color: var(--codeoss-accent);
-                    opacity: 1;
-                }
-
-                /* Add a subtle visual indicator for the resizer */
-                .codeoss-sidebar-resizer::before {
-                    content: '';
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    width: 2px;
-                    height: 20px;
-                    background: repeating-linear-gradient(
-                        to bottom,
-                        transparent 0px,
-                        transparent 2px,
-                        var(--codeoss-text-tertiary) 2px,
-                        var(--codeoss-text-tertiary) 4px
-                    );
-                    opacity: 0.5;
-                    pointer-events: none;
-                }
-
-                .codeoss-sidebar-resizer:hover::before {
-                    opacity: 0.8;
                 }
 
                 /* Query Tabs Styles */

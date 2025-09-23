@@ -67,10 +67,10 @@ define([
          * @returns {string} The script URL
          */
         getScriptURL: function() {
-            return modules.url.resolveScript({ 
-                scriptId: modules.runtime.getCurrentScript().id, 
-                deploymentId: modules.runtime.getCurrentScript().deploymentId, 
-                returnExternalURL: false 
+            return urlModule.resolveScript({
+                scriptId: runtimeModule.getCurrentScript().id,
+                deploymentId: runtimeModule.getCurrentScript().deploymentId,
+                returnExternalURL: false
             });
         },
         
@@ -79,23 +79,23 @@ define([
          * @returns {string} The script ID
          */
         getScriptId: function() {
-            return modules.runtime.getCurrentScript().id;
+            return runtimeModule.getCurrentScript().id;
         },
-        
+
         /**
          * Get the current deployment ID
          * @returns {string} The deployment ID
          */
         getDeploymentId: function() {
-            return modules.runtime.getCurrentScript().deploymentId;
+            return runtimeModule.getCurrentScript().deploymentId;
         },
-        
+
         /**
          * Get the current session
          * @returns {Object} The current session object
          */
         getCurrentSession: function() {
-            return modules.runtime.getCurrentSession();
+            return runtimeModule.getCurrentSession();
         }
     };
     
@@ -111,25 +111,25 @@ define([
          * @param {*} details - The log details
          */
         debug: function(title, details) {
-            modules.log.debug({ title: title, details: details });
+            logModule.debug({ title: title, details: details });
         },
-        
+
         /**
          * Log error information
          * @param {string} title - The log title
          * @param {*} details - The log details
          */
         error: function(title, details) {
-            modules.log.error({ title: title, details: details });
+            logModule.error({ title: title, details: details });
         },
-        
+
         /**
          * Log audit information
          * @param {string} title - The log title
          * @param {*} details - The log details
          */
         audit: function(title, details) {
-            modules.log.audit({ title: title, details: details });
+            logModule.audit({ title: title, details: details });
         }
     };
     
@@ -145,7 +145,7 @@ define([
          * @returns {Object} The file object
          */
         load: function(fileId) {
-            return modules.file.load({ id: fileId });
+            return fileModule.load({ id: fileId });
         },
         
         /**
@@ -154,7 +154,7 @@ define([
          * @returns {Object} The created file object
          */
         create: function(options) {
-            return modules.file.create(options);
+            return fileModule.create(options);
         },
         
         /**
@@ -162,7 +162,7 @@ define([
          * @returns {Object} File type constants
          */
         getTypes: function() {
-            return modules.file.Type;
+            return fileModule.Type;
         }
     };
     
@@ -178,7 +178,7 @@ define([
          * @returns {Object} Query results
          */
         runSuiteQL: function(options) {
-            return modules.query.runSuiteQL(options);
+            return queryModule.runSuiteQL(options);
         },
         
         /**
@@ -187,7 +187,7 @@ define([
          * @returns {Object} The loaded query
          */
         load: function(options) {
-            return modules.query.load(options);
+            return queryModule.load(options);
         }
     };
     
@@ -202,7 +202,7 @@ define([
          * @returns {Object} The renderer object
          */
         create: function() {
-            return modules.render.create();
+            return renderModule.create();
         },
         
         /**
@@ -210,7 +210,7 @@ define([
          * @returns {Object} Data source constants
          */
         getDataSource: function() {
-            return modules.render.DataSource;
+            return renderModule.DataSource;
         }
     };
     
@@ -226,7 +226,7 @@ define([
          * @returns {Object} The form object
          */
         createForm: function(options) {
-            return modules.serverWidget.createForm(options);
+            return serverWidgetModule.createForm(options);
         },
         
         /**
@@ -234,7 +234,7 @@ define([
          * @returns {Object} Field type constants
          */
         getFieldTypes: function() {
-            return modules.serverWidget.FieldType;
+            return serverWidgetModule.FieldType;
         }
     };
     

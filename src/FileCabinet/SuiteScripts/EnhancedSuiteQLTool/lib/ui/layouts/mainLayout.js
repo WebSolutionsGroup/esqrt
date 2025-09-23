@@ -76,78 +76,6 @@ define([
                             </div>
                         </div>
 
-                        <!-- Table Explorer Section -->
-                        <div class="codeoss-sidebar-section">
-                            <div class="codeoss-sidebar-section-header" onclick="toggleSidebarSection('tableExplorer')">
-                                <span class="codeoss-sidebar-section-icon" id="tableExplorerIcon">▶</span>
-                                <span class="codeoss-sidebar-section-title">TABLE EXPLORER</span>
-                            </div>
-                            <div class="codeoss-sidebar-section-content collapsed" id="tableExplorerContent">
-                                <!-- Search Box -->
-                                <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_SEARCH}">
-                                    <input type="text" id="${constants.ELEMENT_IDS.TABLE_EXPLORER_SEARCH}"
-                                           placeholder="Search Record Types"
-                                           onkeyup="filterTableExplorer()"
-                                           style="width: 100%; padding: 4px 8px; border: 1px solid var(--codeoss-border); background: var(--codeoss-input-bg); color: var(--codeoss-text-primary); border-radius: 3px; font-size: 12px;">
-                                </div>
-
-                                <!-- Table Explorer Tree -->
-                                <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_TREE}" id="${constants.ELEMENT_IDS.TABLE_EXPLORER_CONTENT}">
-                                    <!-- Functions Section -->
-                                    <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_CATEGORY}">
-                                        <div class="table-explorer-category-header" onclick="toggleTableCategory('functions')">
-                                            <span class="table-explorer-category-icon" id="functionsIcon">▶</span>
-                                            <span class="table-explorer-category-title">📋 FUNCTIONS</span>
-                                        </div>
-                                        <div class="table-explorer-category-content collapsed" id="functionsContent">
-                                            <div id="${constants.ELEMENT_IDS.TABLE_FUNCTIONS_LIST}">
-                                                <!-- Functions will be loaded here -->
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Procedures Section -->
-                                    <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_CATEGORY}">
-                                        <div class="table-explorer-category-header" onclick="toggleTableCategory('procedures')">
-                                            <span class="table-explorer-category-icon" id="proceduresIcon">▶</span>
-                                            <span class="table-explorer-category-title">⚙️ PROCEDURES</span>
-                                        </div>
-                                        <div class="table-explorer-category-content collapsed" id="proceduresContent">
-                                            <div id="${constants.ELEMENT_IDS.TABLE_PROCEDURES_LIST}">
-                                                <!-- Procedures will be loaded here -->
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- System Section -->
-                                    <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_CATEGORY}">
-                                        <div class="table-explorer-category-header" onclick="toggleTableCategory('system')">
-                                            <span class="table-explorer-category-icon" id="systemIcon">▶</span>
-                                            <span class="table-explorer-category-title">📊 SYSTEM</span>
-                                        </div>
-                                        <div class="table-explorer-category-content collapsed" id="systemContent">
-                                            <div id="${constants.ELEMENT_IDS.TABLE_SYSTEM_LIST}">
-                                                <!-- System tables will be loaded here -->
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Custom Section -->
-                                    <div class="${constants.CSS_CLASSES.TABLE_EXPLORER_CATEGORY}">
-                                        <div class="table-explorer-category-header" onclick="toggleTableCategory('custom')">
-                                            <span class="table-explorer-category-icon" id="customIcon">▶</span>
-                                            <span class="table-explorer-category-title">📁 CUSTOM</span>
-                                        </div>
-                                        <div class="table-explorer-category-content collapsed" id="customContent">
-                                            <div id="${constants.ELEMENT_IDS.TABLE_CUSTOM_LIST}">
-                                                <!-- Custom tables will be loaded here -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="codeoss-sidebar-resizer"></div>
                     </div>
 
@@ -156,11 +84,6 @@ define([
 
                         <!-- Query Tabs -->
                         ${queryTabs.getQueryTabsHTML()}
-
-                        <!-- Table Details Container (for table reference tabs) -->
-                        <div id="table-details-container" style="display: none; flex: 1; height: 100%; overflow: auto;">
-                            <!-- Table reference content will be rendered here -->
-                        </div>
 
                         <!-- Query Editor Container -->
                         <div class="${constants.CSS_CLASSES.CODEOSS_EDITOR}">

@@ -18,15 +18,17 @@ define([
 ], function(log, error, createRecord, createList, insertRecord, updateRecord, deleteRecord) {
     'use strict';
 
-    // Debug: Check if modules loaded correctly
-    log.debug({
-        title: 'DML Execution Engine Module Loading',
-        details: 'createRecord: ' + (createRecord ? 'OK' : 'MISSING') +
-                ', createList: ' + (createList ? 'OK' : 'MISSING') +
-                ', insertRecord: ' + (insertRecord ? 'OK' : 'MISSING') +
-                ', updateRecord: ' + (updateRecord ? 'OK' : 'MISSING') +
-                ', deleteRecord: ' + (deleteRecord ? 'OK' : 'MISSING')
-    });
+    // Debug function to check if modules loaded correctly (called only when needed)
+    function debugModuleLoading() {
+        log.debug({
+            title: 'DML Execution Engine Module Loading',
+            details: 'createRecord: ' + (createRecord ? 'OK' : 'MISSING') +
+                    ', createList: ' + (createList ? 'OK' : 'MISSING') +
+                    ', insertRecord: ' + (insertRecord ? 'OK' : 'MISSING') +
+                    ', updateRecord: ' + (updateRecord ? 'OK' : 'MISSING') +
+                    ', deleteRecord: ' + (deleteRecord ? 'OK' : 'MISSING')
+        });
+    }
 
 
 
@@ -51,16 +53,15 @@ define([
     function executeDMLOperation(dmlType, parsedStatement) {
         var startTime = Date.now();
         
+        // Debug module loading status (only when actually executing)
+        debugModuleLoading();
+
         log.debug({
             title: 'Executing DML Operation',
-            details: 'Type: ' + dmlType + ', Statement: ' + JSON.stringify(parsedStatement)
+            details: 'Type: ' + dmlType + ', Parsed Statement: ' + JSON.stringify(parsedStatement)
         });
 
         try {
-            log.debug({
-                title: 'Executing DML Operation',
-                details: 'Type: ' + dmlType + ', Parsed Statement: ' + JSON.stringify(parsedStatement)
-            });
 
             var result;
 
